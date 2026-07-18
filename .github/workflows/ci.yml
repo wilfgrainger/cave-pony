@@ -17,4 +17,3 @@ jobs:
         with:
           python-version: "3.12"
       - run: make test
-      - run: make build

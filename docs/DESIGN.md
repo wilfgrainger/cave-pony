@@ -2,109 +2,82 @@
 
 ## Problem
 
-Coding agents can waste effort in two independent ways:
+Coding agents can inflate two independent surfaces: implementation and narration. A terse agent can still build a framework; a minimal-code agent can still bury the result in prose. Cave Pony coordinates both without allowing either to weaken correctness.
 
-1. **Implementation inflation:** unnecessary code, dependencies, abstractions, services, configuration, and tests.
-2. **Narration inflation:** greetings, plans, tool diaries, repeated summaries, and explanations the user did not request.
+## Activation model
 
-Reducing only one surface is incomplete. A terse agent can still build a framework. A minimal-code agent can still bury the result in prose. Cave Pony makes both surfaces explicit and coordinates them without allowing either to weaken correctness.
+Cave Pony is explicitly activated. The frontmatter and body use the same trigger contract: invocation, an explicit request for minimal or least-over-engineered code, terse output, a complaint about bloat, or an audit request. It must not auto-load for ordinary coding tasks.
+
+Once active, the selected levels apply on every response until `stop cave-pony`. There is no global `normal mode` alias because that collides with both parent skills.
 
 ## Behavioural model
 
-Cave Pony is a Markdown Agent Skill. It has no runtime process and changes no repository by itself. The host agent loads `skills/cave-pony/SKILL.md` and applies its rules to coding work.
-
-Two independent state values govern behaviour:
+Two independent values govern behaviour:
 
 ```text
 build ∈ {lite, full, ultra}
 voice ∈ {lite, full, ultra}
 ```
 
-A one-word level sets both. Axis assignments override one value without changing the other. Default state is `build=full voice=full`. Audit is a one-shot operation rather than a persistent fourth intensity.
+A one-word level sets both. Axis assignments override one value. Default state is `build=full voice=full`. Audit is a one-shot operation.
 
 ## Coordination invariants
 
-The following rules outrank both budgets:
-
 1. Understand the affected flow before selecting a small implementation.
 2. Preserve correctness, security, privacy, accessibility, data integrity, and explicit requirements.
-3. Expand both implementation and explanation in proportion to material risk.
+3. Expand implementation and explanation with material risk.
 4. Never claim unexecuted proof.
-5. Never shorten exact technical strings into altered forms.
+5. Never alter exact technical strings for terseness.
+6. Ties between brevity and clarity break toward clarity.
 
-These invariants prevent common failure modes: a tiny symptom patch, missing validation, unclear destructive instructions, and false test claims.
+## Footprint gate and complexity toll
 
-## Footprint gate
+The gate is ordered from least to most owned surface. The agent stops at the first option that fully meets the current requirement after understanding the flow.
 
-The gate is ordered from least to most owned surface. It is not a scoring algorithm and needs no external tooling. The agent stops at the first option that fully meets the requirement after understanding the flow.
-
-The order distinguishes repository reuse, standard-library support, native platform capability, installed dependencies, local code, and new ecosystem surface. That distinction matters because each step changes maintenance ownership and failure modes.
-
-## Complexity toll
-
-The toll applies to durable surface: dependencies, files, abstractions, configuration, state, services, workers, schedules, and public APIs. Each item needs:
-
-- a concrete present requirement;
-- a named simpler alternative that does not meet it;
-- a benefit larger than its maintenance and failure cost.
-
-This is deliberately qualitative. A numeric complexity score would create fake precision and more machinery than the skill needs.
+Every durable addition needs a present requirement, a named simpler alternative that fails it, and a benefit larger than its maintenance and failure cost. This applies to repository tooling too.
 
 ## Proof model
 
-“Smallest decisive proof” means the cheapest check that can falsify the claimed behaviour at the relevant risk level. Examples:
+“Smallest decisive proof” means the cheapest check capable of falsifying the claimed behaviour at the relevant risk level. It is a starting point, not a one-test cap.
 
-- existing focused unit test before the full suite;
-- one regression test for a changed branch;
-- schema validation for a data contract;
-- dry-run and rollback verification for a migration;
-- permission-boundary tests for authorisation work.
-
-The model does not cap testing at one test. It starts with one decisive check and expands when risk or repository convention requires it.
+The repository's own tests are **static contract tests**. They can prove that required wording, sections, triggers, and adversarial cases are committed. They cannot prove that a host model follows those rules. Agent behaviour requires comparative model runs.
 
 ## Output model
 
-The default completion shape is a four-field footprint report: Done, Proof, Skipped, Risk. Empty fields disappear. This is compact but auditable: the reader can distinguish delivered work, evidence, deliberate non-work, and residual uncertainty.
+For completed changes, the canonical four-field artifact is the **footprint report**: Done, Proof, Skipped, Risk. Empty fields disappear. Pure questions do not receive a footprint report.
 
-Requested documentation, analysis, teaching, or reports are exempt from aggressive compression because they are the product being requested.
+Audit defaults to the most recent change or diff unless a target is specified.
 
 ## Clarity override
 
-Compression is suspended when omitted grammar could change order, causality, scope, responsibility, or consequences. The override is automatic for destructive, security, privacy, migration, legal, financial, and other high-risk content. It ends after the risky section is clear.
+Compression is suspended for destructive or ordering-sensitive state changes. Trigger verbs include delete, overwrite, reset, force-push, drop, revoke, and rotate. The override includes preconditions and recovery, not only the command itself.
 
-## Packaging
+## Benchmark status
 
-`tools/build.py` creates `dist/cave-pony.skill`, a deterministic ZIP archive containing:
+The coordination layer is not yet proven better than loading Ponytail and Caveman together. [`benchmarks/README.md`](../benchmarks/README.md) preregisters a falsifiable four-arm experiment and kill criterion. No comparative result may be claimed until a committed result file exists.
 
-```text
-cave-pony/SKILL.md
-cave-pony/README.md
-cave-pony/THIRD_PARTY_NOTICES.md
-```
-
-Files use a fixed archive timestamp and stable ordering so identical source produces identical bytes. The build uses only Python's standard library.
+The benchmark is a present requirement because comparative performance is the project's central empirical question. Provider-specific runtime integration remains outside the core skill; the preregistration reuses Ponytail's published agentic harness rather than duplicating it here.
 
 ## Validation
 
 `tools/validate.py` checks:
 
-- required repository files;
-- frontmatter name, licence, description, and argument hint;
-- mandatory behavioural sections;
-- safety and proof language;
-- source links and exact short quotations in the main README;
-- third-party copyright notices;
-- clean Markdown whitespace and final newlines.
+- explicit and consistent activation language;
+- anti-drift persistence;
+- safety override wording;
+- canonical footprint-report terminology;
+- coexistence documentation;
+- benchmark honesty and preregistration;
+- source links, exact quotations, and copyright notices;
+- adversarial contract-case schema;
+- clean text formatting.
 
-`tests/test_repository.py` runs validation, builds the archive, checks its contents, and verifies reproducibility by hashing two builds.
+`tests/test_repository.py` runs validation and negative regression cases against temporary copies of the skill and README.
+
+## Packaging decision
+
+The original archive builder was removed. No confirmed consumer or release process used `dist/cave-pony.skill`, so packaging did not pay the project's own complexity toll. Add packaging only when a named consumer requires it, and document that consumer before adding machinery.
 
 ## Extension rules
 
-Contributions should add rules only for observed failure modes. A proposal should show:
-
-1. a concrete agent failure;
-2. why the existing gate, toll, proof, or clarity rules do not cover it;
-3. the smallest wording change that fixes it;
-4. a repository test that prevents regression.
-
-Do not add provider-specific mirrors until a real integration requires them. Keep `SKILL.md` the single behavioural source of truth.
+A proposal should show a concrete failure, explain why existing rules miss it, make the smallest wording change, and add a regression test. Do not add provider-specific mirrors, packaging artifacts, or generated copies until a real integration requires them. Keep `SKILL.md` the single behavioural source of truth.
