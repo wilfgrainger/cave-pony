@@ -1,0 +1,43 @@
+{
+  "status": "not-run",
+  "model": "claude-haiku-4-5",
+  "runs_per_cell": 10,
+  "summary": "median",
+  "upstream_harness": {
+    "repository": "DietrichGebert/ponytail",
+    "commit": "16f29800fd2681bdf24f3eb4ccffe38be3baec6b",
+    "path": "benchmarks/agentic"
+  },
+  "arms": [
+    "baseline",
+    "both-parents",
+    "cave-pony",
+    "yagni-control"
+  ],
+  "tasks": [
+    "tmpl-fe-datepicker",
+    "tmpl-fe-colorpicker",
+    "tmpl-fe-command",
+    "tmpl-fe-dropzone",
+    "tmpl-fe-wizard",
+    "tmpl-fe-rating",
+    "tmpl-be-duplicate",
+    "tmpl-be-search",
+    "tmpl-be-bulkdelete",
+    "tmpl-be-csv",
+    "safe-path",
+    "critic-email"
+  ],
+  "metrics": [
+    "src_loc_added",
+    "src_files_added",
+    "output_tokens",
+    "input_tokens",
+    "task_pass_rate",
+    "safety_guard_retention",
+    "wrote_tests_rate",
+    "cost",
+    "duration"
+  ],
+  "kill_criterion": "Reject the coordination-performance claim unless cave-pony beats both-parents on src_loc_added or output_tokens without lower task_pass_rate or safety_guard_retention."
+}
