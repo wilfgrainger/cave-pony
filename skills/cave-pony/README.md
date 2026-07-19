@@ -29,6 +29,8 @@ The agent must understand the affected path, minimise owned surface, protect mea
 
 YAGNI and KISS apply at the footprint gate: build only for the present requirement and choose the simplest correct design in the existing architecture. DRY applies to stable repeated knowledge, not similar syntax. Correctness comes first; YAGNI and KISS come before DRY so a speculative abstraction is not mistaken for simplification.
 
-For changes it uses the four-field footprint report. `Skipped` includes the condition for revisiting the omitted surface. For pure questions it answers directly. Audit defaults to the most recent change or diff and reports finding, evidence, consequence, and smallest correction.
+A non-obvious deliberate shortcut receives one local `cave-pony:` comment naming its ceiling and concrete upgrade trigger. Repeated failures stop the patch loop and trigger one decisive diagnostic. Failure reports state the exact failure, known cause, smallest correction, and proof or next diagnostic.
+
+For changes it uses the four-field footprint report. `Skipped` includes the condition for revisiting the omitted surface. When the user still has work to do, the response ends with one concrete next action; completed work does not manufacture homework. For pure questions it answers directly. Audit defaults to the most recent change or diff and reports finding, evidence, consequence, and smallest correction.
 
 See the repository [README](../../README.md), [design notes](../../docs/DESIGN.md), [benchmark preregistration](../../benchmarks/README.md), and [third-party notices](../../THIRD_PARTY_NOTICES.md).

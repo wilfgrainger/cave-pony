@@ -10,6 +10,15 @@ Cave Pony activates only after a trigger in the current conversation: invocation
 
 Once active, the selected levels apply on every response until `stop cave-pony`. There is no global `normal mode` alias because that collides with both parent skills.
 
+## Intentional parent divergences
+
+Cave Pony preserves the parents' implementation and communication goals but deliberately changes two rules:
+
+1. **Uncertainty does not activate the skill.** Both parent skills resolve activation ambiguity by staying active. Cave Pony instead requires a trigger in the current conversation. This prevents a preloaded skill or missing conversation history from silently taking control.
+2. **The clarity override is broader.** Caveman's automatic clarity rule is extended to privacy, destructive operations, migrations, recovery, legal or financial risk, ordered procedures, and repeated questions that signal the earlier compression failed.
+
+These are intentional coordination choices, not accidental drift from the parent skills.
+
 ## Behavioural model
 
 Two independent values govern behaviour:
@@ -35,6 +44,8 @@ A one-word level sets both. Axis assignments override one value. Default state i
 The gate is ordered from least to most owned surface. The agent stops at the first option that fully meets the current requirement after understanding the flow.
 
 Every durable addition needs a present requirement, a named simpler alternative that fails it, and a benefit larger than its maintenance and failure cost. Standing instructions count because they consume context and can conflict or drift.
+
+A deliberate simplification with a non-obvious known ceiling receives one local `cave-pony:` comment naming both the ceiling and the concrete upgrade trigger. This preserves the decision after the chat footprint report disappears. Obvious choices and hypothetical futures do not receive ceiling comments.
 
 ## YAGNI, KISS and DRY
 
@@ -64,11 +75,21 @@ For completed changes, the canonical four-field artifact is the **footprint repo
 
 Audit defaults to the most recent change or diff unless a target is specified. Each ranked finding states the defect, evidence, consequence, and smallest correction.
 
+Voice compression removes greetings, filler, hedging, self-reference, repeated framing and decorative transitions before shortening technical language. Prose abbreviations and arrows are rejected because compact-looking notation can reduce clarity without reducing model tokens. Tables must improve comparison; emoji and raw log dumps are not default output.
+
+Failures are reported as the exact failure, known cause, smallest correction, and proof or next diagnostic. If the same failure survives two attempted corrections, Cave Pony stops adding patches and challenges the assumption most likely to be wrong.
+
+A next action appears only when the user still has work to do. Time estimates require grounded scope and are omitted rather than invented. Multi-step state is restated when needed to resume work, not as a compulsory recap on every turn.
+
+The public README uses compact Bad, Better and Why examples so readers can learn the behaviour quickly. Those teaching examples stay outside `SKILL.md` unless they prevent a concrete model failure, because every active example consumes context.
+
 ## Clarity override
 
 Compression is suspended for destructive or ordering-sensitive state changes. Trigger verbs include delete, overwrite, reset, force-push, drop, revoke, and rotate. The override includes preconditions and recovery, not only the command itself.
 
 An ultra response containing only `git reset --hard origin/main` is unsafe. A compliant response first states the loss risk, offers a preservation step, then gives the command and recovery path.
+
+A materially repeated question is treated as evidence that the previous compression failed. The next answer uses normal explicit prose rather than compressing harder.
 
 ## Benchmark status
 
@@ -91,6 +112,8 @@ The benchmark is a present requirement because comparative performance is the pr
 - clean text formatting.
 
 The YAGNI, KISS and DRY contract has a focused repository test that requires all three names, their precedence and the repeated-knowledge caveat. This prevents a future edit from turning DRY into a blanket anti-duplication rule.
+
+The root-fidelity tests require the ceiling-comment convention, concrete compression prohibitions, repeated-question clarity fallback, intentional parent divergences, debug-spiral stop, failure reporting shape, and conditional next-action rule.
 
 The `prompt` field in each behavioural case is reserved for the comparative harness. Static validation checks its schema; model execution will consume it when the benchmark runs.
 
