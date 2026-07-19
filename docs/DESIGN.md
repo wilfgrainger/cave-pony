@@ -36,6 +36,16 @@ The gate is ordered from least to most owned surface. The agent stops at the fir
 
 Every durable addition needs a present requirement, a named simpler alternative that fails it, and a benefit larger than its maintenance and failure cost. Standing instructions count because they consume context and can conflict or drift.
 
+## YAGNI, KISS and DRY
+
+The principles refine the footprint gate; they are not three extra workflow phases.
+
+1. **YAGNI** rejects speculative requirements, options, extension points, compatibility layers and generality.
+2. **KISS** selects the simplest correct design that fits the existing architecture and remains easy to explain.
+3. **DRY** gives stable repeated knowledge one authoritative home after repetition is real and semantically aligned.
+
+The precedence is deliberate: correctness and trust boundaries first, then YAGNI and KISS, then DRY. Similar syntax does not prove shared knowledge. Two clear local cases are preferable to a generic abstraction whose meaning, lifecycle or callers are not yet stable. Conversely, a repeated business rule, schema, permission decision or publication predicate should not drift across independent implementations once its shared meaning is established.
+
 ## Semantic and claim discipline
 
 Minimal code is not useful when it preserves the wrong meaning. A field must describe the event or authority named by its label; observation, publication, retrieval, validation, build, and display times are therefore distinct. Deterministic output makes unchanged evidence reproducible, while semantic tests allow equivalent wording and implementation.
@@ -79,6 +89,8 @@ The benchmark is a present requirement because comparative performance is the pr
 - source links, quotations, and copyright notices;
 - required behavioural probes plus schema-valid extensions;
 - clean text formatting.
+
+The YAGNI, KISS and DRY contract has a focused repository test that requires all three names, their precedence and the repeated-knowledge caveat. This prevents a future edit from turning DRY into a blanket anti-duplication rule.
 
 The `prompt` field in each behavioural case is reserved for the comparative harness. Static validation checks its schema; model execution will consume it when the benchmark runs.
 

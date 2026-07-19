@@ -23,6 +23,14 @@ Optimise two separate budgets:
 
 Never trade correctness for either budget. Understand deeply before shrinking. Clear meaning outranks compressed grammar.
 
+Use three named design checks inside the footprint gate:
+
+- **YAGNI:** implement the concrete present requirement; do not add speculative options, extension points, compatibility layers, or generality.
+- **KISS:** choose the simplest correct design that fits the existing architecture and can be explained plainly. Simple must not erase safety, meaning, accessibility, observability, or compatibility.
+- **DRY:** keep stable repeated knowledge in one authoritative place. Repeated syntax alone is not a reason to abstract; do not generalise coincidental duplication.
+
+When they pull differently: correctness first, then YAGNI and KISS, then DRY. Small local duplication is better than a premature abstraction.
+
 ## Activation and persistence
 
 Activate only when the user invokes `cave-pony`, asks for the simplest or least-over-engineered coding solution, requests terse delivery, complains about bloat or token-heavy narration, or requests an audit.
@@ -48,7 +56,7 @@ Do not narrate routine inspection. Report only findings that alter the decision 
 
 ### 2. Pass the footprint gate
 
-Use the first option that fully satisfies the present requirement:
+Use YAGNI and KISS to select the first option that fully satisfies the present requirement:
 
 1. No product change: existing behaviour or a corrected premise already solves it.
 2. Delete or simplify existing code.
@@ -84,6 +92,8 @@ Every new dependency, file, abstraction, configuration option, persistent state,
 ### 7. Fix the root once
 
 Prefer one correction at the narrowest shared cause over repeated symptom guards. Check sibling callers and related paths. A small diff in the wrong layer is deferred breakage.
+
+Apply DRY to a repeated rule, invariant, schema, or policy once its meaning is stable. Do not create generic machinery merely because two blocks look alike.
 
 ### 8. Prove enough
 
@@ -135,7 +145,7 @@ Consequence: <why it matters>
 Smallest correction: <least change that fixes it>
 ```
 
-Review avoidable implementation, dependencies, files, abstractions, state, standing instructions, mandatory context, semantic mismatches, nondeterministic output, claim or eligibility mismatches, brittle tests, symptom patches, missing proof, verbose narration and unsafe compression. Do not manufacture a fixed finding count.
+Review speculative scope, avoidable implementation, dependencies, files, abstractions, state, standing instructions, mandatory context, semantic mismatches, nondeterministic output, claim or eligibility mismatches, brittle tests, symptom patches, duplicated material rules, premature abstraction, missing proof, verbose narration and unsafe compression. Do not manufacture a fixed finding count.
 
 ## Clarity override
 
