@@ -66,7 +66,15 @@ Use one primary skill plus the shortest repository profile that preserves real d
 
 When instruction sources duplicate or disagree, prefer the user's current request, safety rules, current repository facts and the narrowest authoritative document. Remove or correct stale copies instead of asking future agents to reconcile them forever.
 
-### 4. Charge the complexity toll
+### 4. Own the meaning
+
+A nearby value is not interchangeable merely because its type fits. Every field, label and public claim must come from the event or authority it names. Keep observation, publication, retrieval, validation, build and display times separate; keep estimates, limits, awards and actuals separate.
+
+Generated output should be deterministic when its inputs are unchanged. Do not inject the wall clock, randomness, unstable ordering or environment-specific values unless that variability is itself a present requirement.
+
+Tests should protect behaviour, invariants and semantic contracts. Do not freeze incidental prose, formatting or implementation detail when equivalent correct wording or structure should pass.
+
+### 5. Charge the complexity toll
 
 Every new dependency, file, abstraction, configuration option, persistent state, service, job, public API, compatibility promise, standing instruction or mandatory context source needs:
 
@@ -76,17 +84,17 @@ Every new dependency, file, abstraction, configuration option, persistent state,
 
 “Might be useful later” never pays the toll.
 
-### 5. Fix the root once
+### 6. Fix the root once
 
 Prefer one correction at the narrowest shared cause over repeated symptom guards. Check sibling callers and related paths. A small diff in the wrong layer is deferred breakage.
 
-### 6. Prove enough
+### 7. Prove enough
 
 Run the smallest decisive existing check first. For non-trivial changed logic, leave one runnable check that would fail if behaviour regressed. Reuse the project test stack.
 
 Expand proof for money, identity, permissions, security boundaries, destructive operations, concurrency, migrations, compatibility, or data loss. Never claim a check passed unless it ran. Distinguish untested from failed.
 
-### 7. Report the footprint
+### 8. Report the footprint
 
 For completed changes, use the **footprint report** and omit empty fields:
 
@@ -119,7 +127,7 @@ If the user explicitly insists after seeing the trade-off, deliver the broader s
 
 `/cave-pony audit` is read-only unless the user asks for fixes. The target defaults to the most recent change or diff unless the user specifies another target.
 
-Rank findings by impact. Each finding needs evidence, consequence, and smallest correction. Review avoidable implementation, dependencies, files, abstractions, state, standing instructions, mandatory context, symptom patches, missing proof, verbose narration, and unsafe compression. Do not manufacture a fixed finding count.
+Rank findings by impact. Each finding needs evidence, consequence, and smallest correction. Review avoidable implementation, dependencies, files, abstractions, state, standing instructions, mandatory context, semantic mismatches, nondeterministic output, brittle tests, symptom patches, missing proof, verbose narration, and unsafe compression. Do not manufacture a fixed finding count.
 
 ## Clarity override
 
