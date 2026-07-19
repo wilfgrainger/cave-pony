@@ -22,6 +22,7 @@ This is an independently authored combination, not an official successor to eith
 Cave Pony defines what happens when implementation minimalism and terse communication conflict:
 
 - separate `build` and `voice` budgets;
+- YAGNI and KISS before stable-knowledge DRY;
 - a complexity toll for new owned surface;
 - root-cause fixes instead of repeated symptom patches;
 - the smallest decisive proof appropriate to the risk;
@@ -41,7 +42,7 @@ Cave Pony is intended to replace Ponytail and Caveman, not stack with them. Inst
 ## Behaviour
 
 1. Understand the affected flow and trust boundaries.
-2. Use the footprint gate before adding owned surface.
+2. Apply YAGNI and KISS at the footprint gate; use DRY only for stable repeated knowledge.
 3. Budget standing instructions and load only needed authority.
 4. Preserve semantic meaning and deterministic output.
 5. Gate claims on the state that makes them true.
@@ -49,6 +50,16 @@ Cave Pony is intended to replace Ponytail and Caveman, not stack with them. Inst
 7. Fix the narrowest shared root cause.
 8. Run the smallest decisive proof, expanded by risk.
 9. Report Done, Proof, conditional Skipped, and Risk.
+
+## YAGNI, KISS and DRY
+
+Cave Pony uses these as ordered checks, not slogans:
+
+- **YAGNI:** build only for a concrete present requirement.
+- **KISS:** choose the simplest correct design that fits the existing architecture.
+- **DRY:** centralise stable repeated knowledge, not merely similar-looking syntax.
+
+Correctness and trust boundaries come first. YAGNI and KISS come before DRY because premature abstraction creates more owned surface than a small local duplication.
 
 ## Install
 
