@@ -79,7 +79,19 @@ class RepositoryContractTests(unittest.TestCase):
 
         result = self.run_clone_validation(mutate)
         self.assertNotEqual(0, result.returncode)
-        self.assertIn("ordinary coding", result.stderr)
+        self.assertIn("explicit invocation", result.stderr)
+
+    def test_non_coding_brevity_activation_is_caught(self) -> None:
+        def mutate(clone: Path) -> None:
+            skill = clone / "skills" / "cave-pony" / "SKILL.md"
+            skill.write_text(skill.read_text(encoding="utf-8").replace(
+                "coding or agent-work",
+                "any",
+            ), encoding="utf-8")
+
+        result = self.run_clone_validation(mutate)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("coding or agent work", result.stderr)
 
     def test_ambiguous_activation_is_caught(self) -> None:
         def mutate(clone: Path) -> None:
@@ -116,6 +128,18 @@ class RepositoryContractTests(unittest.TestCase):
         result = self.run_clone_validation(mutate)
         self.assertNotEqual(0, result.returncode)
         self.assertIn("safety sentence", result.stderr)
+
+    def test_mutable_action_reference_is_caught(self) -> None:
+        def mutate(clone: Path) -> None:
+            workflow = clone / ".github" / "workflows" / "ci.yml"
+            workflow.write_text(workflow.read_text(encoding="utf-8").replace(
+                "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+                "actions/checkout@v4",
+            ), encoding="utf-8")
+
+        result = self.run_clone_validation(mutate)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("immutable commit", result.stderr)
 
 
 if __name__ == "__main__":
