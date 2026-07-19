@@ -11,20 +11,20 @@ class ClaimGateTests(unittest.TestCase):
         text = SKILL.read_text(encoding="utf-8")
 
         self.assertIn("### 5. Gate the claim", text)
-        self.assertIn("Data, output or a fallback being present does not make it eligible for every use.", text)
-        self.assertIn("gate on that same predicate", text)
+        self.assertIn("Presence is not eligibility.", text)
+        self.assertRegex(text, r"Gate public, API and UI claims on the predicate that makes them true")
 
     def test_invalid_status_is_withheld_or_qualified(self) -> None:
         text = SKILL.read_text(encoding="utf-8")
 
-        self.assertIn("Stale, partial, unverified, unauthorized or incompatible state stays unavailable or clearly qualified.", text)
-        self.assertIn("Withholding is often the smallest correct result.", text)
+        for status in ("stale", "partial", "unverified", "unauthorized", "incompatible"):
+            self.assertIn(status, text)
+        self.assertRegex(text, r"unavailable or clearly qualified")
 
     def test_status_gate_proves_accept_and_reject(self) -> None:
         text = SKILL.read_text(encoding="utf-8")
 
-        self.assertIn("test one accepted state and the most plausible rejected state", text)
-        self.assertIn("A happy-path presence check is not decisive proof.", text)
+        self.assertRegex(text, r"Test one accepted state and the most plausible rejected state")
 
 
 if __name__ == "__main__":

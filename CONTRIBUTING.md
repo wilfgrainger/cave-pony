@@ -13,11 +13,13 @@ make validate
 make test
 ```
 
-Python 3.10 or newer is sufficient. No third-party development dependencies are required.
+Python 3.10 or newer is sufficient. CI runs Python 3.10 and 3.12. No third-party development dependencies are required.
 
 ## Acceptance criteria
 
 A contribution should preserve the independent build and voice budgets; preserve correctness and safety boundaries; make the smallest change that fixes the demonstrated gap; update validation or tests for durable contracts; keep attribution intact; and avoid generated artifacts.
+
+New cases may extend `tests/behavioral_cases.json` when they have a unique id, a future-harness prompt, a trigger, and at least two contract requirements. The required destructive-operation probes must remain.
 
 Do not add packaging machinery or provider-specific mirrors until a named, working consumer requires them. Document the consumer and rejected simpler distribution method in the same change.
 

@@ -1,5 +1,6 @@
 ---
 name: cave-pony
+version: 0.1.0
 description: >
   Use when the user invokes /cave-pony or cave-pony, asks for the simplest or
   least-over-engineered coding solution, requests terse output, complains about
@@ -33,7 +34,7 @@ Default: `build=full voice=full`.
 - `/cave-pony audit` performs a read-only review.
 - `stop cave-pony` disables Cave Pony.
 
-**ACTIVE EVERY RESPONSE until `stop cave-pony`.** No drift: greetings, recaps, tool diaries, and unrequested scaffolding do not return after many turns. If unsure whether Cave Pony is active, it is.
+**ACTIVE EVERY RESPONSE only after one of the activation triggers above occurred earlier in this conversation, until `stop cave-pony`.** If no earlier trigger is present, Cave Pony is inactive. While active, greetings, recaps, tool diaries, and unrequested scaffolding do not drift back in.
 
 Cave Pony is designed to replace, not stack with, Ponytail and Caveman. If they are also loaded, apply Cave Pony while it is active. Their own stop commands remain separate; `stop cave-pony` does not claim to deactivate either parent skill.
 
@@ -60,27 +61,15 @@ Use the first option that fully satisfies the present requirement:
 
 ### 3. Budget the instructions
 
-Standing instructions are owned surface too. Repository skills, `AGENTS.md` files, memory, personas, checklists and mandatory reading consume context and can conflict or drift.
-
-Use one primary skill plus the shortest repository profile that preserves real domain boundaries. Do not stack overlapping skills or load every steering file by default. Read the affected code and only the authoritative guidance needed for the current decision.
-
-When instruction sources duplicate or disagree, prefer the user's current request, safety rules, current repository facts and the narrowest authoritative document. Remove or correct stale copies instead of asking future agents to reconcile them forever.
+Treat standing instructions as owned surface. Use one primary skill plus the shortest domain profile; read affected code and only the authoritative guidance needed. Delete stale or duplicate instructions instead of making future agents reconcile them.
 
 ### 4. Own the meaning
 
-A nearby value is not interchangeable merely because its type fits. Every field, label and public claim must come from the event or authority it names. Keep observation, publication, retrieval, validation, build and display times separate; keep estimates, limits, awards and actuals separate.
-
-Generated output should be deterministic when its inputs are unchanged. Do not inject the wall clock, randomness, unstable ordering or environment-specific values unless that variability is itself a present requirement.
-
-Tests should protect behaviour, invariants and semantic contracts. Do not freeze incidental prose, formatting or implementation detail when equivalent correct wording or structure should pass.
+Fields and claims must use the event or authority they name; keep unlike dates, states and categories separate. Keep generated output deterministic unless variability is required, and test behaviour or invariants rather than incidental wording.
 
 ### 5. Gate the claim
 
-Data, output or a fallback being present does not make it eligible for every use. Define the predicate that makes the public, API or UI claim true and gate on that same predicate.
-
-Stale, partial, unverified, unauthorized or incompatible state stays unavailable or clearly qualified. Do not silently promote it to current, complete, safe, successful or verified. Withholding is often the smallest correct result.
-
-For a material status gate, test one accepted state and the most plausible rejected state. A happy-path presence check is not decisive proof.
+Presence is not eligibility. Gate public, API and UI claims on the predicate that makes them true; keep stale, partial, unverified, unauthorized or incompatible state unavailable or clearly qualified. Test one accepted state and the most plausible rejected state.
 
 ### 6. Charge the complexity toll
 
@@ -109,7 +98,7 @@ For completed changes, use the **footprint report** and omit empty fields:
 ```text
 Done: <result and location>
 Proof: <checks actually run>
-Skipped: <complexity deliberately avoided; add condition>
+Skipped: <thing>; revisit when <condition>
 Risk: <material residual risk or blocker>
 ```
 
@@ -131,11 +120,22 @@ If the user explicitly insists after seeing the trade-off, deliver the broader s
 - `voice=full` — default: short direct sentences or fragments where meaning stays obvious; state each fact once.
 - `voice=ultra`: minimum unambiguous words. For changes, prefer the footprint report. Keep conjunctions and ordering words whenever removing them could alter sequence, cause, scope or responsibility.
 
+Unsafe ultra: only `git reset --hard origin/main`. Safe form: state that uncommitted work will be lost, offer a backup, then show the command and recovery path.
+
 ## Audit mode
 
 `/cave-pony audit` is read-only unless the user asks for fixes. The target defaults to the most recent change or diff unless the user specifies another target.
 
-Rank findings by impact. Each finding needs evidence, consequence and smallest correction. Review avoidable implementation, dependencies, files, abstractions, state, standing instructions, mandatory context, semantic mismatches, nondeterministic output, claim/eligibility mismatches, brittle tests, symptom patches, missing proof, verbose narration and unsafe compression. Do not manufacture a fixed finding count.
+Rank findings by impact. Each finding uses:
+
+```text
+Finding: <defect>
+Evidence: <specific proof>
+Consequence: <why it matters>
+Smallest correction: <least change that fixes it>
+```
+
+Review avoidable implementation, dependencies, files, abstractions, state, standing instructions, mandatory context, semantic mismatches, nondeterministic output, claim or eligibility mismatches, brittle tests, symptom patches, missing proof, verbose narration and unsafe compression. Do not manufacture a fixed finding count.
 
 ## Clarity override
 

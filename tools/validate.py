@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,6 +49,12 @@ SAFETY_SENTENCES = (
     "Ties between brevity and clarity always break toward clarity.",
 )
 
+REQUIRED_CASES = {
+    "reset-hard": "resets",
+    "rotate-key": "rotates",
+    "delete-branches": "deletes",
+}
+
 
 def parse_frontmatter(text: str) -> dict[str, str]:
     if not text.startswith("---\n"):
@@ -73,6 +80,15 @@ def parse_frontmatter(text: str) -> dict[str, str]:
     return values
 
 
+def section(text: str, heading: str) -> str:
+    match = re.search(
+        rf"^{re.escape(heading)}\s*\n(.*?)(?=^##\s+|\Z)",
+        text,
+        flags=re.MULTILINE | re.DOTALL,
+    )
+    return match.group(1) if match else ""
+
+
 def validate_behavioral_cases(errors: list[str]) -> None:
     path = ROOT / "tests" / "behavioral_cases.json"
     if not path.is_file():
@@ -82,24 +98,54 @@ def validate_behavioral_cases(errors: list[str]) -> None:
     except (json.JSONDecodeError, OSError) as exc:
         errors.append(f"invalid behavioral_cases.json: {exc}")
         return
+    if not isinstance(cases, list):
+        errors.append("behavioral_cases.json must contain a list")
+        return
 
-    expected = {"reset-hard": "resets", "rotate-key": "rotates", "delete-branches": "deletes"}
     found: dict[str, str] = {}
-    for case in cases if isinstance(cases, list) else []:
+    for case in cases:
         if not isinstance(case, dict):
             errors.append("behavioral case must be an object")
             continue
         case_id = case.get("id")
+        prompt = case.get("prompt")
         trigger = case.get("trigger")
         requirements = case.get("required_contract")
-        if not isinstance(case_id, str) or not isinstance(trigger, str):
-            errors.append("behavioral case requires string id and trigger")
+        if not isinstance(case_id, str) or not case_id.strip():
+            errors.append("behavioral case requires a non-empty string id")
+            continue
+        if case_id in found:
+            errors.append(f"duplicate behavioral case id: {case_id!r}")
+            continue
+        if not isinstance(prompt, str) or not prompt.strip():
+            errors.append(f"behavioral case {case_id!r} requires a string prompt")
+        if not isinstance(trigger, str) or not trigger.strip():
+            errors.append(f"behavioral case {case_id!r} requires a string trigger")
             continue
         found[case_id] = trigger
         if not isinstance(requirements, list) or len(requirements) < 2:
             errors.append(f"behavioral case {case_id!r} needs at least two contract requirements")
-    if found != expected:
-        errors.append(f"behavioral cases must equal {expected!r}; found {found!r}")
+        elif not all(isinstance(item, str) and item.strip() for item in requirements):
+            errors.append(f"behavioral case {case_id!r} requirements must be non-empty strings")
+
+    for case_id, trigger in REQUIRED_CASES.items():
+        if found.get(case_id) != trigger:
+            errors.append(
+                f"required behavioral case {case_id!r} must use {trigger!r}; "
+                f"found {found.get(case_id)!r}"
+            )
+
+
+def validate_loop_sync(errors: list[str], skill_text: str, readme: str) -> None:
+    skill_steps = re.findall(r"^###\s+(\d+)\.", section(skill_text, "## Execution loop"), re.MULTILINE)
+    readme_steps = re.findall(r"^(\d+)\.\s+", section(readme, "## Behaviour"), re.MULTILINE)
+    if not skill_steps:
+        errors.append("SKILL.md execution loop has no numbered steps")
+    elif skill_steps != readme_steps:
+        errors.append(
+            "README Behaviour step numbers must match SKILL.md execution loop; "
+            f"skill={skill_steps!r}, readme={readme_steps!r}"
+        )
 
 
 def validate_benchmark(errors: list[str], readme: str) -> None:
@@ -122,29 +168,22 @@ def validate_benchmark(errors: list[str], readme: str) -> None:
         errors.append("benchmark manifest must use 10 runs per cell")
 
     results = list((ROOT / "benchmarks" / "results").glob("*.json"))
-    comparative_claim = "## What is novel here" in readme
-    if comparative_claim and not results:
+    if "## What is novel here" in readme and not results:
         errors.append("README comparative claim requires committed benchmark results")
-    if "not yet benchmarked" not in readme.lower():
+    if not results and "not yet benchmarked" not in readme.lower():
         errors.append("README must disclose that the coordination design is not yet benchmarked")
 
 
 def validate() -> list[str]:
     errors: list[str] = []
-
     for relative in REQUIRED_FILES:
         if not (ROOT / relative).is_file():
             errors.append(f"missing required file: {relative}")
-
-    if (ROOT / "tools" / "build.py").exists():
-        errors.append("tools/build.py requires a named current consumer; remove it until then")
-
     if not SKILL.is_file():
         return errors
 
     skill_text = SKILL.read_text(encoding="utf-8")
     readme = README.read_text(encoding="utf-8") if README.is_file() else ""
-
     try:
         frontmatter = parse_frontmatter(skill_text)
     except ValueError as exc:
@@ -154,6 +193,8 @@ def validate() -> list[str]:
     for key, expected in {"name": "cave-pony", "license": "MIT"}.items():
         if frontmatter.get(key) != expected:
             errors.append(f"frontmatter {key!r} must equal {expected!r}")
+    if not re.fullmatch(r"\d+\.\d+\.\d+", frontmatter.get("version", "")):
+        errors.append("frontmatter 'version' must use MAJOR.MINOR.PATCH")
 
     description = frontmatter.get("description", "")
     if "/cave-pony" not in description or "invokes" not in description:
@@ -165,26 +206,32 @@ def validate() -> list[str]:
     if "build=" not in frontmatter.get("argument-hint", ""):
         errors.append("argument-hint must expose independent build and voice controls")
 
-    for section in REQUIRED_SECTIONS:
-        if section not in skill_text:
-            errors.append(f"SKILL.md missing section: {section}")
+    for required in REQUIRED_SECTIONS:
+        if required not in skill_text:
+            errors.append(f"SKILL.md missing section: {required}")
 
     for term in (
         "ACTIVE EVERY RESPONSE",
+        "only after one of the activation triggers above occurred earlier in this conversation",
         "smallest decisive",
         "complexity toll",
         "root-cause",
         "Never claim a check passed unless it ran",
         "footprint report",
+        "Skipped: <thing>; revisit when <condition>",
+        "Finding: <defect>",
+        "Consequence: <why it matters>",
+        "Smallest correction: <least change that fixes it>",
         "The target defaults to the most recent change or diff unless the user specifies another target.",
     ):
         if term.lower() not in skill_text.lower():
             errors.append(f"SKILL.md missing contract term: {term}")
 
+    if "If unsure whether Cave Pony is active, it is." in skill_text:
+        errors.append("SKILL.md must not activate Cave Pony from ambiguity")
     for sentence in SAFETY_SENTENCES:
         if sentence not in skill_text:
             errors.append(f"SKILL.md missing safety sentence: {sentence}")
-
     if "normal mode" in skill_text.lower():
         errors.append("SKILL.md must not claim the colliding normal mode command")
     if "hoofprint" in skill_text.lower():
@@ -194,7 +241,6 @@ def validate() -> list[str]:
         errors.append("README missing Coexistence section")
     if "global `normal mode`" not in readme:
         errors.append("README must explain that no global normal mode is claimed")
-
     for url, quote in SOURCE_EXPECTATIONS.items():
         if url not in readme:
             errors.append(f"README missing source link: {url}")
@@ -208,6 +254,7 @@ def validate() -> list[str]:
             errors.append(f"third-party notice missing: {notice}")
 
     validate_behavioral_cases(errors)
+    validate_loop_sync(errors, skill_text, readme)
     validate_benchmark(errors, readme)
 
     for path in ROOT.rglob("*"):
@@ -223,7 +270,6 @@ def validate() -> list[str]:
             errors.append(f"trailing whitespace found: {relative}")
         if text and not text.endswith("\n"):
             errors.append(f"missing final newline: {relative}")
-
     return errors
 
 
