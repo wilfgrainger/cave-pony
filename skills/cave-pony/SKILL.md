@@ -58,27 +58,35 @@ Use the first option that fully satisfies the present requirement:
 7. Add the smallest local implementation.
 8. Add a dependency or abstraction only after the complexity toll passes.
 
-### 3. Charge the complexity toll
+### 3. Budget the instructions
 
-Every new dependency, file, abstraction, configuration option, persistent state, service, job, public API, or compatibility promise needs:
+Standing instructions are owned surface too. Repository skills, `AGENTS.md` files, memory, personas, checklists and mandatory reading consume context and can conflict or drift.
+
+Use one primary skill plus the shortest repository profile that preserves real domain boundaries. Do not stack overlapping skills or load every steering file by default. Read the affected code and only the authoritative guidance needed for the current decision.
+
+When instruction sources duplicate or disagree, prefer the user's current request, safety rules, current repository facts and the narrowest authoritative document. Remove or correct stale copies instead of asking future agents to reconcile them forever.
+
+### 4. Charge the complexity toll
+
+Every new dependency, file, abstraction, configuration option, persistent state, service, job, public API, compatibility promise, standing instruction or mandatory context source needs:
 
 - a concrete present requirement;
 - a named simpler alternative that fails that requirement;
-- a benefit larger than its maintenance and failure surface.
+- a benefit larger than its maintenance, failure and context surface.
 
 “Might be useful later” never pays the toll.
 
-### 4. Fix the root once
+### 5. Fix the root once
 
 Prefer one correction at the narrowest shared cause over repeated symptom guards. Check sibling callers and related paths. A small diff in the wrong layer is deferred breakage.
 
-### 5. Prove enough
+### 6. Prove enough
 
 Run the smallest decisive existing check first. For non-trivial changed logic, leave one runnable check that would fail if behaviour regressed. Reuse the project test stack.
 
 Expand proof for money, identity, permissions, security boundaries, destructive operations, concurrency, migrations, compatibility, or data loss. Never claim a check passed unless it ran. Distinguish untested from failed.
 
-### 6. Report the footprint
+### 7. Report the footprint
 
 For completed changes, use the **footprint report** and omit empty fields:
 
@@ -97,7 +105,7 @@ No greeting, tool diary, feature tour, repeated summary, or automatic invitation
 
 - `build=lite`: implement requested scope safely; mention a materially smaller equivalent when useful.
 - `build=full` — default: enforce the footprint gate and complexity toll; prefer the smallest root-cause change.
-- `build=ultra`: challenge speculative scope while completing the clearly useful core; require direct evidence before new dependencies, services, frameworks, or extension points.
+- `build=ultra`: challenge speculative scope while completing the clearly useful core; require direct evidence before new dependencies, services, frameworks, extension points, standing instructions or mandatory context.
 
 If the user explicitly insists after seeing the trade-off, deliver the broader safe scope without repeated argument.
 
@@ -111,7 +119,7 @@ If the user explicitly insists after seeing the trade-off, deliver the broader s
 
 `/cave-pony audit` is read-only unless the user asks for fixes. The target defaults to the most recent change or diff unless the user specifies another target.
 
-Rank findings by impact. Each finding needs evidence, consequence, and smallest correction. Review avoidable implementation, dependencies, files, abstractions, state, symptom patches, missing proof, verbose narration, and unsafe compression. Do not manufacture a fixed finding count.
+Rank findings by impact. Each finding needs evidence, consequence, and smallest correction. Review avoidable implementation, dependencies, files, abstractions, state, standing instructions, mandatory context, symptom patches, missing proof, verbose narration, and unsafe compression. Do not manufacture a fixed finding count.
 
 ## Clarity override
 
