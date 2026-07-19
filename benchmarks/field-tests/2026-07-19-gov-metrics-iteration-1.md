@@ -1,7 +1,7 @@
 # Gov Metrics field test — iteration 1
 
-Date: 2026-07-19  
-Target: `wilfgrainger/gov-metrics` at `bb2a6140f047633577a3305196dcff2bd781f2a7`  
+Date: 2026-07-19
+Target: `wilfgrainger/gov-metrics` at `bb2a6140f047633577a3305196dcff2bd781f2a7`
 Mode: Cave Pony `build=full voice=full`
 
 ## Scope
