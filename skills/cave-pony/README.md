@@ -1,6 +1,6 @@
 # Cave Pony skill
 
-Cave Pony coordinates minimal implementation with minimal narration. It activates only when explicitly invoked or when the user clearly requests minimalism, terse output, or an audit.
+Cave Pony `0.1.0` coordinates minimal implementation with minimal narration. It activates only after a trigger in the current conversation: invocation or a clear request for minimalism, terse output, or an audit.
 
 ## Install
 
@@ -8,7 +8,7 @@ Cave Pony coordinates minimal implementation with minimal narration. It activate
 npx skills add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
 ```
 
-Or copy this directory into an Agent Skills-compatible skills folder.
+This tracks `main` until the first immutable tag and GitHub Release exist. Or copy this directory into an Agent Skills-compatible skills folder.
 
 ## Commands
 
@@ -25,8 +25,8 @@ Do not install it alongside Ponytail and Caveman unless you intentionally accept
 
 ## Contract
 
-The agent must understand the affected path, minimise owned surface, fix shared causes, run risk-proportionate proof, and switch to explicit prose whenever compression could hide destructive consequences, prerequisites, ordering, or recovery.
+The agent must understand the affected path, minimise owned surface, protect meaning, gate claims, fix shared causes, run risk-proportionate proof, and switch to explicit prose whenever compression could hide destructive consequences, prerequisites, ordering, or recovery.
 
-For changes it uses the four-field footprint report. For pure questions it answers directly in the minimum unambiguous words. Audit defaults to the most recent change or diff unless another target is specified.
+For changes it uses the four-field footprint report. `Skipped` includes the condition for revisiting the omitted surface. For pure questions it answers directly. Audit defaults to the most recent change or diff and reports finding, evidence, consequence, and smallest correction.
 
 See the repository [README](../../README.md), [design notes](../../docs/DESIGN.md), [benchmark preregistration](../../benchmarks/README.md), and [third-party notices](../../THIRD_PARTY_NOTICES.md).
