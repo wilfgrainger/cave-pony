@@ -17,6 +17,29 @@ Cave Pony is an open-source coding-agent skill combining two excellent ideas:
 
 This is an independently authored combination, not an official successor to either project and not endorsed by their maintainers. Both source projects are MIT licensed; see [Third-party notices](THIRD_PARTY_NOTICES.md).
 
+## See it in 30 seconds
+
+Request: “Add a flexible retry framework for this one HTTP call.”
+
+### Bad
+
+Add a dependency, retry-strategy interface, provider adapters, configuration schema and logging hooks before a second caller exists.
+
+### Better
+
+Check whether the existing client already retries. If it does, configure the idempotent GET. Otherwise add one bounded local retry and one regression test.
+
+```text
+Done: Used the existing retry policy for the idempotent GET.
+Proof: Retry-limit test passes; existing suite passes.
+Skipped: New dependency and wrapper hierarchy; revisit when a second caller needs shared policy.
+Risk: POST calls remain non-retrying by design.
+```
+
+### Why
+
+YAGNI rejects imagined requirements. KISS reuses the current architecture. DRY waits until repeated knowledge is real. The proof matches the risk.
+
 ## Coordination design — not yet benchmarked
 
 Cave Pony defines what happens when implementation minimalism and terse communication conflict:
@@ -61,6 +84,67 @@ Cave Pony uses these as ordered checks, not slogans:
 
 Correctness and trust boundaries come first. YAGNI and KISS come before DRY because premature abstraction creates more owned surface than a small local duplication.
 
+## More examples
+
+### No change beats a new feature
+
+Request: “Add a formatter option so dates display in the user's locale.”
+
+**Bad:** add a formatting service and configuration object before checking the runtime.
+
+**Better:** use the existing locale-aware platform formatter if it already meets the requirement.
+
+**Why:** the footprint gate starts with existing behaviour, deletion and reuse before new code.
+
+### Similar code is not automatically shared knowledge
+
+Request: “These two functions look alike. Build a generic processing framework.”
+
+**Bad:** introduce callbacks, generic types and extension points solely because the syntax is similar.
+
+**Better:** keep two clear local implementations until the repeated rule, lifecycle and callers are semantically aligned.
+
+**Why:** DRY protects stable knowledge from drifting; it does not reward premature abstraction.
+
+### Stop a debugging spiral
+
+Situation: two attempted fixes have produced the same failure.
+
+**Bad:** add a third guard around the same symptom.
+
+**Better:** state the assumption now in doubt and run one decisive diagnostic before editing again.
+
+```text
+Failure: request still returns 401.
+Cause in doubt: the test token may not reach the handler.
+Next diagnostic: log the parsed authorization header at the handler boundary.
+```
+
+**Why:** repeated failure is evidence that the working model may be wrong, not a request for more patches.
+
+### Compression stops at destructive work
+
+Request: “Reset my branch to `origin/main`.”
+
+**Bad:** output only `git reset --hard origin/main`.
+
+**Better:** state that uncommitted work will be lost, offer a preservation command, then provide the reset and recovery path.
+
+**Why:** clarity, ordering and recovery outrank brevity at a destructive boundary.
+
+## Real-world field evidence
+
+Cave Pony has been used on the live [Gov Metrics](https://github.com/wilfgrainger/gov-metrics) repository. In the publication-diagnostics change it:
+
+- rejected a new service, endpoint, store and UI;
+- reused the existing publication snapshot and canary;
+- reduced the first classifier implementation while retaining all required failure categories;
+- left deterministic tests and passed the repository's validation stack.
+
+Read the [publication-diagnostics field test](benchmarks/field-tests/2026-07-19-gov-metrics-publication-diagnostics.md) and the [YAGNI, KISS and DRY analysis](benchmarks/field-tests/2026-07-19-gov-metrics-yagni-kiss-dry.md).
+
+These are practical field records, not comparative benchmark results.
+
 ## Install
 
 Current development version: `0.1.0`.
@@ -102,21 +186,6 @@ Any command that deletes, overwrites, resets, force-pushes, drops, revokes, or r
 
 These static probes do not prove model compliance. Real compliance belongs in the comparative agent benchmark.
 
-## Example
-
-Request: “Add a retry framework for one HTTP call.”
-
-A Cave Pony agent checks the existing client, failure semantics, and idempotency. If the client already supports retries, it configures that. Otherwise it may add one bounded local retry around the safe call and one regression test.
-
-Footprint report:
-
-```text
-Done: Used the existing retry policy for the idempotent GET.
-Proof: Retry-limit test passes; existing suite passes.
-Skipped: New dependency and wrapper hierarchy; revisit when a second caller needs shared policy.
-Risk: POST calls remain non-retrying by design.
-```
-
 ## Development and testing
 
 No runtime package or third-party development dependency is required.
@@ -139,6 +208,10 @@ benchmarks/                  Preregistered comparative benchmark
 docs/DESIGN.md               Design and implementation details
 ```
 
+## Presentation influence
+
+The README's concrete Bad, Better and Why teaching pattern was influenced by [`i-have-adhd`](https://github.com/ayghri/i-have-adhd). Cave Pony does not adopt that skill's universal activation, compulsory time estimates or compulsory state repetition.
+
 ## Licence
 
-Cave Pony is released under the [MIT License](LICENSE). Attribution for Ponytail and Caveman is preserved in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Cave Pony is released under the [MIT License](LICENSE). Attribution for Ponytail and Caveman is preserved in [Third-party notices](THIRD_PARTY_NOTICES.md).
