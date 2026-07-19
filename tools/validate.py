@@ -11,12 +11,15 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "skills" / "cave-pony" / "SKILL.md"
 README = ROOT / "README.md"
+DESIGN = ROOT / "docs" / "DESIGN.md"
+CI = ROOT / ".github" / "workflows" / "ci.yml"
 
 REQUIRED_FILES = (
     "README.md",
     "LICENSE",
     "THIRD_PARTY_NOTICES.md",
     "CONTRIBUTING.md",
+    ".github/workflows/ci.yml",
     "skills/cave-pony/SKILL.md",
     "skills/cave-pony/README.md",
     "docs/DESIGN.md",
@@ -47,10 +50,76 @@ SAFETY_SENTENCES = (
     "Ties between brevity and clarity always break toward clarity.",
 )
 
+SKILL_EXPECTATIONS = (
+    "coding or agent-work request",
+    "A generic request to be brief outside coding or agent work does not activate Cave Pony.",
+    "ACTIVE EVERY RESPONSE",
+    "only after one of the activation triggers above occurred earlier in this conversation",
+    "correctness first, then YAGNI and KISS, then DRY",
+    "Repeated syntax alone is not a reason to abstract",
+    "standing instructions as owned surface",
+    "one primary skill plus the shortest domain profile",
+    "Fields and claims must use the event or authority they name",
+    "generated output deterministic unless variability is required",
+    "Presence is not eligibility",
+    "Test one accepted state and the most plausible rejected state",
+    "complexity toll",
+    "root-cause",
+    "# cave-pony: global lock",
+    "Name the ceiling and concrete upgrade trigger",
+    "Compress by deletion, not shorthand",
+    "Do not invent prose abbreviations",
+    "do not use arrows as prose",
+    "No decorative tables or emoji",
+    "dumping raw logs",
+    "same failure survives two attempted corrections",
+    "one decisive diagnostic",
+    "exact failure, known cause, smallest correction, and proof or next diagnostic",
+    "smallest decisive",
+    "Never claim a check passed unless it ran",
+    "footprint report",
+    "Skipped: <thing>; revisit when <condition>",
+    "Finding: <defect>",
+    "Consequence: <why it matters>",
+    "Smallest correction: <least change that fixes it>",
+    "The target defaults to the most recent change or diff unless the user specifies another target.",
+    "When the user still has work to do",
+    "Do not manufacture homework",
+    "Give time estimates only when grounded",
+    "do not recap every turn",
+)
+
+README_EXPECTATIONS = (
+    "## See it in 30 seconds",
+    "### Bad",
+    "### Better",
+    "### Why",
+    "### Stop a debugging spiral",
+    "## Real-world field evidence",
+    "## Presentation influence",
+    "universal activation",
+    "compulsory time estimates",
+    "YAGNI and KISS before stable-knowledge DRY",
+    "Correctness and trust boundaries come first",
+)
+
+DESIGN_EXPECTATIONS = (
+    "## Intentional parent divergences",
+    "Uncertainty does not activate the skill",
+    "The clarity override is broader",
+    "Similar syntax does not prove shared knowledge",
+    "tools/validate.py` is the authoritative static contract checker",
+)
+
 REQUIRED_CASES = {
     "reset-hard": "resets",
     "rotate-key": "rotates",
     "delete-branches": "deletes",
+}
+
+PINNED_ACTIONS = {
+    "actions/checkout": "11bd71901bbe5b1630ceea73d27597364c9af683",
+    "actions/setup-python": "a26af69be951a213d495a4c3e4e4022e16d87065",
 }
 
 
@@ -85,6 +154,13 @@ def section(text: str, heading: str) -> str:
         flags=re.MULTILINE | re.DOTALL,
     )
     return match.group(1) if match else ""
+
+
+def require_terms(errors: list[str], label: str, text: str, terms: tuple[str, ...]) -> None:
+    lowered = text.lower()
+    for term in terms:
+        if term.lower() not in lowered:
+            errors.append(f"{label} missing contract term: {term}")
 
 
 def validate_behavioral_cases(errors: list[str]) -> None:
@@ -146,6 +222,25 @@ def validate_loop_sync(errors: list[str], skill_text: str, readme: str) -> None:
         )
 
 
+def validate_ci(errors: list[str]) -> None:
+    if not CI.is_file():
+        return
+    workflow = CI.read_text(encoding="utf-8")
+    if workflow.count("branches: [main]") != 2:
+        errors.append("CI must run only for pushes and pull requests targeting main")
+    if "cancel-in-progress: true" not in workflow:
+        errors.append("CI must cancel superseded runs")
+    if "permissions:\n  contents: read" not in workflow:
+        errors.append("CI must keep read-only repository permissions")
+
+    for action, expected_sha in PINNED_ACTIONS.items():
+        match = re.search(rf"uses:\s*{re.escape(action)}@([^\s#]+)", workflow)
+        if not match:
+            errors.append(f"CI missing action: {action}")
+        elif match.group(1) != expected_sha:
+            errors.append(f"CI action {action} must use immutable commit {expected_sha}")
+
+
 def validate() -> list[str]:
     errors: list[str] = []
     for relative in REQUIRED_FILES:
@@ -156,6 +251,7 @@ def validate() -> list[str]:
 
     skill_text = SKILL.read_text(encoding="utf-8")
     readme = README.read_text(encoding="utf-8") if README.is_file() else ""
+    design = DESIGN.read_text(encoding="utf-8") if DESIGN.is_file() else ""
     try:
         frontmatter = parse_frontmatter(skill_text)
     except ValueError as exc:
@@ -171,10 +267,10 @@ def validate() -> list[str]:
     description = frontmatter.get("description", "")
     if "/cave-pony" not in description or "invokes" not in description:
         errors.append("frontmatter description must use explicit invocation language")
-    if "Use for coding" in description:
-        errors.append("frontmatter description must not auto-trigger on ordinary coding")
-    if "Do not auto-load for ordinary coding requests" not in description:
-        errors.append("frontmatter description must state the ordinary-coding exclusion")
+    if "coding or agent-work" not in description:
+        errors.append("frontmatter description must limit implicit triggers to coding or agent work")
+    if "Do not auto-load for ordinary coding or non-coding requests" not in description:
+        errors.append("frontmatter description must exclude ordinary coding and non-coding requests")
     if "build=" not in frontmatter.get("argument-hint", ""):
         errors.append("argument-hint must expose independent build and voice controls")
 
@@ -182,22 +278,9 @@ def validate() -> list[str]:
         if required not in skill_text:
             errors.append(f"SKILL.md missing section: {required}")
 
-    for term in (
-        "ACTIVE EVERY RESPONSE",
-        "only after one of the activation triggers above occurred earlier in this conversation",
-        "smallest decisive",
-        "complexity toll",
-        "root-cause",
-        "Never claim a check passed unless it ran",
-        "footprint report",
-        "Skipped: <thing>; revisit when <condition>",
-        "Finding: <defect>",
-        "Consequence: <why it matters>",
-        "Smallest correction: <least change that fixes it>",
-        "The target defaults to the most recent change or diff unless the user specifies another target.",
-    ):
-        if term.lower() not in skill_text.lower():
-            errors.append(f"SKILL.md missing contract term: {term}")
+    require_terms(errors, "SKILL.md", skill_text, SKILL_EXPECTATIONS)
+    require_terms(errors, "README.md", readme, README_EXPECTATIONS)
+    require_terms(errors, "docs/DESIGN.md", design, DESIGN_EXPECTATIONS)
 
     if "If unsure whether Cave Pony is active, it is." in skill_text:
         errors.append("SKILL.md must not activate Cave Pony from ambiguity")
@@ -227,6 +310,7 @@ def validate() -> list[str]:
 
     validate_behavioral_cases(errors)
     validate_loop_sync(errors, skill_text, readme)
+    validate_ci(errors)
 
     for path in ROOT.rglob("*"):
         if not path.is_file() or ".git" in path.parts:
