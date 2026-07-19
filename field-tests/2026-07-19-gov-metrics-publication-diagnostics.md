@@ -88,9 +88,9 @@ This field test therefore proves implementation, repository integration and exac
 
 ## What this proves
 
-This field test is evidence that Cave Pony can:
+This field record shows Cave Pony used on one real repository to:
 
-- select a real P0 defect rather than inventing a feature;
+- select a real defect rather than invent a feature;
 - discover and reuse existing architecture;
 - reject a first implementation as too large;
 - reduce owned runtime surface before merge;
@@ -98,6 +98,4 @@ This field test is evidence that Cave Pony can:
 - require exact-head policy, test, build and browser proof;
 - report a deployment blocker instead of bypassing a guardrail or claiming success.
 
-## What this does not prove
-
-This is one real-repository field test. It does not measure input tokens, output tokens, cost or performance against baseline, Ponytail plus Caveman, or a YAGNI control. Comparative research is deferred to cave-pony issue #11, and no superiority claim follows from this result.
+It is one practical example. It does not guarantee that every host model or task will follow the skill correctly.
