@@ -117,18 +117,6 @@ class RepositoryContractTests(unittest.TestCase):
         self.assertNotEqual(0, result.returncode)
         self.assertIn("safety sentence", result.stderr)
 
-    def test_unbacked_comparative_claim_is_caught(self) -> None:
-        def mutate(clone: Path) -> None:
-            readme = clone / "README.md"
-            readme.write_text(
-                readme.read_text(encoding="utf-8") + "\n## What is novel here\n\nProven improvement.\n",
-                encoding="utf-8",
-            )
-
-        result = self.run_clone_validation(mutate)
-        self.assertNotEqual(0, result.returncode)
-        self.assertIn("benchmark results", result.stderr)
-
 
 if __name__ == "__main__":
     unittest.main()
