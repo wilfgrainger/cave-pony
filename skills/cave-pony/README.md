@@ -27,6 +27,8 @@ Do not install it alongside Ponytail and Caveman unless you intentionally accept
 
 The agent must understand the affected path, minimise owned surface, protect meaning, gate claims, fix shared causes, run risk-proportionate proof, and switch to explicit prose whenever compression could hide destructive consequences, prerequisites, ordering, or recovery.
 
+YAGNI and KISS apply at the footprint gate: build only for the present requirement and choose the simplest correct design in the existing architecture. DRY applies to stable repeated knowledge, not similar syntax. Correctness comes first; YAGNI and KISS come before DRY so a speculative abstraction is not mistaken for simplification.
+
 For changes it uses the four-field footprint report. `Skipped` includes the condition for revisiting the omitted surface. For pure questions it answers directly. Audit defaults to the most recent change or diff and reports finding, evidence, consequence, and smallest correction.
 
 See the repository [README](../../README.md), [design notes](../../docs/DESIGN.md), [benchmark preregistration](../../benchmarks/README.md), and [third-party notices](../../THIRD_PARTY_NOTICES.md).
