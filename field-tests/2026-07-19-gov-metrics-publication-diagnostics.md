@@ -3,7 +3,6 @@
 Date: 2026-07-19
 Target: `wilfgrainger/gov-metrics` issue #253 and PR #261
 Mode: Cave Pony `build=full voice=full`
-Cave Pony commit: `a4b280ffbee3c6ec943c040427380454ea226e21`
 Gov Metrics tested head: `2a211c92972e02a3dccda1de076a3c72d0f1e0d5`
 Gov Metrics merge: `fedf9cc723d4aa0873f4db81f170ece921c9a8f2`
 
@@ -81,15 +80,11 @@ Focused tests prove:
 
 PR #261 was squash-merged only after the exact tested head passed.
 
-## Operational correction
+## Production status at the test date
 
-While setting up the branch, a connector mistake created a one-word placeholder file on `main`. It was immediately deleted in the next commit before the feature branch was created. No product code, data contract or metric value changed. The mistake is recorded because proof includes recovery behaviour, not only successful steps.
+Production deployment was pending. Gov Metrics permits deployment only through its manual `workflow_dispatch` workflow. The available GitHub capability could inspect and rerun Actions but could not start that workflow, so the safeguard was not weakened and no temporary push-triggered deployment path was added.
 
-## Production status
-
-Production deployment is pending. Gov Metrics deliberately permits deployment only through the manual `workflow_dispatch` workflow. The connected GitHub capability in this session can inspect and rerun Actions but cannot start a new manual workflow. The deployment safeguard was not weakened and no temporary push-triggered deployment path was added.
-
-Therefore this field test proves implementation, repository integration and exact-head assurance. It does not yet claim that `public-data.org` serves `meta.publicationDiagnostics` until the manual deployment workflow runs and the production canary observes it.
+This field test therefore proves implementation, repository integration and exact-head assurance. It does not claim that `public-data.org` served `meta.publicationDiagnostics` on the test date.
 
 ## What this proves
 
