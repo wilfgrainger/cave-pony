@@ -467,7 +467,8 @@ def main() -> int:
     started = time.time()
     sys.argv = [sys.argv[0], *remaining]
     upstream.main()
-    rewrite_latest_result(started)
+    if live:
+        rewrite_latest_result(started)
     return 0
 
 
