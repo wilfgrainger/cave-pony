@@ -1,6 +1,6 @@
 # Cave Pony skill
 
-Cave Pony `0.1.0` coordinates minimal implementation with minimal narration. It activates only after a trigger in the current conversation: invocation or a clear request for minimalism, terse output, or an audit.
+Cave Pony `0.1.0` coordinates minimal implementation with minimal narration. It activates after explicit invocation or, within coding or agent work, a clear request for minimalism, terse output, or an audit. Generic brevity requests outside that context do not activate it.
 
 ## Install
 
