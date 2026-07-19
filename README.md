@@ -1,5 +1,8 @@
 # Cave Pony
 
+[![CI](https://github.com/wilfgrainger/cave-pony/actions/workflows/ci.yml/badge.svg)](https://github.com/wilfgrainger/cave-pony/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 **Do less. Say less. Prove enough.**
 
 Cave Pony is an open-source coding-agent skill combining two excellent ideas:
@@ -29,7 +32,7 @@ These are design claims, not performance results. Cave Pony has **not yet been s
 
 ### Context overhead
 
-The skill text is loaded into model context when activated. Its exact token cost depends on the host and tokenizer; the current file is roughly in the high-one-thousands of input tokens. This overhead can be net-negative for small or already-terse tasks. Cave Pony therefore uses explicit activation rather than loading for every coding request.
+The skill text is loaded into model context when activated. Its exact token cost depends on the host and tokenizer. This overhead can be net-negative for small or already-terse tasks, so Cave Pony uses explicit activation rather than loading for every coding request.
 
 ## Coexistence
 
@@ -38,17 +41,24 @@ Cave Pony is intended to replace Ponytail and Caveman, not stack with them. Inst
 ## Behaviour
 
 1. Understand the affected flow and trust boundaries.
-2. Prefer no change, deletion, reuse, standard library, native features, or installed dependencies before new owned code.
-3. Require a present need and rejected simpler alternative for every new durable surface.
-4. Fix the narrowest shared root cause.
-5. Run the smallest meaningful proof and expand it with risk.
-6. For changes, report Done, Proof, Skipped, and Risk. For questions, answer directly.
+2. Use the footprint gate before adding owned surface.
+3. Budget standing instructions and load only needed authority.
+4. Preserve semantic meaning and deterministic output.
+5. Gate claims on the state that makes them true.
+6. Charge every durable addition the complexity toll.
+7. Fix the narrowest shared root cause.
+8. Run the smallest decisive proof, expanded by risk.
+9. Report Done, Proof, conditional Skipped, and Risk.
 
 ## Install
+
+Current development version: `0.1.0`.
 
 ```bash
 npx skills add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
 ```
+
+This tracks `main` until the first immutable tag and GitHub Release are cut. Do not describe it as a pinned release.
 
 Manual installation:
 
@@ -77,9 +87,9 @@ A single level sets both axes. Advanced users can tune them independently:
 
 ## Safety under compression
 
-Any command that deletes, overwrites, resets, force-pushes, drops, revokes, or rotates state must trigger explicit prose. Preconditions, ordering, consequences, and recovery stay visible. Three adversarial contract probes are committed in [`tests/behavioral_cases.json`](tests/behavioral_cases.json).
+Any command that deletes, overwrites, resets, force-pushes, drops, revokes, or rotates state must trigger explicit prose. Preconditions, ordering, consequences, and recovery stay visible. The committed probes in [`tests/behavioral_cases.json`](tests/behavioral_cases.json) verify the written contract and may be extended with new regression cases.
 
-These static probes verify the written contract, not model compliance. Real compliance belongs in the comparative agent benchmark.
+These static probes do not prove model compliance. Real compliance belongs in the comparative agent benchmark.
 
 ## Example
 
@@ -92,7 +102,7 @@ Footprint report:
 ```text
 Done: Used the existing retry policy for the idempotent GET.
 Proof: Retry-limit test passes; existing suite passes.
-Skipped: New dependency and wrapper hierarchy; no current need.
+Skipped: New dependency and wrapper hierarchy; revisit when a second caller needs shared policy.
 Risk: POST calls remain non-retrying by design.
 ```
 
@@ -105,7 +115,7 @@ make validate
 make test
 ```
 
-CI runs the same checks. Static tests validate the skill contract and adversarial cases; they do not prove that every host model will obey the skill. See [Design and implementation](docs/DESIGN.md).
+CI runs the same checks on Python 3.10 and 3.12. Static tests validate the skill contract and adversarial cases; they do not prove that every host model will obey the skill. See [Design and implementation](docs/DESIGN.md).
 
 ## Repository layout
 
