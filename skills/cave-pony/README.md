@@ -1,6 +1,6 @@
 # Cave Pony skill
 
-Cave Pony `0.1.0` coordinates minimal implementation with minimal narration. It activates after explicit invocation or, within coding or agent work, a clear request for minimalism, terse output, or an audit. Generic brevity requests outside that context do not activate it.
+Cave Pony `0.1.0` builds like Ponytail and speaks like Caveman. It activates after explicit invocation or, within coding or agent work, a clear request for minimalism, terse output, relief from bloat, or an audit. Generic brevity requests outside that context do not activate it.
 
 ## Install
 
@@ -8,7 +8,7 @@ Cave Pony `0.1.0` coordinates minimal implementation with minimal narration. It 
 npx skills add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
 ```
 
-This tracks `main` until the first immutable tag and GitHub Release exist. Or copy this directory into an Agent Skills-compatible skills folder.
+This tracks `main` until an immutable tag and GitHub Release exist. Or copy this directory into an Agent Skills-compatible skills folder.
 
 ## Commands
 
@@ -21,16 +21,14 @@ This tracks `main` until the first immutable tag and GitHub Release exist. Or co
 stop cave-pony                     # disable Cave Pony only
 ```
 
-Do not install it alongside Ponytail and Caveman unless you intentionally accept overlapping instructions and context overhead.
+Do not stack it with Ponytail and Caveman unless overlapping instructions and context overhead are intentional.
 
 ## Contract
 
-The agent must understand the affected path, minimise owned surface, protect meaning, gate claims, fix shared causes, run risk-proportionate proof, and switch to explicit prose whenever compression could hide destructive consequences, prerequisites, ordering, or recovery.
+The agent reads the complete affected path, climbs the no-change/reuse/stdlib/native/installed/local-code ladder, fixes the shared root cause, leaves one runnable check for non-trivial logic, and reports only useful result, proof, skipped surface, and risk.
 
-YAGNI and KISS apply at the footprint gate: build only for the present requirement and choose the simplest correct design in the existing architecture. DRY applies to stable repeated knowledge, not similar syntax. Correctness comes first; YAGNI and KISS come before DRY so a speculative abstraction is not mistaken for simplification.
+Voice removes filler, hedging, self-reference, and routine narration. Full voice may use fragments and drop articles where meaning stays obvious. Exact code, commands, identifiers, errors, language, commits, PR bodies, and documentation remain intact or use normal grammar.
 
-A non-obvious deliberate shortcut receives one local `cave-pony:` comment naming its ceiling and concrete upgrade trigger. Repeated failures stop the patch loop and trigger one decisive diagnostic. Failure reports state the exact failure, known cause, smallest correction, and proof or next diagnostic.
+Compression stops for destructive, security-sensitive, and order-dependent content. Preconditions, consequences, preservation, and recovery stay explicit.
 
-For changes it uses the four-field footprint report. `Skipped` includes the condition for revisiting the omitted surface. When the user still has work to do, the response ends with one concrete next action; completed work does not manufacture homework. For pure questions it answers directly. Audit defaults to the most recent change or diff and reports finding, evidence, consequence, and smallest correction.
-
-See the repository [README](../../README.md), [design notes](../../docs/DESIGN.md), [field tests](../../field-tests/), [future comparative-research issue](https://github.com/wilfgrainger/cave-pony/issues/11), and [third-party notices](../../THIRD_PARTY_NOTICES.md).
+See the repository [README](../../README.md), [design notes](../../docs/DESIGN.md), [field record](../../field-tests/2026-07-19-gov-metrics-publication-diagnostics.md), and [third-party notices](../../THIRD_PARTY_NOTICES.md).
