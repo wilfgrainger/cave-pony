@@ -6,7 +6,7 @@ Coding agents can inflate two independent surfaces: implementation and narration
 
 ## Activation model
 
-Cave Pony activates only after a trigger in the current conversation: invocation, an explicit request for minimal or least-over-engineered code, terse output, a complaint about bloat, or an audit request. A preloaded skill or uncertainty about prior state does not activate it.
+Cave Pony activates after explicit invocation or, within coding or agent work, a request for minimal or least-over-engineered implementation, terse output, relief from bloat, or an audit. A generic request to be brief outside that context does not activate it. A preloaded skill or uncertainty about prior state does not activate it.
 
 Once active, the selected levels apply on every response until `stop cave-pony`. There is no global `normal mode` alias because that collides with both parent skills.
 
@@ -67,7 +67,7 @@ Presence is also separate from eligibility. A fallback may be valid for continui
 
 “Smallest decisive proof” means the cheapest check capable of falsifying the claimed behaviour at the relevant risk level. It is a starting point, not a one-test cap.
 
-The repository's own tests are **static contract tests**. They can prove that required wording, sections, triggers, and adversarial cases are committed. They cannot prove that every host model follows those rules or that Cave Pony outperforms another skill. Comparative model research is deferred to [issue #11](https://github.com/wilfgrainger/cave-pony/issues/11).
+The repository's own tests are **static contract tests**. They can prove that required sections, triggers, invariants and adversarial cases are committed. They cannot prove that every host model follows those rules or that Cave Pony outperforms another skill. Comparative model research is deferred to [issue #11](https://github.com/wilfgrainger/cave-pony/issues/11).
 
 ## Output model
 
@@ -99,24 +99,21 @@ No comparative superiority or measured token-efficiency claim is made. The large
 
 ## Validation
 
-`tools/validate.py` checks:
+`tools/validate.py` is the authoritative static contract checker. It verifies:
 
-- explicit activation and anti-hijack persistence;
+- explicit coding-context activation and anti-hijack persistence;
 - execution-loop consistency between the skill and README;
-- safety override and output-template wording;
-- canonical footprint-report terminology;
-- coexistence and version documentation;
-- source links, quotations, and copyright notices;
+- YAGNI, KISS and stable-knowledge DRY precedence;
+- instruction-budget, semantic, claim-gate and root-fidelity invariants;
+- safety override, failure shape and footprint-report wording;
+- coexistence, version, attribution and field-evidence documentation;
+- immutable CI action references, main-branch scoping and run cancellation;
 - required behavioural probes plus schema-valid extensions;
 - clean text formatting.
 
-The YAGNI, KISS and DRY contract has a focused repository test that requires all three names, their precedence and the repeated-knowledge caveat. This prevents a future edit from turning DRY into a blanket anti-duplication rule.
-
-The root-fidelity tests require the ceiling-comment convention, concrete compression prohibitions, repeated-question clarity fallback, intentional parent divergences, debug-spiral stop, failure reporting shape, and conditional next-action rule.
+`tests/test_repository.py` exercises that validator through its Python API and command-line entry point, then mutates temporary repository copies to prove important regressions are rejected. Keeping the static contract in one validator avoids five small test files independently freezing the same prose.
 
 The `prompt` field in each behavioural case records the scenario that exercises the written contract. Static validation checks its schema without requiring a model runner.
-
-`tests/test_repository.py` runs validation and negative regression cases against temporary copies of the skill, README, and behavioural cases. CI runs the suite on Python 3.10 and 3.12.
 
 ## Packaging and release decision
 
@@ -126,4 +123,4 @@ The skill declares a semantic version in frontmatter. Installation remains expli
 
 ## Extension rules
 
-A proposal should show a concrete failure, explain why existing rules miss it, make the smallest wording change, and add a regression test. New behavioural cases are allowed when their schema is valid; the three destructive-operation probes remain required. Do not add provider-specific mirrors, packaging artifacts, or generated copies until a real integration requires them. Keep `SKILL.md` the single behavioural source of truth.
+A proposal should show a concrete failure, explain why existing rules miss it, make the smallest wording change, and add or update a regression check. New behavioural cases are allowed when their schema is valid; the three destructive-operation probes remain required. Do not add provider-specific mirrors, packaging artifacts, or generated copies until a real integration requires them. Keep `SKILL.md` the single behavioural source of truth.
