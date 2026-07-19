@@ -40,7 +40,7 @@ Risk: POST calls remain non-retrying by design.
 
 YAGNI rejects imagined requirements. KISS reuses the current architecture. DRY waits until repeated knowledge is real. The proof matches the risk.
 
-## Coordination design — not yet benchmarked
+## Coordination design
 
 Cave Pony defines what happens when implementation minimalism and terse communication conflict:
 
@@ -52,7 +52,7 @@ Cave Pony defines what happens when implementation minimalism and terse communic
 - an explicit clarity override for risky work;
 - read-only audit mode.
 
-These are design claims, not performance results. Cave Pony has **not yet been shown to outperform installing Ponytail and Caveman side by side**. Until the preregistered benchmark in [`benchmarks/`](benchmarks/) is run and published, treat Cave Pony as a convenience and coordination experiment, not a proven improvement.
+Cave Pony makes no measured superiority claim over installing Ponytail and Caveman side by side. The current evidence is the committed behavioural contract, static regression tests and real-repository field records. A future comparative Codex study is deliberately deferred to [issue #11](https://github.com/wilfgrainger/cave-pony/issues/11).
 
 ### Context overhead
 
@@ -141,9 +141,9 @@ Cave Pony has been used on the live [Gov Metrics](https://github.com/wilfgrainge
 - reduced the first classifier implementation while retaining all required failure categories;
 - left deterministic tests and passed the repository's validation stack.
 
-Read the [publication-diagnostics field test](benchmarks/field-tests/2026-07-19-gov-metrics-publication-diagnostics.md) and the [YAGNI, KISS and DRY analysis](benchmarks/field-tests/2026-07-19-gov-metrics-yagni-kiss-dry.md).
+Read the [publication-diagnostics field test](field-tests/2026-07-19-gov-metrics-publication-diagnostics.md) and the [YAGNI, KISS and DRY analysis](field-tests/2026-07-19-gov-metrics-yagni-kiss-dry.md).
 
-These are practical field records, not comparative benchmark results.
+These are practical field records, not controlled comparative results.
 
 ## Install
 
@@ -184,7 +184,7 @@ A single level sets both axes. Advanced users can tune them independently:
 
 Any command that deletes, overwrites, resets, force-pushes, drops, revokes, or rotates state must trigger explicit prose. Preconditions, ordering, consequences, and recovery stay visible. The committed probes in [`tests/behavioral_cases.json`](tests/behavioral_cases.json) verify the written contract and may be extended with new regression cases.
 
-These static probes do not prove model compliance. Real compliance belongs in the comparative agent benchmark.
+These static probes do not prove that every host model will comply. They prove the repository's intended contract and protect it from accidental drift.
 
 ## Development and testing
 
@@ -204,7 +204,7 @@ skills/cave-pony/SKILL.md    Agent-facing behaviour
 skills/cave-pony/README.md   Install and command reference
 tools/validate.py            Static contract validation
 tests/                       Repository and adversarial contract tests
-benchmarks/                  Preregistered comparative benchmark
+field-tests/                 Real-repository field records
 docs/DESIGN.md               Design and implementation details
 ```
 
