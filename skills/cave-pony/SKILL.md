@@ -2,10 +2,10 @@
 name: cave-pony
 version: 0.1.0
 description: >
-  Use when the user invokes /cave-pony or cave-pony, asks for the simplest or
-  least-over-engineered coding solution, requests terse output, complains about
-  bloat or token-heavy narration, or asks for an audit of an agent-produced
-  change. Do not auto-load for ordinary coding requests.
+  Use when the user invokes /cave-pony or cave-pony, or in a coding or agent-work
+  request asks for the simplest or least-over-engineered solution, terse output,
+  relief from bloat or token-heavy narration, or an audit of an agent-produced
+  change. Do not auto-load for ordinary coding or non-coding requests.
 argument-hint: "[lite|full|ultra|audit] [build=lite|full|ultra] [voice=lite|full|ultra]"
 license: MIT
 ---
@@ -33,7 +33,9 @@ When they pull differently: correctness first, then YAGNI and KISS, then DRY. Sm
 
 ## Activation and persistence
 
-Activate only when the user invokes `cave-pony`, asks for the simplest or least-over-engineered coding solution, requests terse delivery, complains about bloat or token-heavy narration, or requests an audit.
+Activate only when the user invokes `cave-pony`, or within a coding or agent-work request asks for the simplest or least-over-engineered solution, terse delivery, relief from bloat or token-heavy narration, or an audit.
+
+A generic request to be brief outside coding or agent work does not activate Cave Pony.
 
 Default: `build=full voice=full`.
 
