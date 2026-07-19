@@ -77,6 +77,12 @@ Audit defaults to the most recent change or diff unless a target is specified. E
 
 Voice compression removes greetings, filler, hedging, self-reference, repeated framing and decorative transitions before shortening technical language. Prose abbreviations and arrows are rejected because compact-looking notation can reduce clarity without reducing model tokens. Tables must improve comparison; emoji and raw log dumps are not default output.
 
+Failures are reported as the exact failure, known cause, smallest correction, and proof or next diagnostic. If the same failure survives two attempted corrections, Cave Pony stops adding patches and challenges the assumption most likely to be wrong.
+
+A next action appears only when the user still has work to do. Time estimates require grounded scope and are omitted rather than invented. Multi-step state is restated when needed to resume work, not as a compulsory recap on every turn.
+
+The public README uses compact Bad, Better and Why examples so readers can learn the behaviour quickly. Those teaching examples stay outside `SKILL.md` unless they prevent a concrete model failure, because every active example consumes context.
+
 ## Clarity override
 
 Compression is suspended for destructive or ordering-sensitive state changes. Trigger verbs include delete, overwrite, reset, force-push, drop, revoke, and rotate. The override includes preconditions and recovery, not only the command itself.
@@ -107,7 +113,7 @@ The benchmark is a present requirement because comparative performance is the pr
 
 The YAGNI, KISS and DRY contract has a focused repository test that requires all three names, their precedence and the repeated-knowledge caveat. This prevents a future edit from turning DRY into a blanket anti-duplication rule.
 
-The root-fidelity tests require the ceiling-comment convention, concrete compression prohibitions, repeated-question clarity fallback, and documentation of the intentional parent divergences.
+The root-fidelity tests require the ceiling-comment convention, concrete compression prohibitions, repeated-question clarity fallback, intentional parent divergences, debug-spiral stop, failure reporting shape, and conditional next-action rule.
 
 The `prompt` field in each behavioural case is reserved for the comparative harness. Static validation checks its schema; model execution will consume it when the benchmark runs.
 
