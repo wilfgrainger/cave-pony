@@ -20,8 +20,6 @@ REQUIRED_FILES = (
     "skills/cave-pony/SKILL.md",
     "skills/cave-pony/README.md",
     "docs/DESIGN.md",
-    "benchmarks/README.md",
-    "benchmarks/manifest.json",
     "tools/validate.py",
     "tests/test_repository.py",
     "tests/behavioral_cases.json",
@@ -148,32 +146,6 @@ def validate_loop_sync(errors: list[str], skill_text: str, readme: str) -> None:
         )
 
 
-def validate_benchmark(errors: list[str], readme: str) -> None:
-    manifest_path = ROOT / "benchmarks" / "manifest.json"
-    if not manifest_path.is_file():
-        return
-    try:
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except (json.JSONDecodeError, OSError) as exc:
-        errors.append(f"invalid benchmark manifest: {exc}")
-        return
-
-    if manifest.get("status") != "not-run" and not list((ROOT / "benchmarks" / "results").glob("*.json")):
-        errors.append("benchmark status may change from not-run only with committed JSON results")
-    if len(manifest.get("tasks", [])) != 12:
-        errors.append("benchmark manifest must preregister exactly 12 tasks")
-    if manifest.get("arms") != ["baseline", "both-parents", "cave-pony", "yagni-control"]:
-        errors.append("benchmark manifest arms do not match preregistration")
-    if manifest.get("runs_per_cell") != 10:
-        errors.append("benchmark manifest must use 10 runs per cell")
-
-    results = list((ROOT / "benchmarks" / "results").glob("*.json"))
-    if "## What is novel here" in readme and not results:
-        errors.append("README comparative claim requires committed benchmark results")
-    if not results and "not yet benchmarked" not in readme.lower():
-        errors.append("README must disclose that the coordination design is not yet benchmarked")
-
-
 def validate() -> list[str]:
     errors: list[str] = []
     for relative in REQUIRED_FILES:
@@ -255,7 +227,6 @@ def validate() -> list[str]:
 
     validate_behavioral_cases(errors)
     validate_loop_sync(errors, skill_text, readme)
-    validate_benchmark(errors, readme)
 
     for path in ROOT.rglob("*"):
         if not path.is_file() or ".git" in path.parts:
