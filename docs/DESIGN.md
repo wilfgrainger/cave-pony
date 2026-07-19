@@ -95,7 +95,7 @@ A materially repeated question is treated as evidence that the previous compress
 
 The coordination layer is not yet proven better than loading Ponytail and Caveman together. [`benchmarks/README.md`](../benchmarks/README.md) preregisters a falsifiable four-arm experiment and kill criterion. No comparative result may be claimed until a committed result file exists.
 
-The benchmark is a present requirement because comparative performance is the project's central empirical question. Provider-specific runtime integration remains outside the core skill; the preregistration reuses Ponytail's published agentic harness rather than duplicating it here.
+The benchmark is a present requirement because comparative performance is the project's central empirical question. The benchmark-only Codex adapter imports Ponytail's pinned tasks, deterministic scorers and aggregation, while replacing its Claude-specific invocation with isolated `codex exec` sessions authenticated through ChatGPT. This integration is deliberately kept outside the core skill and records the exact Codex CLI version, model identifier, arm hashes and raw JSONL for every run.
 
 ## Validation
 
@@ -114,6 +114,8 @@ The benchmark is a present requirement because comparative performance is the pr
 The YAGNI, KISS and DRY contract has a focused repository test that requires all three names, their precedence and the repeated-knowledge caveat. This prevents a future edit from turning DRY into a blanket anti-duplication rule.
 
 The root-fidelity tests require the ceiling-comment convention, concrete compression prohibitions, repeated-question clarity fallback, intentional parent divergences, debug-spiral stop, failure reporting shape, and conditional next-action rule.
+
+The Codex benchmark tests pin the four arms, verify the immutable skill snapshots, require isolated `codex exec` flags, and exercise JSONL usage and failure parsing without consuming a model run.
 
 The `prompt` field in each behavioural case is reserved for the comparative harness. Static validation checks its schema; model execution will consume it when the benchmark runs.
 
