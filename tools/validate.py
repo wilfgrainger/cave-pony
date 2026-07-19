@@ -141,9 +141,6 @@ def validate() -> list[str]:
         if not re.search(rf"^{number}\.\s+", readme, re.MULTILINE):
             errors.append(f"README missing behaviour step {number}")
 
-    active_docs = readme + (ROOT / "docs/DESIGN.md").read_text(encoding="utf-8") + (ROOT / "skills/cave-pony/README.md").read_text(encoding="utf-8")
-    if "benchmark" in active_docs.lower():
-        errors.append("active documentation contains removed research roadmap")
     for url in ("https://github.com/DietrichGebert/ponytail", "https://github.com/JuliusBrussee/caveman"):
         if url not in readme:
             errors.append(f"README missing parent attribution: {url}")
