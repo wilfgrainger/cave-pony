@@ -33,4 +33,4 @@ A non-obvious deliberate shortcut receives one local `cave-pony:` comment naming
 
 For changes it uses the four-field footprint report. `Skipped` includes the condition for revisiting the omitted surface. When the user still has work to do, the response ends with one concrete next action; completed work does not manufacture homework. For pure questions it answers directly. Audit defaults to the most recent change or diff and reports finding, evidence, consequence, and smallest correction.
 
-See the repository [README](../../README.md), [design notes](../../docs/DESIGN.md), [benchmark preregistration](../../benchmarks/README.md), and [third-party notices](../../THIRD_PARTY_NOTICES.md).
+See the repository [README](../../README.md), [design notes](../../docs/DESIGN.md), [field tests](../../field-tests/), [future comparative-research issue](https://github.com/wilfgrainger/cave-pony/issues/11), and [third-party notices](../../THIRD_PARTY_NOTICES.md).
