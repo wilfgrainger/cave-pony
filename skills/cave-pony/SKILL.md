@@ -74,7 +74,15 @@ Generated output should be deterministic when its inputs are unchanged. Do not i
 
 Tests should protect behaviour, invariants and semantic contracts. Do not freeze incidental prose, formatting or implementation detail when equivalent correct wording or structure should pass.
 
-### 5. Charge the complexity toll
+### 5. Gate the claim
+
+Data, output or a fallback being present does not make it eligible for every use. Define the predicate that makes the public, API or UI claim true and gate on that same predicate.
+
+Stale, partial, unverified, unauthorized or incompatible state stays unavailable or clearly qualified. Do not silently promote it to current, complete, safe, successful or verified. Withholding is often the smallest correct result.
+
+For a material status gate, test one accepted state and the most plausible rejected state. A happy-path presence check is not decisive proof.
+
+### 6. Charge the complexity toll
 
 Every new dependency, file, abstraction, configuration option, persistent state, service, job, public API, compatibility promise, standing instruction or mandatory context source needs:
 
@@ -84,17 +92,17 @@ Every new dependency, file, abstraction, configuration option, persistent state,
 
 “Might be useful later” never pays the toll.
 
-### 6. Fix the root once
+### 7. Fix the root once
 
 Prefer one correction at the narrowest shared cause over repeated symptom guards. Check sibling callers and related paths. A small diff in the wrong layer is deferred breakage.
 
-### 7. Prove enough
+### 8. Prove enough
 
 Run the smallest decisive existing check first. For non-trivial changed logic, leave one runnable check that would fail if behaviour regressed. Reuse the project test stack.
 
 Expand proof for money, identity, permissions, security boundaries, destructive operations, concurrency, migrations, compatibility, or data loss. Never claim a check passed unless it ran. Distinguish untested from failed.
 
-### 8. Report the footprint
+### 9. Report the footprint
 
 For completed changes, use the **footprint report** and omit empty fields:
 
@@ -121,13 +129,13 @@ If the user explicitly insists after seeing the trade-off, deliver the broader s
 
 - `voice=lite`: concise full sentences; no filler, hedging, self-reference, or routine narration.
 - `voice=full` — default: short direct sentences or fragments where meaning stays obvious; state each fact once.
-- `voice=ultra`: minimum unambiguous words. For changes, prefer the footprint report. Keep conjunctions and ordering words whenever removing them could alter sequence, cause, scope, or responsibility.
+- `voice=ultra`: minimum unambiguous words. For changes, prefer the footprint report. Keep conjunctions and ordering words whenever removing them could alter sequence, cause, scope or responsibility.
 
 ## Audit mode
 
 `/cave-pony audit` is read-only unless the user asks for fixes. The target defaults to the most recent change or diff unless the user specifies another target.
 
-Rank findings by impact. Each finding needs evidence, consequence, and smallest correction. Review avoidable implementation, dependencies, files, abstractions, state, standing instructions, mandatory context, semantic mismatches, nondeterministic output, brittle tests, symptom patches, missing proof, verbose narration, and unsafe compression. Do not manufacture a fixed finding count.
+Rank findings by impact. Each finding needs evidence, consequence and smallest correction. Review avoidable implementation, dependencies, files, abstractions, state, standing instructions, mandatory context, semantic mismatches, nondeterministic output, claim/eligibility mismatches, brittle tests, symptom patches, missing proof, verbose narration and unsafe compression. Do not manufacture a fixed finding count.
 
 ## Clarity override
 
@@ -135,7 +143,7 @@ Temporarily use normal, explicit prose for security or privacy warnings, destruc
 
 Any command that deletes, overwrites, resets, force-pushes, drops, revokes, or rotates state triggers the override, however routine the request sounds. The override covers preconditions and recovery, not only the risky step. Ties between brevity and clarity always break toward clarity.
 
-State prerequisites, ordering, consequences, and recovery plainly. Resume the selected voice only after the risky content is unambiguous.
+State prerequisites, ordering, consequences and recovery plainly. Resume the selected voice only after the risky content is unambiguous.
 
 ## Non-negotiable boundaries
 
