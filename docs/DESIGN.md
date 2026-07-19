@@ -67,7 +67,7 @@ Presence is also separate from eligibility. A fallback may be valid for continui
 
 “Smallest decisive proof” means the cheapest check capable of falsifying the claimed behaviour at the relevant risk level. It is a starting point, not a one-test cap.
 
-The repository's own tests are **static contract tests**. They can prove that required wording, sections, triggers, and adversarial cases are committed. They cannot prove that a host model follows those rules. Agent behaviour requires comparative model runs.
+The repository's own tests are **static contract tests**. They can prove that required wording, sections, triggers, and adversarial cases are committed. They cannot prove that every host model follows those rules or that Cave Pony outperforms another skill. Comparative model research is deferred to [issue #11](https://github.com/wilfgrainger/cave-pony/issues/11).
 
 ## Output model
 
@@ -91,11 +91,11 @@ An ultra response containing only `git reset --hard origin/main` is unsafe. A co
 
 A materially repeated question is treated as evidence that the previous compression failed. The next answer uses normal explicit prose rather than compressing harder.
 
-## Benchmark status
+## Evidence boundary
 
-The coordination layer is not yet proven better than loading Ponytail and Caveman together. [`benchmarks/README.md`](../benchmarks/README.md) preregisters a falsifiable four-arm experiment and kill criterion. No comparative result may be claimed until a committed result file exists.
+The release claim is structural: Cave Pony coordinates implementation minimalism, communication compression and risk-proportionate proof in one skill. Static tests protect that written contract, while `field-tests/` records practical repository use.
 
-The benchmark is a present requirement because comparative performance is the project's central empirical question. The benchmark-only Codex adapter imports Ponytail's pinned tasks, deterministic scorers and aggregation, while replacing its Claude-specific invocation with isolated `codex exec` sessions authenticated through ChatGPT. This integration is deliberately kept outside the core skill and records the exact Codex CLI version, model identifier, arm hashes and raw JSONL for every run.
+No comparative superiority or measured token-efficiency claim is made. The larger Codex experiment was removed from the release surface and preserved as future work in issue #11.
 
 ## Validation
 
@@ -106,7 +106,6 @@ The benchmark is a present requirement because comparative performance is the pr
 - safety override and output-template wording;
 - canonical footprint-report terminology;
 - coexistence and version documentation;
-- benchmark honesty and preregistration;
 - source links, quotations, and copyright notices;
 - required behavioural probes plus schema-valid extensions;
 - clean text formatting.
@@ -115,9 +114,7 @@ The YAGNI, KISS and DRY contract has a focused repository test that requires all
 
 The root-fidelity tests require the ceiling-comment convention, concrete compression prohibitions, repeated-question clarity fallback, intentional parent divergences, debug-spiral stop, failure reporting shape, and conditional next-action rule.
 
-The Codex benchmark tests pin the four arms, verify the immutable skill snapshots, require isolated `codex exec` flags, and exercise JSONL usage and failure parsing without consuming a model run.
-
-The `prompt` field in each behavioural case is reserved for the comparative harness. Static validation checks its schema; model execution will consume it when the benchmark runs.
+The `prompt` field in each behavioural case records the scenario that exercises the written contract. Static validation checks its schema without requiring a model runner.
 
 `tests/test_repository.py` runs validation and negative regression cases against temporary copies of the skill, README, and behavioural cases. CI runs the suite on Python 3.10 and 3.12.
 
