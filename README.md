@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/cave-pony-logo.png" width="256" alt="Cave Pony: an original 8-bit pony standing inside a cave">
+  <img src="https://raw.githubusercontent.com/wilfgrainger/cave-pony/main/assets/cave-pony-logo.png" width="256" height="256" alt="Cave Pony: an original 8-bit pony standing inside a cave">
 </p>
 
 <h1 align="center">Cave Pony</h1>
