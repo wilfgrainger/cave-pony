@@ -1,12 +1,10 @@
-<p align="center">
-  <img src="./assets/cave-pony-logo.png" width="256" height="256" alt="Cave Pony: an original 8-bit pony standing inside a cave">
-</p>
+![Cave Pony logo](cave-pony-logo.png)
 
-<h1 align="center">Cave Pony</h1>
+# Cave Pony
 
-<p align="center"><strong>Do less. Say less. Prove enough.</strong></p>
+**Do less. Say less. Prove enough.**
 
-<p align="center">
+<p>
   <a href="https://github.com/wilfgrainger/cave-pony/actions/workflows/ci.yml"><img src="https://github.com/wilfgrainger/cave-pony/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT licence"></a>
   <img src="https://img.shields.io/badge/version-0.1.0-blue.svg" alt="Version 0.1.0">
@@ -148,7 +146,8 @@ make test
 
 ```text
 skills/cave-pony/SKILL.md    Agent-facing behaviour
-assets/cave-pony-logo.png    Original Cave Pony identity
+cave-pony-logo.png           README logo
+assets/                      Original project artwork
 field-tests/                 Real-repository field records
 docs/                        Design, origins, evidence, and launch gates
 tests/                       Contract and safety probes
