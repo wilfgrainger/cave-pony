@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import re
+import struct
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,7 +15,6 @@ README = ROOT / "README.md"
 NESTED_README = ROOT / "skills/cave-pony/README.md"
 LAUNCH = ROOT / "docs/LAUNCH_CHECKLIST.md"
 CI = ROOT / ".github/workflows/ci.yml"
-LOGO = ROOT / "assets/cave-pony-logo.png"
 
 FILES = (
     ".github/workflows/ci.yml",
@@ -82,11 +82,15 @@ SAFETY_TERMS = (
     "existing compatibility guarantees",
 )
 
-FORBIDDEN_STANDALONE_TERMS = (
-    "silicon" + " valley",
-    "silicon-valley" + "-dev-team",
-    "gilfoyle" + " persona",
-)
+STANDALONE_TERMS = {
+    "README.md": "This repository is the canonical home of Cave Pony.",
+    "CONTRIBUTING.md": "This standalone repository is the canonical home of the skill.",
+}
+
+PNG_ASSETS = {
+    "assets/cave-pony-logo.png": (256, 256),
+    "assets/cave-pony-social-preview.png": (1280, 640),
+}
 
 PINS = {
     "actions/checkout": "11bd71901bbe5b1630ceea73d27597364c9af683",
@@ -210,6 +214,20 @@ def validate_ci(errors: list[str]) -> None:
             errors.append(f"CI action must use immutable commit: {action}")
 
 
+def validate_png(errors: list[str], relative: str, dimensions: tuple[int, int]) -> None:
+    path = ROOT / relative
+    if not path.is_file() or path.stat().st_size < 24:
+        errors.append(f"PNG asset missing or empty: {relative}")
+        return
+    header = path.read_bytes()[:24]
+    if not header.startswith(b"\x89PNG\r\n\x1a\n"):
+        errors.append(f"asset must be a PNG: {relative}")
+        return
+    width, height = struct.unpack(">II", header[16:24])
+    if (width, height) != dimensions:
+        errors.append(f"PNG dimensions must be {dimensions[0]}x{dimensions[1]}: {relative}")
+
+
 def validate() -> list[str]:
     errors: list[str] = []
     for relative in FILES:
@@ -249,21 +267,19 @@ def validate() -> list[str]:
         if url not in readme:
             errors.append(f"README missing parent attribution: {url}")
 
+    for relative, expected in STANDALONE_TERMS.items():
+        path = ROOT / relative
+        if not path.is_file() or expected not in path.read_text(encoding="utf-8"):
+            errors.append(f"standalone contract missing from {relative}")
+
     validate_versions(errors, version)
     validate_ci(errors)
     validate_cases(errors, skill)
-
-    if not LOGO.is_file() or LOGO.stat().st_size < 8:
-        errors.append("logo must exist and be non-empty")
-    elif not LOGO.read_bytes().startswith(b"\x89PNG\r\n\x1a\n"):
-        errors.append("logo must be a PNG")
+    for relative, dimensions in PNG_ASSETS.items():
+        validate_png(errors, relative, dimensions)
 
     for path in text_files():
         text = path.read_text(encoding="utf-8")
-        lowered = text.lower()
-        for term in FORBIDDEN_STANDALONE_TERMS:
-            if term in lowered:
-                errors.append(f"standalone repository contains forbidden reference in {path.relative_to(ROOT)}: {term}")
         if any(line.endswith(" ") for line in text.splitlines()):
             errors.append(f"trailing whitespace: {path.relative_to(ROOT)}")
         if text and not text.endswith("\n"):

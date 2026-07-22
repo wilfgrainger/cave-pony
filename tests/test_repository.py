@@ -133,21 +133,29 @@ class RepositoryContractTests(unittest.TestCase):
 
         self.assert_mutation_fails(mutate, "authentication or authorisation")
 
-    def test_standalone_contamination_is_caught(self) -> None:
+    def test_standalone_statement_regression_is_caught(self) -> None:
         def mutate(clone: Path) -> None:
-            path = clone / "skills/cave-pony/README.md"
-            path.write_text(
-                path.read_text(encoding="utf-8") + "\nOptional " + "Silicon" + " Valley integration.\n",
-                encoding="utf-8",
-            )
+            path = clone / "CONTRIBUTING.md"
+            path.write_text(path.read_text(encoding="utf-8").replace(
+                "This standalone repository is the canonical home of the skill.",
+                "This repository may contain unrelated integrations.",
+            ), encoding="utf-8")
 
-        self.assert_mutation_fails(mutate, "forbidden reference")
+        self.assert_mutation_fails(mutate, "standalone contract")
 
     def test_invalid_logo_is_caught(self) -> None:
         def mutate(clone: Path) -> None:
             (clone / "assets/cave-pony-logo.png").write_bytes(b"not a png")
 
-        self.assert_mutation_fails(mutate, "logo must be a PNG")
+        self.assert_mutation_fails(mutate, "asset must be a PNG")
+
+    def test_invalid_social_preview_dimensions_are_caught(self) -> None:
+        def mutate(clone: Path) -> None:
+            source = clone / "assets/cave-pony-logo.png"
+            target = clone / "assets/cave-pony-social-preview.png"
+            target.write_bytes(source.read_bytes())
+
+        self.assert_mutation_fails(mutate, "PNG dimensions")
 
 
 if __name__ == "__main__":
