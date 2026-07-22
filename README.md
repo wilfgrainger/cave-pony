@@ -1,4 +1,6 @@
-![Cave Pony logo](cave-pony-logo-8bit-v1.png)
+<p align="center">
+  <img src="https://github.com/wilfgrainger/cave-pony/raw/refs/heads/main/cave-pony-logo-8bit-v1.png" width="256" height="256" alt="Cave Pony logo">
+</p>
 
 # Cave Pony
 
