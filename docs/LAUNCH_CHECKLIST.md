@@ -66,7 +66,7 @@ Do not publish a maintainer's private reply without permission.
 - [x] Standalone repository declared canonical.
 - [x] Skill synced from the latest `agent-skills/skills/cave-pony/SKILL.md` source available during launch preparation.
 - [x] README front door includes logo, outcome, example, installation, safety, evidence, origins, and status.
-- [x] CI validates Python 3.10 and 3.12.
+- [x] CI runs the validator and tests once on Python 3.12.
 - [x] No runtime or development dependency required.
 - [ ] Working tree and default branch contain no obsolete release artefacts.
 - [ ] Version updated consistently across skill and documentation.

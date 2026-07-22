@@ -161,7 +161,7 @@ make validate
 make test
 ```
 
-CI runs Python 3.10 and 3.12.
+CI runs the validator and tests once on Python 3.12.
 
 ```text
 skills/cave-pony/SKILL.md    Agent-facing behaviour

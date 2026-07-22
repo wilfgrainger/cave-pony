@@ -24,7 +24,7 @@ make validate
 make test
 ```
 
-Python 3.10 or newer is sufficient. CI runs Python 3.10 and 3.12. No third-party development dependencies are required.
+Python 3.10 or newer is sufficient. CI uses Python 3.12. No third-party development dependencies are required.
 
 ## Acceptance criteria
 
