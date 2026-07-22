@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/wilfgrainger/cave-pony/blob/main/logo.png?raw=true" width="256" height="256" alt="Cave Pony logo">
+  <img src="logo.svg" width="256" height="256" alt="Cave Pony logo">
 </p>
 
 # Cave Pony
@@ -147,7 +147,7 @@ make test
 
 ```text
 skills/cave-pony/SKILL.md       Agent-facing behaviour
-logo.png                        README logo
+logo.svg                        README logo
 assets/                         Original project artwork
 field-tests/                    Real-repository field records
 docs/                           Design, origins, evidence, and launch gates
