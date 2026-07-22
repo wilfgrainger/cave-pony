@@ -1,4 +1,4 @@
-![Cave Pony logo](https://raw.githubusercontent.com/wilfgrainger/cave-pony/main/cave-pony-logo-8bit-v1.png?cache=20260722-1)
+![Cave Pony logo](cave-pony-logo-8bit-v1.png)
 
 # Cave Pony
 
@@ -145,13 +145,13 @@ make test
 ```
 
 ```text
-skills/cave-pony/SKILL.md    Agent-facing behaviour
-cave-pony-logo.png           README logo
-assets/                      Original project artwork
-field-tests/                 Real-repository field records
-docs/                        Design, origins, evidence, and launch gates
-tests/                       Contract and safety probes
-tools/validate.py            Small static contract validator
+skills/cave-pony/SKILL.md       Agent-facing behaviour
+cave-pony-logo-8bit-v1.png      README logo
+assets/                         Original project artwork
+field-tests/                    Real-repository field records
+docs/                           Design, origins, evidence, and launch gates
+tests/                          Contract and safety probes
+tools/validate.py               Small static contract validator
 ```
 
 Contributions should demonstrate a concrete failure and the smallest evidence-backed correction. See [Contributing](CONTRIBUTING.md).
