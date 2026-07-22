@@ -1,4 +1,4 @@
-![Cave Pony logo](cave-pony-logo.png)
+![Cave Pony logo](https://raw.githubusercontent.com/wilfgrainger/cave-pony/main/cave-pony-logo-8bit-v1.png?cache=20260722-1)
 
 # Cave Pony
 
