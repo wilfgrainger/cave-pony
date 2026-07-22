@@ -100,7 +100,7 @@ It replaces rather than stacks with Ponytail and Caveman. `stop cave-pony` disab
 2. Stop at the first correct rung: no change, deletion, reuse, standard library, native platform, installed dependency, then the smallest local implementation.
 3. Fix the narrowest shared root cause rather than guarding the same symptom repeatedly.
 4. Run the smallest decisive proof, expanded for material risk.
-5. Report only useful `Done`, `Proof`, `Skipped`, and `Risk` lines.
+5. Put the result first and report only useful Done, Proof, Skipped, and Risk lines.
 
 YAGNI decides whether work is presently needed. KISS selects the simplest correct design. DRY centralises stable repeated knowledge, not merely similar syntax. Correctness comes first.
 

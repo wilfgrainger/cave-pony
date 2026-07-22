@@ -1,7 +1,7 @@
 # Launch checklist
 
-Owner: Wilfred Grainger  
-Target: public `v1.0.0`  
+Owner: Wilfred Grainger
+Target: public `v1.0.0`
 Current state: pre-release `0.1.0`
 
 A checked item means committed evidence exists. Verbal confidence is not completion.
