@@ -1,6 +1,8 @@
 # Cave Pony skill
 
-Cave Pony `0.1.0` builds like Ponytail and speaks like Caveman. It activates after explicit invocation or, within coding or agent work, a clear request for minimalism, terse output, relief from bloat, or an audit. Generic brevity requests outside that context do not activate it.
+Cave Pony `0.1.0` is a standalone simplicity-and-proof skill. It builds like Ponytail and speaks like Caveman. It activates after explicit invocation or, within coding or agent work, a clear request for minimalism, terse output, relief from bloat, or an audit. Generic brevity requests outside that context do not activate it.
+
+Cave Pony is not based on an HBO *Silicon Valley* character and is not a member of the Silicon Valley Dev Team. It can be installed and used entirely on its own.
 
 ## Install
 
@@ -31,4 +33,17 @@ Voice removes filler, hedging, self-reference, and routine narration. Full voice
 
 Compression stops for destructive, security-sensitive, and order-dependent content. Preconditions, consequences, preservation, and recovery stay explicit.
 
-See the repository [README](../../README.md), [design notes](../../docs/DESIGN.md), [field record](../../field-tests/2026-07-19-gov-metrics-publication-diagnostics.md), and [third-party notices](../../THIRD_PARTY_NOTICES.md).
+## Optional use with the Silicon Valley Dev Team
+
+Cave Pony is a useful supplementary final pass after the team has produced one coherent result:
+
+```text
+silicon-valley-dev-team deliver <customer outcome>
+cave-pony audit <resulting diff, plan, or documentation>
+```
+
+Use it when the remaining risk is unnecessary scope, files, dependencies, abstractions, process, proof, or narration. Return accepted simplifications to the team's accountable editor for correction, review, and retesting.
+
+Do not treat Cave Pony as the Gilfoyle persona. Gilfoyle owns security, infrastructure, reliability, incidents, and recovery. Cave Pony challenges footprint and attention cost across every domain. Keeping them separate prevents terse minimalism from deleting security evidence or operational safeguards.
+
+See the repository [README](../../README.md), [design notes](../../docs/DESIGN.md), [origins and differences](../../docs/ORIGINS_AND_DIFFERENCES.md), [launch checklist](../../docs/LAUNCH_CHECKLIST.md), [field record](../../field-tests/2026-07-19-gov-metrics-publication-diagnostics.md), and [third-party notices](../../THIRD_PARTY_NOTICES.md).
