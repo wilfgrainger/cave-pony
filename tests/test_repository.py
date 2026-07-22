@@ -145,7 +145,7 @@ class RepositoryContractTests(unittest.TestCase):
 
     def test_invalid_logo_is_caught(self) -> None:
         def mutate(clone: Path) -> None:
-            (clone / "assets/cave-pony-logo.png").write_bytes(b"not a png")
+            (clone / "assets/cave-pony-logo.png").write_bytes(b"not a png" * 4)
 
         self.assert_mutation_fails(mutate, "asset must be a PNG")
 
