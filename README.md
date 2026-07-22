@@ -3,7 +3,6 @@
 </p>
 
 # Cave Pony
-
 **Do less. Say less. Prove enough.**
 
 <p>
