@@ -28,6 +28,11 @@ class RepositoryContractTests(unittest.TestCase):
                 text=True,
             )
 
+    def assert_mutation_fails(self, mutate, expected: str) -> None:
+        result = self.run_clone_validation(mutate)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn(expected.lower(), result.stderr.lower())
+
     def test_static_validation(self) -> None:
         self.assertEqual([], validate.validate())
 
@@ -50,9 +55,7 @@ class RepositoryContractTests(unittest.TestCase):
                 "any",
             ), encoding="utf-8")
 
-        result = self.run_clone_validation(mutate)
-        self.assertNotEqual(0, result.returncode)
-        self.assertIn("activation", result.stderr)
+        self.assert_mutation_fails(mutate, "activation")
 
     def test_ponytail_ladder_regression_is_caught(self) -> None:
         def mutate(clone: Path) -> None:
@@ -62,9 +65,7 @@ class RepositoryContractTests(unittest.TestCase):
                 "Prefer maintainable solutions.",
             ), encoding="utf-8")
 
-        result = self.run_clone_validation(mutate)
-        self.assertNotEqual(0, result.returncode)
-        self.assertIn("Deletion over addition", result.stderr)
+        self.assert_mutation_fails(mutate, "Deletion over addition")
 
     def test_caveman_voice_regression_is_caught(self) -> None:
         def mutate(clone: Path) -> None:
@@ -74,9 +75,7 @@ class RepositoryContractTests(unittest.TestCase):
                 "use short sentences",
             ), encoding="utf-8")
 
-        result = self.run_clone_validation(mutate)
-        self.assertNotEqual(0, result.returncode)
-        self.assertIn("drop articles", result.stderr)
+        self.assert_mutation_fails(mutate, "drop articles")
 
     def test_five_step_loop_drift_is_caught(self) -> None:
         def mutate(clone: Path) -> None:
@@ -86,9 +85,7 @@ class RepositoryContractTests(unittest.TestCase):
                 "",
             ), encoding="utf-8")
 
-        result = self.run_clone_validation(mutate)
-        self.assertNotEqual(0, result.returncode)
-        self.assertIn("step 5", result.stderr)
+        self.assert_mutation_fails(mutate, "step 5")
 
     def test_mutable_action_reference_is_caught(self) -> None:
         def mutate(clone: Path) -> None:
@@ -98,9 +95,59 @@ class RepositoryContractTests(unittest.TestCase):
                 "actions/checkout@v4",
             ), encoding="utf-8")
 
-        result = self.run_clone_validation(mutate)
-        self.assertNotEqual(0, result.returncode)
-        self.assertIn("immutable commit", result.stderr)
+        self.assert_mutation_fails(mutate, "immutable commit")
+
+    def test_ci_write_permission_is_caught(self) -> None:
+        def mutate(clone: Path) -> None:
+            path = clone / ".github/workflows/ci.yml"
+            path.write_text(path.read_text(encoding="utf-8").replace(
+                "contents: read",
+                "contents: write",
+            ), encoding="utf-8")
+
+        self.assert_mutation_fails(mutate, "read-only")
+
+    def test_missing_launch_asset_is_caught(self) -> None:
+        def mutate(clone: Path) -> None:
+            (clone / "docs/ORIGINS_AND_DIFFERENCES.md").unlink()
+
+        self.assert_mutation_fails(mutate, "missing file")
+
+    def test_version_drift_is_caught(self) -> None:
+        def mutate(clone: Path) -> None:
+            path = clone / "skills/cave-pony/README.md"
+            path.write_text(path.read_text(encoding="utf-8").replace(
+                "Cave Pony `0.1.0`",
+                "Cave Pony `9.9.9`",
+            ), encoding="utf-8")
+
+        self.assert_mutation_fails(mutate, "version drift")
+
+    def test_safety_boundary_regression_is_caught(self) -> None:
+        def mutate(clone: Path) -> None:
+            path = clone / "skills/cave-pony/SKILL.md"
+            path.write_text(path.read_text(encoding="utf-8").replace(
+                "authentication or authorisation",
+                "basic access checks",
+            ), encoding="utf-8")
+
+        self.assert_mutation_fails(mutate, "authentication or authorisation")
+
+    def test_standalone_contamination_is_caught(self) -> None:
+        def mutate(clone: Path) -> None:
+            path = clone / "skills/cave-pony/README.md"
+            path.write_text(
+                path.read_text(encoding="utf-8") + "\nOptional " + "Silicon" + " Valley integration.\n",
+                encoding="utf-8",
+            )
+
+        self.assert_mutation_fails(mutate, "forbidden reference")
+
+    def test_invalid_logo_is_caught(self) -> None:
+        def mutate(clone: Path) -> None:
+            (clone / "assets/cave-pony-logo.png").write_bytes(b"not a png")
+
+        self.assert_mutation_fails(mutate, "logo must be a PNG")
 
 
 if __name__ == "__main__":

@@ -21,11 +21,12 @@ A checked item means committed evidence exists. Verbal confidence is not complet
 
 - [x] Comparative protocol preregistered in [`BENCHMARK_PLAN.md`](BENCHMARK_PLAN.md).
 - [x] README makes no unsupported numerical performance claim.
+- [x] Benchmark explicitly required for numerical comparison claims, not for an honest feature-only release.
 - [ ] Baseline, Ponytail, Caveman, stacked parents, and Cave Pony runs complete under equivalent conditions.
 - [ ] Correctness and safety gates independently reviewed.
 - [ ] Raw artefacts and reproduction instructions published.
 - [ ] Limitations and losing cases visible beside headline results.
-- [ ] Every launch claim traced to committed evidence.
+- [x] Every current README claim is limited to committed documentation or the published field record.
 
 ## Legal, attribution, and ethics
 
@@ -35,46 +36,29 @@ A checked item means committed evidence exists. Verbal confidence is not complet
 - [x] Full parent MIT notices retained in `licenses/`.
 - [x] Independent Cave Pony contributions listed specifically.
 - [x] Original logo does not reuse parent brand assets.
-- [ ] Name and relevant software classes searched in UK, EU, and US trademark databases.
+- [ ] Name and relevant software classes searched in official UK, EU, and US trademark databases.
 - [ ] Licensing and branding reviewed by a suitably qualified person before commercial use.
 - [ ] Courtesy note sent privately to each parent maintainer.
 - [ ] Any requested attribution correction resolved before launch.
-
-Suggested courtesy note:
-
-```text
-Subject: Courtesy note: Cave Pony, inspired by Ponytail/Caveman
-
-I built Cave Pony, an independently authored coding-agent skill inspired by
-Ponytail's implementation discipline and Caveman's communication discipline.
-It coordinates implementation footprint, attention cost, and proof under one
-safety contract.
-
-Your project is prominently credited and linked. The reviewed source snapshot,
-full MIT notice, and exact influence are documented. Cave Pony does not claim
-affiliation or endorsement and does not reuse your visual identity.
-
-I am preparing a public release and wanted to give you a heads-up. I would
-welcome corrections to the attribution or positioning. This is not a request
-for endorsement.
-```
 
 Do not publish a maintainer's private reply without permission.
 
 ## Repository and release
 
 - [x] Standalone repository declared canonical.
-- [x] Skill synced from the latest `agent-skills/skills/cave-pony/SKILL.md` source available during launch preparation.
+- [x] Repository contains no integration, persona, or unrelated-team references.
 - [x] README front door includes logo, outcome, example, installation, safety, evidence, origins, and status.
 - [x] CI runs the validator and tests once on Python 3.12.
-- [x] No runtime or development dependency required.
-- [ ] Working tree and default branch contain no obsolete release artefacts.
-- [ ] Version updated consistently across skill and documentation.
+- [x] No runtime package or third-party Python dependency required.
+- [x] Default branch contains no obsolete release automation or benchmark artefacts.
+- [x] Version `0.1.0` is consistent across skill and documentation.
+- [x] Upgrade, removal, and recovery instructions documented.
+- [x] Security reporting route documented.
 - [ ] Immutable `v1.0.0` tag created from a verified commit.
 - [ ] GitHub Release created with concise notes and migration information.
 - [ ] Install command pinned to immutable release rather than moving `main`.
 - [ ] Release archive installation tested from a clean environment.
-- [ ] Upgrade and uninstall instructions tested.
+- [ ] Upgrade and uninstall instructions tested from a clean environment.
 - [ ] Repository social preview configured using the original logo.
 - [ ] Repository description and topics set for discovery.
 
@@ -87,59 +71,34 @@ Do not claim support merely because a file format appears compatible.
 - [ ] Codex installation documented and tested.
 - [ ] Hermes installation documented and tested.
 - [ ] OpenClaw installation documented and tested.
-- [ ] Generic manual installation documented and tested.
+- [x] Generic manual installation, verification, upgrade, removal, and recovery documented.
 - [ ] Activation, level switching, audit, and stop behaviour checked in each claimed host.
-- [ ] Host-specific limitations recorded.
+- [x] Host-specific limitations and support-claim policy recorded.
 
 Add new adapters only after a named user or launch channel requires them.
 
 ## Security and operations
 
-- [x] Destructive-operation clarity rules covered by behavioural probes.
+- [x] Destructive-operation clarity rules covered by static contract probes.
+- [x] Authentication, authorisation, secrets, data-loss, accessibility, and repeated-question boundaries covered by static contract probes.
 - [x] No network call or secret required by the skill itself.
 - [x] CI permissions restricted to repository read.
-- [ ] Dependency and workflow actions re-reviewed at release commit.
+- [x] Workflow actions pinned to immutable commits and re-reviewed on 2026-07-22.
 - [ ] Recovery steps tested for install and uninstall failure.
-- [ ] Security reporting route added before broad promotion.
+- [x] Security reporting route added.
 - [ ] Release commit and tag verified after publication.
 
 ## Community readiness
 
 - [x] Contribution rules require concrete failures and evidence.
 - [x] Numerical claims policy documented.
+- [x] FAQ covers origin, stacking, guarantees, host support, destructive work, and commercial-use caution.
+- [x] Three launch examples prepared: no change, native reuse, destructive clarity.
 - [ ] Issue templates added only if actual issue volume justifies them.
 - [ ] Code of conduct added if an external contributor community begins forming.
-- [ ] Three launch examples prepared: no change, native reuse, destructive clarity.
 - [ ] One short terminal recording or image prepared using a real reproducible task.
-- [ ] FAQ reviewed by someone unfamiliar with Ponytail and Caveman.
+- [ ] FAQ reviewed by someone unfamiliar with the parent projects.
 - [ ] README tested at desktop and mobile widths.
-
-## Launch communication
-
-The launch story is:
-
-> Cave Pony makes coding agents produce the smallest trustworthy change: less implementation, less narration, and proof proportional to risk.
-
-It is not:
-
-> We combined two famous skills and made them better.
-
-Required launch materials:
-
-- [ ] Technical launch article centred on the coordination problem and evidence.
-- [ ] Hacker News submission with reproducible benchmark, not star solicitation.
-- [ ] Concise GitHub, LinkedIn, and X examples tailored to each audience.
-- [ ] Relevant skill registries and curated lists identified.
-- [ ] Private testers told the release is available; no coordinated artificial starring.
-- [ ] Response prepared for fair criticism and corrections.
-
-Prepared response to “Is this a copy?”:
-
-> Cave Pony is explicitly inspired by Ponytail and Caveman, which are credited
-> with pinned source snapshots and retained MIT notices. It is independently
-> authored and addresses the coordination problem between implementation
-> footprint, communication footprint, and proof. It is not affiliated with or
-> endorsed by either project.
 
 ## Go/no-go decision
 
@@ -148,7 +107,7 @@ Launch `v1.0.0` only when all of these are true:
 - comparative claims are reproducible or omitted;
 - critical installation paths work from clean environments;
 - parent attribution and licence retention are complete;
-- branding is independently recognisable;
+- branding is independently recognisable and appropriately cleared;
 - safety probes and CI pass at the exact release commit;
 - an immutable tag and release exist;
 - material residual risks are written down.

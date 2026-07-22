@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/cave-pony-logo.png" width="320" alt="Cave Pony: an original 8-bit pony standing inside a cave">
+  <img src="assets/cave-pony-logo.png" width="256" alt="Cave Pony: an original 8-bit pony standing inside a cave">
 </p>
 
 <h1 align="center">Cave Pony</h1>
@@ -20,7 +20,7 @@ It coordinates two budgets under one hard constraint:
 - **Attention:** consume as little human attention as clear communication allows.
 - **Assurance:** never shrink away proof, safety, compatibility, or trust-boundary checks required by the risk.
 
-This repository is the canonical home of Cave Pony. The copy in `wilfgrainger/agent-skills` may temporarily lag until it is synchronised.
+This repository is the canonical home of Cave Pony.
 
 ## See it in 30 seconds
 
@@ -65,14 +65,7 @@ Current development version: `0.1.0`.
 npx skills add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
 ```
 
-Manual installation:
-
-```bash
-git clone https://github.com/wilfgrainger/cave-pony.git
-cp -R cave-pony/skills/cave-pony /path/to/your/agent/skills/
-```
-
-The command currently tracks `main`. A stable installation command pinned to an immutable tag will replace it before the public `v1.0.0` launch.
+The development command tracks `main`. Clean install, upgrade, removal, recovery, and support-claim rules are in [Installation](docs/INSTALLATION.md). A stable command pinned to an immutable tag will replace it at `v1.0.0`.
 
 ## Use
 
@@ -92,7 +85,7 @@ stop cave-pony
 
 Cave Pony activates after explicit invocation or a clear request for minimalism, brevity, relief from bloat, or an audit within coding or agent work. Generic requests for a brief non-coding answer do not activate it.
 
-It replaces rather than stacks with Ponytail and Caveman. `stop cave-pony` disables Cave Pony only.
+Cave Pony is intended to be activated instead of Ponytail and Caveman in the same session. It cannot unload another host-managed skill; disable overlapping skills through the host when needed. `stop cave-pony` disables Cave Pony only.
 
 ## How it works
 
@@ -120,15 +113,15 @@ Cave Pony never minimises away:
 - explicit compatibility guarantees;
 - legal or operational obligations.
 
-The behavioural probes in [`tests/behavioral_cases.json`](tests/behavioral_cases.json) protect the written contract. Static checks cannot guarantee how every host model will behave.
+The static contract probes in [`tests/behavioral_cases.json`](tests/behavioral_cases.json) protect these written rules. They do not guarantee that every host model will obey them.
 
 ## Evidence
 
-Cave Pony has been field-tested on [Gov Metrics](https://github.com/wilfgrainger/gov-metrics) publication diagnostics. It rejected a new service, endpoint, store, and UI; reused the existing snapshot and canary; reduced the first classifier implementation; and required exact-head repository proof.
+Cave Pony has one published real-repository field record: [Gov Metrics publication diagnostics](field-tests/2026-07-19-gov-metrics-publication-diagnostics.md). It is evidence of one use, not a universal performance claim.
 
-Read the [field record](field-tests/2026-07-19-gov-metrics-publication-diagnostics.md). It is one practical case, not a universal performance claim.
+Cave Pony does **not** publish a comparative numerical claim. The preregistered protocol is in [Benchmark plan](docs/BENCHMARK_PLAN.md). The benchmark is required before numerical comparison claims, not before an honest feature-only release.
 
-Cave Pony does **not** yet publish a comparative benchmark claim. The preregistered launch protocol is in [Benchmark plan](docs/BENCHMARK_PLAN.md). Results, limitations, losing cases, and reproduction instructions must exist before numerical claims appear here.
+Illustrative contract examples are in [Examples](docs/EXAMPLES.md). They are not benchmark results.
 
 ## Why not install both parents?
 
@@ -138,30 +131,20 @@ Cave Pony is for users who want one smaller, coordinated contract with independe
 
 ## Launch status
 
-Cave Pony is usable today but is not yet presented as a stable `v1.0.0` release.
+Cave Pony is usable today but remains a pre-release `0.1.0`.
 
-The launch gates cover:
+Repository integrity, attribution, safety wording, CI, recovery documentation, and launch claims are protected in code. External launch gates—independent users, host installation verification, maintainer outreach, brand clearance, and an immutable release—remain recorded rather than falsely marked complete.
 
-- fair comparative evidence;
-- immutable release and pinned installation;
-- major-agent installation checks;
-- attribution and branding review;
-- maintainer courtesy outreach;
-- external field testing;
-- recovery and uninstall instructions.
-
-Progress and release criteria are tracked in [Launch checklist](docs/LAUNCH_CHECKLIST.md).
+See [Launch checklist](docs/LAUNCH_CHECKLIST.md), [FAQ](docs/FAQ.md), and [Security policy](SECURITY.md).
 
 ## Development
 
-No runtime package or third-party development dependency is required.
+No runtime package or third-party Python dependency is required. Local checks require Python 3.10 or newer and `make`; CI uses Python 3.12.
 
 ```bash
 make validate
 make test
 ```
-
-CI runs the validator and tests once on Python 3.12.
 
 ```text
 skills/cave-pony/SKILL.md    Agent-facing behaviour

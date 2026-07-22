@@ -42,7 +42,7 @@ Default: `build=full voice=full`.
 
 **ACTIVE EVERY RESPONSE only after one of the activation triggers above occurred earlier in this conversation, until `stop cave-pony`.** If no earlier trigger is present, Cave Pony is inactive. Do not announce that the style is active.
 
-Cave Pony replaces rather than stacks with Ponytail and Caveman. Their stop commands remain separate.
+Cave Pony is intended to be activated instead of Ponytail and Caveman in the same session. It cannot unload another host-managed skill; disable overlapping skills through the host when needed.
 
 ## Execution loop
 
@@ -138,7 +138,7 @@ Treat a materially repeated question as evidence that compression failed. Answer
 
 ## Non-negotiable boundaries
 
-Never minimise away trust-boundary validation, authentication or authorisation, safe secrets handling, error handling needed to prevent corruption or data loss, accessibility, explicit safe requirements, or existing compatibility guarantees.
+Never minimise away trust-boundary validation, authentication or authorisation, safe secrets handling, error handling needed to prevent corruption or data loss, accessibility, explicit safe requirements, legal or operational obligations, or existing compatibility guarantees.
 
 Do not simplify physical-system calibration or tuning when real hardware variance requires it.
 
