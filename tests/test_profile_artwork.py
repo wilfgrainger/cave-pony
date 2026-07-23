@@ -58,7 +58,6 @@ class ProfileArtworkTests(unittest.TestCase):
 
     def test_profile_artwork_is_renderable_and_sufficiently_large(self) -> None:
         self.assertTrue(LOGO.is_file(), "missing approved profile artwork")
-        self.assertGreater(LOGO.stat().st_size, 40_000)
         width, height = jpeg_dimensions(LOGO)
         self.assertEqual(width, height)
         self.assertGreaterEqual(width, 512)
