@@ -1,19 +1,20 @@
 <p align="center">
-  <img src="logo.png" width="256" height="256" alt="Cave Pony logo">
+  <img src="./logo.jpg" width="420" alt="Cave Pony logo">
 </p>
 
-# Cave Pony
-**Do less. Say less. Prove enough.**
+<h1 align="center">Cave Pony</h1>
 
-<p>
+<p align="center"><strong>Do less. Say less. Prove enough.</strong></p>
+
+<p align="center">
   <a href="https://github.com/wilfgrainger/cave-pony/actions/workflows/ci.yml"><img src="https://github.com/wilfgrainger/cave-pony/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT licence"></a>
   <img src="https://img.shields.io/badge/version-0.1.0-blue.svg" alt="Version 0.1.0">
 </p>
 
-Cave Pony is an open-source coding-agent skill for producing the **smallest trustworthy change**.
+<p align="center">An open-source coding-agent skill for producing the <strong>smallest trustworthy change</strong>.</p>
 
-It coordinates two budgets under one hard constraint:
+Cave Pony coordinates two budgets under one hard constraint:
 
 - **Footprint:** own as little new implementation surface as the task allows.
 - **Attention:** consume as little human attention as clear communication allows.
@@ -39,22 +40,6 @@ Risk: POST requests remain non-retrying by design.
 ```
 
 Small change. Small report. Enough evidence to trust both.
-
-## Why it exists
-
-[Ponytail](https://github.com/DietrichGebert/ponytail) challenges unnecessary implementation. [Caveman](https://github.com/JuliusBrussee/caveman) challenges unnecessary prose.
-
-Using those ideas together is valuable, but two independent instruction sets do not automatically resolve their conflicts:
-
-- terse output can hide missing proof;
-- a small diff can be chosen before the affected path is understood;
-- destructive or security-sensitive work can become dangerously compressed;
-- separate activation rules can conflict;
-- stacked instructions consume more context and can drift independently.
-
-Cave Pony provides one independently authored coordination contract for deciding what must be built, how much must be said, and what must be proved.
-
-It is not a fork, official successor, or endorsed project. Its influences, quotations, source snapshots, and licences are recorded in [Third-party notices](THIRD_PARTY_NOTICES.md) and [Origins and differences](docs/ORIGINS_AND_DIFFERENCES.md).
 
 ## Install
 
@@ -114,6 +99,22 @@ Cave Pony never minimises away:
 
 The static contract probes in [`tests/behavioral_cases.json`](tests/behavioral_cases.json) protect these written rules. They do not guarantee that every host model will obey them.
 
+## Why it exists
+
+[Ponytail](https://github.com/DietrichGebert/ponytail) challenges unnecessary implementation. [Caveman](https://github.com/JuliusBrussee/caveman) challenges unnecessary prose.
+
+Using those ideas together is valuable, but two independent instruction sets do not automatically resolve their conflicts:
+
+- terse output can hide missing proof;
+- a small diff can be chosen before the affected path is understood;
+- destructive or security-sensitive work can become dangerously compressed;
+- separate activation rules can conflict;
+- stacked instructions consume more context and can drift independently.
+
+Cave Pony provides one independently authored coordination contract for deciding what must be built, how much must be said, and what must be proved.
+
+It is not a fork, official successor, or endorsed project. Its influences, quotations, source snapshots, and licences are recorded in [Third-party notices](THIRD_PARTY_NOTICES.md) and [Origins and differences](docs/ORIGINS_AND_DIFFERENCES.md).
+
 ## Evidence
 
 Cave Pony has one published real-repository field record: [Gov Metrics publication diagnostics](field-tests/2026-07-19-gov-metrics-publication-diagnostics.md). It is evidence of one use, not a universal performance claim.
@@ -122,13 +123,7 @@ Cave Pony does **not** publish a comparative numerical claim. The preregistered 
 
 Illustrative contract examples are in [Examples](docs/EXAMPLES.md). They are not benchmark results.
 
-## Why not install both parents?
-
-You can. Stacking Ponytail and Caveman remains a valid choice.
-
-Cave Pony is for users who want one smaller, coordinated contract with independent build and voice controls, one clarity override, one proof model, and explicit conflict resolution. See [Origins and differences](docs/ORIGINS_AND_DIFFERENCES.md) for the detailed comparison.
-
-## Launch status
+## Project status
 
 Cave Pony is usable today but remains a pre-release `0.1.0`.
 
@@ -147,8 +142,8 @@ make test
 
 ```text
 skills/cave-pony/SKILL.md       Agent-facing behaviour
-logo.png                        README logo
-assets/                         Original project artwork
+logo.jpg                        High-resolution README artwork
+assets/                         Project artwork and social preview
 field-tests/                    Real-repository field records
 docs/                           Design, origins, evidence, and launch gates
 tests/                          Contract and safety probes
@@ -163,4 +158,4 @@ Cave Pony is released under the [MIT License](LICENSE).
 
 Ponytail and Caveman are MIT-licensed projects whose ideas influenced Cave Pony. Their full licence texts and copyright notices are retained in [`licenses/`](licenses/), with detailed provenance in [Third-party notices](THIRD_PARTY_NOTICES.md).
 
-The Cave Pony name, wording, coordination model, documentation, and original 8-bit logo are independently authored for this project. No affiliation or endorsement is implied.
+The Cave Pony name, wording, coordination model, documentation, and original pixel-art logo are independently authored for this project. No affiliation or endorsement is implied.
