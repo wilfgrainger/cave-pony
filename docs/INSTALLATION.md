@@ -31,7 +31,7 @@ DISABLE_TELEMETRY=1 npx --yes skills@1.5.9 add \
   --yes
 ```
 
-The check verifies `.agents/skills/cave-pony/SKILL.md` and the expected frontmatter. The local checked-out source keeps routine CI independent of a second remote clone while the one-off public URL and cross-host evidence remain recorded.
+The check verifies `.agents/skills/cave-pony/SKILL.md` and the expected frontmatter. The local checked-out source keeps routine CI independent of a second remote clone while the one-off public URL, cross-host, and lifecycle evidence remain recorded.
 
 ## Generic manual install
 
@@ -56,19 +56,36 @@ Then start a fresh session, invoke `/cave-pony audit`, and confirm the host load
 
 ## Upgrade
 
-1. Back up the installed `cave-pony` directory.
-2. Replace it with the newer directory or rerun the host's supported installer.
-3. Confirm the frontmatter version.
-4. Start a fresh session and repeat the audit smoke check.
-5. Restore the backup if discovery or activation regresses.
+Before upgrading, back up the installed `cave-pony` directory.
+
+For a project installation managed by `skills@1.5.9`:
+
+```bash
+npx --yes skills@1.5.9 update cave-pony --project --yes
+```
+
+Then:
+
+1. confirm the installed frontmatter version;
+2. start a fresh session and repeat the audit smoke check;
+3. restore the backup if discovery or activation regresses.
+
+A clean CI lifecycle probe deliberately changed the installed version marker, ran this update command, and confirmed restoration to `0.1.0`.
 
 ## Remove
 
-1. End active sessions using Cave Pony.
-2. Remove the installed `cave-pony` directory through the host's supported skill manager or filesystem.
-3. Remove any host configuration that explicitly activates Cave Pony.
-4. Restart or reload the host.
-5. Start a fresh session and confirm `/cave-pony` is no longer available.
+End active sessions using Cave Pony first. For a Codex project installation managed by `skills@1.5.9`:
+
+```bash
+npx --yes skills@1.5.9 remove cave-pony --agent codex --yes
+```
+
+Then:
+
+1. confirm `.agents/skills/cave-pony` no longer exists;
+2. remove any host configuration that explicitly activates Cave Pony;
+3. restart or reload the host;
+4. start a fresh session and confirm `/cave-pony` is no longer available.
 
 Deleting the skill directory does not revert code changes previously made while the skill was active.
 
@@ -76,10 +93,13 @@ Deleting the skill directory does not revert code changes previously made while 
 
 If an upgrade or removal fails:
 
-- restore the backed-up directory;
-- restore the previous host configuration;
-- restart the host;
-- verify from a fresh session.
+1. recreate the host's skills parent directory if needed;
+2. restore the backed-up `cave-pony` directory;
+3. restore the previous host configuration;
+4. restart or reload the host;
+5. verify the frontmatter and behaviour from a fresh session.
+
+A clean CI lifecycle probe confirmed update repair, non-interactive removal, and manual backup restoration for the Codex project path. It did not simulate every host failure or an interrupted filesystem operation.
 
 ## Support claims
 
