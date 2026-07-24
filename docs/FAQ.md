@@ -10,11 +10,11 @@ You can. Cave Pony exists for users who prefer one activation model, independent
 
 ## Does Cave Pony guarantee smaller or safer output?
 
-No. Static repository checks protect the written contract, not the behaviour of every host model. Numerical comparisons require the preregistered benchmark and published raw evidence.
+No. Static repository checks protect the written contract, not the behaviour of every host model. Numerical comparisons require separately preregistered work and published raw evidence.
 
-## Is the benchmark required for release?
+## Is a comparative benchmark included?
 
-Only for numerical comparative claims. An honest release may describe the documented mechanism and limitations without claiming measured superiority.
+No. Cave Pony currently makes no numerical comparative claim. Benchmark work is deferred until a concrete claim, release channel, or customer decision requires it.
 
 ## Does Cave Pony unload other skills?
 

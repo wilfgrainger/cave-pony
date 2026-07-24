@@ -41,11 +41,11 @@ A contribution must:
 
 New cases may extend `tests/behavioral_cases.json` when they have a unique ID, concrete prompt, trigger, at least one exact contract term, and at least two written requirements.
 
-## Comparative evidence
+## Comparative claims
 
-Do not add numerical claims from anecdotes, cherry-picked prompts, or mismatched environments. Comparisons must follow [`docs/BENCHMARK_PLAN.md`](docs/BENCHMARK_PLAN.md) or a stronger preregistered protocol and publish failures, losing cases, scoring rules, safety gates, limitations, and reproduction material.
+Do not add numerical claims from anecdotes, cherry-picked prompts, or mismatched environments. Any future comparison must be preregistered before final runs and publish equivalent conditions, correctness and safety gates, all runs, scoring rules, limitations, losing cases, and reproduction material.
 
-A result showing no advantage is useful evidence.
+Benchmark machinery does not belong in the repository until a concrete claim, release channel, or customer decision requires it. A result showing no advantage is useful evidence.
 
 ## Documentation and branding
 

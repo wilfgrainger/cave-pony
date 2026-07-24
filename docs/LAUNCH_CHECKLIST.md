@@ -19,14 +19,11 @@ A checked item means committed evidence exists. Verbal confidence is not complet
 
 ## Evidence and claims
 
-- [x] Comparative protocol preregistered in [`BENCHMARK_PLAN.md`](BENCHMARK_PLAN.md).
 - [x] README makes no unsupported numerical performance claim.
-- [x] Benchmark explicitly required for numerical comparison claims, not for an honest feature-only release.
-- [ ] Baseline, Ponytail, Caveman, stacked parents, and Cave Pony runs complete under equivalent conditions.
-- [ ] Correctness and safety gates independently reviewed.
-- [ ] Raw artefacts and reproduction instructions published.
-- [ ] Limitations and losing cases visible beside headline results.
+- [x] Comparative benchmark work is deferred until a concrete numerical claim requires it.
 - [x] Every current README claim is limited to committed documentation or the published field record.
+- [ ] Before any numerical claim, preregister equivalent conditions, correctness and safety gates, raw artefacts, scoring, limitations, losing cases, and reproduction instructions.
+- [ ] Correctness and safety gates independently reviewed before any comparison is published.
 
 ## Legal, attribution, and ethics
 

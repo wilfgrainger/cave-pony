@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./logo.jpg" width="420" alt="Cave Pony logo">
+  <img src="./assets/cave-pony-logo.png" width="420" alt="Cave Pony logo">
 </p>
 
 <h1 align="center">Cave Pony</h1>
@@ -119,7 +119,7 @@ It is not a fork, official successor, or endorsed project. Its influences, quota
 
 Cave Pony has one published real-repository field record: [Gov Metrics publication diagnostics](field-tests/2026-07-19-gov-metrics-publication-diagnostics.md). It is evidence of one use, not a universal performance claim.
 
-Cave Pony does **not** publish a comparative numerical claim. The preregistered protocol is in [Benchmark plan](docs/BENCHMARK_PLAN.md). The benchmark is required before numerical comparison claims, not before an honest feature-only release.
+Cave Pony does **not** publish a comparative numerical claim. Any future numerical comparison requires separately preregistered work with equivalent conditions, correctness and safety gates, raw artefacts, limitations, and losing cases.
 
 Illustrative contract examples are in [Examples](docs/EXAMPLES.md). They are not benchmark results.
 
@@ -142,7 +142,7 @@ make test
 
 ```text
 skills/cave-pony/SKILL.md       Agent-facing behaviour
-logo.jpg                        High-resolution README artwork
+assets/cave-pony-logo.png       High-resolution README artwork
 assets/                         Project artwork and social preview
 field-tests/                    Real-repository field records
 docs/                           Design, origins, evidence, and launch gates

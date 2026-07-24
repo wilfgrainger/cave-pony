@@ -27,7 +27,6 @@ FILES = (
     "THIRD_PARTY_NOTICES.md",
     "assets/cave-pony-logo.png",
     "assets/cave-pony-social-preview.png",
-    "docs/BENCHMARK_PLAN.md",
     "docs/DESIGN.md",
     "docs/EXAMPLES.md",
     "docs/FAQ.md",
@@ -41,6 +40,7 @@ FILES = (
     "skills/cave-pony/README.md",
     "skills/cave-pony/SKILL.md",
     "tests/behavioral_cases.json",
+    "tests/test_profile_artwork.py",
     "tests/test_repository.py",
     "tools/validate.py",
 )
@@ -88,7 +88,7 @@ STANDALONE_TERMS = {
 }
 
 PNG_ASSETS = {
-    "assets/cave-pony-logo.png": (256, 256),
+    "assets/cave-pony-logo.png": (1254, 1254),
     "assets/cave-pony-social-preview.png": (1280, 640),
 }
 
@@ -233,6 +233,8 @@ def validate() -> list[str]:
     for relative in FILES:
         if not (ROOT / relative).is_file():
             errors.append(f"missing file: {relative}")
+    if (ROOT / "docs/BENCHMARK_PLAN.md").exists():
+        errors.append("deferred benchmark artefact must remain absent until a numerical claim requires it")
     if not SKILL.is_file():
         return errors
 

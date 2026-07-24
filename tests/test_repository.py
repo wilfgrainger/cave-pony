@@ -149,6 +149,15 @@ class RepositoryContractTests(unittest.TestCase):
 
         self.assert_mutation_fails(mutate, "asset must be a PNG")
 
+    def test_deferred_benchmark_artifact_is_caught(self) -> None:
+        def mutate(clone: Path) -> None:
+            (clone / "docs/BENCHMARK_PLAN.md").write_text(
+                "# Comparative benchmark plan\n",
+                encoding="utf-8",
+            )
+
+        self.assert_mutation_fails(mutate, "deferred benchmark artefact")
+
     def test_invalid_social_preview_dimensions_are_caught(self) -> None:
         def mutate(clone: Path) -> None:
             source = clone / "assets/cave-pony-logo.png"
