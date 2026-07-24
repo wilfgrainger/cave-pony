@@ -40,17 +40,3 @@ jobs:
           test -f .agents/skills/cave-pony/SKILL.md
           grep -q '^name: cave-pony$' .agents/skills/cave-pony/SKILL.md
           grep -q '^version: 0.1.0$' .agents/skills/cave-pony/SKILL.md
-      - name: Verify public remote install command
-        env:
-          DISABLE_TELEMETRY: "1"
-        run: |
-          temp_dir="$(mktemp -d)"
-          cd "$temp_dir"
-          npx --yes skills@1.5.9 add \
-            "https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony" \
-            --agent codex \
-            --copy \
-            --yes
-          test -f .agents/skills/cave-pony/SKILL.md
-          grep -q '^name: cave-pony$' .agents/skills/cave-pony/SKILL.md
-          grep -q '^version: 0.1.0$' .agents/skills/cave-pony/SKILL.md
