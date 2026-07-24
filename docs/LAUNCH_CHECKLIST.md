@@ -13,16 +13,16 @@ A checked item means committed evidence exists. Verbal confidence is not complet
 - [x] Clear explanation of why a coordinated skill exists instead of silently stacking parents.
 - [x] Activation, persistence, stop behaviour, audit mode, and safety override specified.
 - [x] Real field record published with limitations.
-- [ ] At least three independent users have used Cave Pony on real repository work.
-- [ ] At least one public field record shows no material improvement or a losing case.
+- [ ] At least three independent users have used Cave Pony on real repository work. Tracked in [issue #21](https://github.com/wilfgrainger/cave-pony/issues/21).
+- [x] A public neutral field record shows no demonstrated improvement to the core contract: [Cave Pony self-audit](../field-tests/2026-07-24-cave-pony-self-audit-neutral.md).
 - [ ] Repeated user confusion has been tested against the clarity override.
 
 ## Evidence and claims
 
 - [x] README makes no unsupported numerical performance claim.
 - [x] Comparative benchmark work is deferred until a concrete numerical claim requires it.
-- [x] Every current README claim is limited to committed documentation or the published field record.
-- [ ] Before any numerical claim, preregister equivalent conditions, correctness and safety gates, raw artefacts, scoring, limitations, losing cases, and reproduction instructions.
+- [x] Every current README claim is limited to committed documentation or published field records.
+- [ ] Before any numerical claim, preregister equivalent conditions, correctness and safety gates, raw artefacts, scoring, limitations, losing cases, and reproduction instructions. Tracked in [issue #19](https://github.com/wilfgrainger/cave-pony/issues/19).
 - [ ] Correctness and safety gates independently reviewed before any comparison is published.
 
 ## Legal, attribution, and ethics
@@ -33,9 +33,11 @@ A checked item means committed evidence exists. Verbal confidence is not complet
 - [x] Full parent MIT notices retained in `licenses/`.
 - [x] Independent Cave Pony contributions listed specifically.
 - [x] Original logo does not reuse parent brand assets.
-- [ ] Name and relevant software classes searched in official UK, EU, and US trademark databases.
+- [x] Preliminary name, class and design-search scope recorded without claiming clearance in [Brand diligence](BRAND_CLEARANCE.md).
+- [ ] Interactive name and relevant software-class searches completed in official UK, EU and US trade mark databases.
 - [ ] Licensing and branding reviewed by a suitably qualified person before commercial use.
-- [ ] Courtesy note sent privately to each parent maintainer.
+- [x] Courtesy messages prepared in [Maintainer outreach](MAINTAINER_OUTREACH.md).
+- [ ] Courtesy note delivered to each parent maintainer. Tracked with brand diligence in [issue #24](https://github.com/wilfgrainger/cave-pony/issues/24).
 - [ ] Any requested attribution correction resolved before launch.
 
 Do not publish a maintainer's private reply without permission.
@@ -57,20 +59,20 @@ Do not publish a maintainer's private reply without permission.
 - [ ] Release archive installation tested from a clean environment.
 - [ ] Upgrade and uninstall instructions tested from a clean environment.
 - [ ] Repository social preview configured using the original logo.
-- [ ] Repository description and topics set for discovery.
+- [ ] Repository description and topics set for discovery. Both metadata items are tracked in [issue #23](https://github.com/wilfgrainger/cave-pony/issues/23).
 
 ## Installation coverage
 
 Do not claim support merely because a file format appears compatible.
 
-- [ ] `npx skills add` tested from a clean environment.
+- [ ] Public remote `npx skills add` command tested from a clean environment.
 - [ ] Claude Code installation documented and tested.
-- [ ] Codex installation documented and tested.
+- [ ] Codex project-installation mechanism passes CI at the exact release commit.
+- [ ] Codex activation, level switching, audit, destructive clarity and stop behaviour tested in an authenticated fresh session. Tracked in [issue #22](https://github.com/wilfgrainger/cave-pony/issues/22).
 - [ ] Hermes installation documented and tested.
 - [ ] OpenClaw installation documented and tested.
 - [x] Generic manual installation, verification, upgrade, removal, and recovery documented.
-- [ ] Activation, level switching, audit, and stop behaviour checked in each claimed host.
-- [x] Host-specific limitations and support-claim policy recorded.
+- [x] Host-specific limitations and support-claim policy recorded in [Host verification](HOST_VERIFICATION.md).
 
 Add new adapters only after a named user or launch channel requires them.
 
