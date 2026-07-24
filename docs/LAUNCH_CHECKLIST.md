@@ -65,7 +65,7 @@ Do not publish a maintainer's private reply without permission.
 
 Do not claim support merely because a file format appears compatible.
 
-- [ ] Public remote `npx skills add` command tested from a clean environment.
+- [x] Public remote `npx skills add` command passed on [CI run #200](https://github.com/wilfgrainger/cave-pony/actions/runs/30134001186) with `skills@1.5.9`, Codex project scope, copy mode, and a clean temporary directory.
 - [ ] Claude Code installation documented and tested.
 - [x] Codex project-installation mechanism passed with `skills@1.5.9` on [CI run #193](https://github.com/wilfgrainger/cave-pony/actions/runs/30133587016) at commit `ed172c6a5bffcc9a540bda628d72e10f8a498995`.
 - [ ] The exact `v1.0.0` release commit repeats the Codex installation proof.
