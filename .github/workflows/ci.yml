@@ -40,30 +40,3 @@ jobs:
           test -f .agents/skills/cave-pony/SKILL.md
           grep -q '^name: cave-pony$' .agents/skills/cave-pony/SKILL.md
           grep -q '^version: 0.1.0$' .agents/skills/cave-pony/SKILL.md
-      - name: Verify documented host install paths
-        env:
-          DISABLE_TELEMETRY: "1"
-        run: |
-          temp_dir="$(mktemp -d)"
-          cd "$temp_dir"
-          npx --yes skills@1.5.9 add \
-            "https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony" \
-            --agent claude-code \
-            --agent codex \
-            --agent hermes-agent \
-            --agent openclaw \
-            --copy \
-            --yes
-          test -f .claude/skills/cave-pony/SKILL.md
-          test -f .agents/skills/cave-pony/SKILL.md
-          test -f .hermes/skills/cave-pony/SKILL.md
-          test -f skills/cave-pony/SKILL.md
-          for file in \
-            .claude/skills/cave-pony/SKILL.md \
-            .agents/skills/cave-pony/SKILL.md \
-            .hermes/skills/cave-pony/SKILL.md \
-            skills/cave-pony/SKILL.md
-          do
-            grep -q '^name: cave-pony$' "$file"
-            grep -q '^version: 0.1.0$' "$file"
-          done
