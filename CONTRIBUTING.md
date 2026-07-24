@@ -17,6 +17,14 @@ Proposed: <smallest correction>
 
 Sensitive reports follow [`SECURITY.md`](SECURITY.md).
 
+## Field testing
+
+Independent real-repository records are especially useful before `v1.0.0`. Start from [`field-tests/TEMPLATE.md`](field-tests/TEMPLATE.md) and keep neutral, losing, failed, and ambiguous results visible.
+
+A useful record pins the repository and Cave Pony commits, names the host and model, preserves the prompt, distinguishes checks that ran from checks that did not, and states what Cave Pony improved, failed to improve, or made worse. Do not infer a numerical superiority claim from an individual record or a small convenience sample.
+
+Authenticated Codex behaviour testing follows [`docs/CODEX_BEHAVIOUR_PROTOCOL.md`](docs/CODEX_BEHAVIOUR_PROTOCOL.md). A prepared protocol is not proof; publish the observed result.
+
 ## Development
 
 ```bash

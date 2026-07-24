@@ -130,6 +130,12 @@ Cave Pony does **not** publish a comparative numerical claim. Any future numeric
 
 Illustrative contract examples are in [Examples](docs/EXAMPLES.md). They are not benchmark results.
 
+## Help validate it
+
+Cave Pony needs independent real-repository evidence before `v1.0.0`, including neutral and losing cases. See [issue #21](https://github.com/wilfgrainger/cave-pony/issues/21) and start from the [field-test template](field-tests/TEMPLATE.md).
+
+Authenticated Codex behaviour testing has a reproducible [protocol](docs/CODEX_BEHAVIOUR_PROTOCOL.md) and remains open in [issue #22](https://github.com/wilfgrainger/cave-pony/issues/22). Installation compatibility alone is not behavioural support.
+
 ## Project status
 
 Cave Pony is usable today but remains a pre-release `0.1.0`.
@@ -151,7 +157,7 @@ make test
 skills/cave-pony/SKILL.md       Agent-facing behaviour
 assets/cave-pony-logo.png       High-resolution README artwork
 assets/                         Project artwork and social preview
-field-tests/                    Real-repository field records
+field-tests/                    Real-repository records and template
 docs/                           Design, origins, evidence, and launch gates
 tests/                          Contract and safety probes
 tools/validate.py               Small static contract validator
