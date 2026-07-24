@@ -18,6 +18,7 @@ Cave Pony remains a standalone pre-release `0.1.0`. The core behavioural contrac
 - The documented public `npx skills add` command passed from a clean temporary directory on pull-request run [#200](https://github.com/wilfgrainger/cave-pony/actions/runs/30134001186) with pinned `skills@1.5.9` and Codex project-copy mode.
 - Claude Code, Codex, Hermes Agent, and OpenClaw project installation layouts passed together on pull-request run [#207](https://github.com/wilfgrainger/cave-pony/actions/runs/30134217101) with pinned `skills@1.5.9` and the public development URL.
 - Codex project update repair, non-interactive removal, and manual backup restoration passed on pull-request run [#216](https://github.com/wilfgrainger/cave-pony/actions/runs/30134550258).
+- Independent field-test template and reproducible Codex behaviour protocol prepared.
 - Host verification claim boundary documented.
 - Preliminary brand diligence and ready-to-send parent-maintainer courtesy messages recorded.
 - Comparative benchmark follow-up tracked in issue #19.
@@ -25,12 +26,13 @@ Cave Pony remains a standalone pre-release `0.1.0`. The core behavioural contrac
 
 ## In progress
 
-- Merge the install-lifecycle evidence after exact-head recurring CI is green.
+- Merge the external-validation preparation after exact-head CI is green.
 - Recruit three independent field users and publish their evidence, including a neutral or losing case.
+- Execute the Codex behaviour protocol in a fresh authenticated session and commit the observed result.
 - Complete interactive UK, EU, and US trade mark searches and obtain qualified branding advice where required.
 - Send courtesy provenance notes to Ponytail and Caveman maintainers through a manually authorised route.
 - Apply the approved GitHub description, topics, and social preview.
-- Exercise host discovery, activation, level switching, audit, clarity override, and stop behaviour in fresh authenticated sessions.
+- Exercise equivalent discovery and behaviour paths for other hosts before claiming behavioural support.
 
 ## Release rule
 
