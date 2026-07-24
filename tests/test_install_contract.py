@@ -14,9 +14,9 @@ class InstallContractTests(unittest.TestCase):
         workflow = CI.read_text(encoding="utf-8")
         for required in (
             "DISABLE_TELEMETRY",
-            "SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}",
+            "ref: ${{ github.event.pull_request.head.sha || github.sha }}",
             "skills@1.5.9",
-            "tree/${SOURCE_SHA}/skills/cave-pony",
+            '"$GITHUB_WORKSPACE/skills/cave-pony"',
             "--agent codex",
             "--copy",
             ".agents/skills/cave-pony/SKILL.md",
