@@ -8,7 +8,16 @@ Cave Pony is one skill directory containing Markdown. It has no executable insta
 npx skills add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
 ```
 
-This follows moving `main` and is appropriate for evaluation, not an immutable production pin. A clean GitHub-hosted Ubuntu run verified this public URL with `skills@1.5.9`, Codex project scope, copy mode, and non-interactive confirmation. See [Host verification](HOST_VERIFICATION.md) for the exact run and limitations.
+This follows moving `main` and is appropriate for evaluation, not an immutable production pin. Clean GitHub-hosted Ubuntu runs verified this public URL with `skills@1.5.9`, copy mode, and non-interactive confirmation for the project layouts below:
+
+| Host target | Installed project path |
+|---|---|
+| Claude Code | `.claude/skills/cave-pony/SKILL.md` |
+| Codex | `.agents/skills/cave-pony/SKILL.md` |
+| Hermes Agent | `.hermes/skills/cave-pony/SKILL.md` |
+| OpenClaw | `skills/cave-pony/SKILL.md` |
+
+See [Host verification](HOST_VERIFICATION.md) for exact runs and limitations. Installation layout evidence does not establish host discovery or model behaviour.
 
 ## Recurring Codex project-install check
 
@@ -22,7 +31,7 @@ DISABLE_TELEMETRY=1 npx --yes skills@1.5.9 add \
   --yes
 ```
 
-The check verifies `.agents/skills/cave-pony/SKILL.md` and the expected frontmatter. The local checked-out source keeps routine CI independent of a second remote clone while the one-off public URL evidence remains recorded.
+The check verifies `.agents/skills/cave-pony/SKILL.md` and the expected frontmatter. The local checked-out source keeps routine CI independent of a second remote clone while the one-off public URL and cross-host evidence remain recorded.
 
 ## Generic manual install
 
@@ -74,4 +83,4 @@ If an upgrade or removal fails:
 
 ## Support claims
 
-A compatible Markdown layout is not proof of host support. The repository claims verified Codex project-installation paths only for the recorded `skills@1.5.9` GitHub-hosted Ubuntu runs. Full Codex behavioural support remains unclaimed until activation, persistence, level switching, audit mode, destructive-operation clarity, and stop behaviour are exercised in an authenticated fresh session and committed as evidence. Claude Code, Hermes, OpenClaw, and other hosts remain unclaimed until equivalent evidence exists.
+A compatible Markdown layout is not proof of host support. The repository claims verified project-installation layouts only for the recorded `skills@1.5.9` GitHub-hosted Ubuntu runs. Claude Code, Codex, Hermes Agent, and OpenClaw behavioural support remains unclaimed until each host's actual discovery, activation, level switching, audit, clarity override, and stop behaviour is exercised in a fresh authenticated session and committed as evidence.
