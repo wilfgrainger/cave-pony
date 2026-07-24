@@ -117,7 +117,14 @@ It is not a fork, official successor, or endorsed project. Its influences, quota
 
 ## Evidence
 
-Cave Pony has one published real-repository field record: [Gov Metrics publication diagnostics](field-tests/2026-07-19-gov-metrics-publication-diagnostics.md). It is evidence of one use, not a universal performance claim.
+Published real-repository records:
+
+- [Gov Metrics publication diagnostics](field-tests/2026-07-19-gov-metrics-publication-diagnostics.md): one applied use with stated limitations.
+- [Cave Pony self-audit: neutral result](field-tests/2026-07-24-cave-pony-self-audit-neutral.md): a case where the core behavioural contract correctly received no change.
+
+These records are not independent-user evidence or universal performance claims.
+
+CI includes a commit-pinned, project-scoped Codex installation smoke test. [Host verification](docs/HOST_VERIFICATION.md) states exactly what that proves and what still requires an authenticated Codex behaviour exercise.
 
 Cave Pony does **not** publish a comparative numerical claim. Any future numerical comparison requires separately preregistered work with equivalent conditions, correctness and safety gates, raw artefacts, limitations, and losing cases.
 
@@ -127,9 +134,9 @@ Illustrative contract examples are in [Examples](docs/EXAMPLES.md). They are not
 
 Cave Pony is usable today but remains a pre-release `0.1.0`.
 
-Repository integrity, attribution, safety wording, CI, recovery documentation, and launch claims are protected in code. External launch gates—independent users, host installation verification, maintainer outreach, brand clearance, and an immutable release—remain recorded rather than falsely marked complete.
+Repository integrity, attribution, safety wording, CI, recovery documentation, artwork identity, and Codex install-path verification are protected in code. External launch gates—independent users, authenticated host-behaviour evidence, maintainer outreach, brand clearance, repository metadata, and an immutable release—remain recorded rather than falsely marked complete.
 
-See [Launch checklist](docs/LAUNCH_CHECKLIST.md), [FAQ](docs/FAQ.md), and [Security policy](SECURITY.md).
+See [Release progress](PROGRESS.md), [Launch checklist](docs/LAUNCH_CHECKLIST.md), [FAQ](docs/FAQ.md), and [Security policy](SECURITY.md).
 
 ## Development
 
