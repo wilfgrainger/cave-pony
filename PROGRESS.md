@@ -5,7 +5,7 @@ Target: honest public `v1.0.0`
 
 ## Current state
 
-Cave Pony remains a standalone pre-release `0.1.0`. The core behavioural contract is stable. Current work is release evidence, distribution, and external diligence rather than another internal rewrite.
+Cave Pony remains a standalone pre-release `0.1.0`. The core behavioural contract is stable. All repository-internal release-readiness work that can currently be proved is merged. Remaining work depends on independent people, authenticated host sessions, external GitHub settings, maintainer contact, or formal brand diligence.
 
 ## Completed
 
@@ -21,12 +21,12 @@ Cave Pony remains a standalone pre-release `0.1.0`. The core behavioural contrac
 - Independent field-test template and reproducible Codex behaviour protocol prepared.
 - Host verification claim boundary documented.
 - Preliminary brand diligence and ready-to-send parent-maintainer courtesy messages recorded.
+- Release-readiness work merged through pull requests [#20](https://github.com/wilfgrainger/cave-pony/pull/20), [#25](https://github.com/wilfgrainger/cave-pony/pull/25), [#26](https://github.com/wilfgrainger/cave-pony/pull/26), [#27](https://github.com/wilfgrainger/cave-pony/pull/27), and [#28](https://github.com/wilfgrainger/cave-pony/pull/28), each after exact-head CI passed.
 - Comparative benchmark follow-up tracked in issue #19.
 - Independent field testing, authenticated Codex behaviour, repository metadata, and external diligence tracked in issues #21–#24.
 
-## In progress
+## External gates
 
-- Merge the external-validation preparation after exact-head CI is green.
 - Recruit three independent field users and publish their evidence, including a neutral or losing case.
 - Execute the Codex behaviour protocol in a fresh authenticated session and commit the observed result.
 - Complete interactive UK, EU, and US trade mark searches and obtain qualified branding advice where required.
