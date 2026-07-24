@@ -57,7 +57,8 @@ Do not publish a maintainer's private reply without permission.
 - [ ] GitHub Release created with concise notes and migration information.
 - [ ] Install command pinned to immutable release rather than moving `main`.
 - [ ] Release archive installation tested from a clean environment.
-- [ ] Upgrade and uninstall instructions tested from a clean environment.
+- [x] Codex project update, removal, and manual backup recovery passed on [CI run #216](https://github.com/wilfgrainger/cave-pony/actions/runs/30134550258) using pinned `skills@1.5.9`.
+- [ ] Equivalent lifecycle evidence exists for every host claimed at release.
 - [ ] Repository social preview configured using the original logo.
 - [ ] Repository description and topics set for discovery. Both metadata items are tracked in [issue #23](https://github.com/wilfgrainger/cave-pony/issues/23).
 
@@ -85,7 +86,8 @@ Add new adapters only after a named user or launch channel requires them.
 - [x] No network call or secret required by the skill itself.
 - [x] CI permissions restricted to repository read.
 - [x] Workflow actions pinned to immutable commits and re-reviewed on 2026-07-22.
-- [ ] Recovery steps tested for install and uninstall failure.
+- [x] Codex project update repair, removal, and backup restoration tested on [CI run #216](https://github.com/wilfgrainger/cave-pony/actions/runs/30134550258).
+- [ ] Interrupted filesystem operations and host-specific recovery remain untested.
 - [x] Security reporting route added.
 - [ ] Release commit and tag verified after publication.
 
