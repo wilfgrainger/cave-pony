@@ -1,7 +1,6 @@
 # Release progress
 
 Owner: Wilfred Grainger
-Delivery lead: Jared
 Target: honest public `v1.0.0`
 
 ## Current state
