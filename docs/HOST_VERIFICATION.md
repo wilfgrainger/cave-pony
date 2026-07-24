@@ -49,6 +49,6 @@ Every later merge or release candidate must rerun the recurring checks at its ex
 
 The evidence proves that `skills@1.5.9` discovered and copied Cave Pony into the listed project directories in the recorded GitHub-hosted Ubuntu runs. It does not prove universal network reliability, other CLI versions, other operating systems, global installation, host discovery after restart, or model behaviour.
 
-A host is not claimed as behaviourally supported until a fresh authenticated session exercises its actual discovery and activation model, level switching, audit mode, destructive-operation clarity, repeated-question clarity, and stop behaviour. Installation layout alone is not behavioural support.
+Full Codex behaviour support still requires a fresh authenticated Codex session. A host is not claimed as behaviourally supported until a fresh authenticated session exercises its actual discovery and activation model, level switching, audit mode, destructive-operation clarity, repeated-question clarity, and stop behaviour. Installation layout alone is not behavioural support.
 
 Codex behavioural verification is tracked in [issue #22](https://github.com/wilfgrainger/cave-pony/issues/22). Equivalent behaviour evidence remains required before making Claude Code, Hermes Agent, or OpenClaw behavioural-support claims.
