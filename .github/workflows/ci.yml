@@ -40,3 +40,25 @@ jobs:
           test -f .agents/skills/cave-pony/SKILL.md
           grep -q '^name: cave-pony$' .agents/skills/cave-pony/SKILL.md
           grep -q '^version: 0.1.0$' .agents/skills/cave-pony/SKILL.md
+      - name: Verify Codex update, removal, and recovery
+        env:
+          DISABLE_TELEMETRY: "1"
+        run: |
+          temp_dir="$(mktemp -d)"
+          cd "$temp_dir"
+          npx --yes skills@1.5.9 add \
+            "https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony" \
+            --agent codex \
+            --copy \
+            --yes
+          test -f .agents/skills/cave-pony/SKILL.md
+          cp -R .agents/skills/cave-pony "$temp_dir/cave-pony-backup"
+          sed -i 's/^version: 0.1.0$/version: 9.9.9/' .agents/skills/cave-pony/SKILL.md
+          grep -q '^version: 9.9.9$' .agents/skills/cave-pony/SKILL.md
+          npx --yes skills@1.5.9 update cave-pony --project --yes
+          grep -q '^version: 0.1.0$' .agents/skills/cave-pony/SKILL.md
+          npx --yes skills@1.5.9 remove cave-pony --agent codex --yes
+          test ! -e .agents/skills/cave-pony
+          mkdir -p .agents/skills
+          cp -R "$temp_dir/cave-pony-backup" .agents/skills/cave-pony
+          grep -q '^version: 0.1.0$' .agents/skills/cave-pony/SKILL.md
