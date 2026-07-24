@@ -15,6 +15,7 @@ Cave Pony remains a standalone pre-release `0.1.0`. The core behavioural contrac
 - Neutral self-audit field record added.
 - Clean Codex project-installation smoke test added to CI.
 - Codex installation smoke and the full repository test target passed on pull-request run [#193](https://github.com/wilfgrainger/cave-pony/actions/runs/30133587016) at commit `ed172c6a5bffcc9a540bda628d72e10f8a498995`.
+- The documented public `npx skills add` command passed from a clean temporary directory on pull-request run [#200](https://github.com/wilfgrainger/cave-pony/actions/runs/30134001186) with pinned `skills@1.5.9` and Codex project-copy mode.
 - Host verification claim boundary documented.
 - Preliminary brand diligence and ready-to-send parent-maintainer courtesy messages recorded.
 - Comparative benchmark follow-up tracked in issue #19.
@@ -22,8 +23,7 @@ Cave Pony remains a standalone pre-release `0.1.0`. The core behavioural contrac
 
 ## In progress
 
-- Validate the final release-readiness pull-request head after documentation reconciliation.
-- Merge the reviewed pull request only after exact-head CI is green.
+- Merge the remote-install evidence after exact-head CI is green.
 - Recruit three independent field users and publish their evidence, including a neutral or losing case.
 - Complete interactive UK, EU, and US trade mark searches and obtain qualified branding advice where required.
 - Send courtesy provenance notes to Ponytail and Caveman maintainers through a manually authorised route.
