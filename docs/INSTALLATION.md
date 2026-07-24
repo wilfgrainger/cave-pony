@@ -10,6 +10,20 @@ npx skills add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-p
 
 This follows moving `main` and is appropriate for evaluation, not an immutable production pin.
 
+## Verified Codex project install
+
+CI verifies a clean, non-interactive, project-scoped Codex installation with the `skills` CLI pinned to `1.5.9`:
+
+```bash
+DISABLE_TELEMETRY=1 npx --yes skills@1.5.9 add \
+  https://github.com/wilfgrainger/cave-pony/tree/<commit>/skills/cave-pony \
+  --agent codex \
+  --copy \
+  --yes
+```
+
+The test pins the Cave Pony source to the exact commit under review and checks `.agents/skills/cave-pony/SKILL.md`, expected frontmatter, and CLI discovery. See [Host verification](HOST_VERIFICATION.md) for the evidence boundary.
+
 ## Generic manual install
 
 ```bash
@@ -60,4 +74,4 @@ If an upgrade or removal fails:
 
 ## Support claims
 
-A compatible Markdown layout is not proof of host support. The repository claims only the installation paths that have committed clean-environment evidence. Claude Code, Codex, Hermes, OpenClaw, and other hosts remain unclaimed until each path, activation model, level switch, audit mode, and stop behaviour is tested and recorded.
+A compatible Markdown layout is not proof of host support. The repository currently claims a CI-verified Codex project installation path only. Full Codex behavioural support remains unclaimed until activation, persistence, level switching, audit mode, destructive-operation clarity, and stop behaviour are exercised in an authenticated fresh session and committed as evidence. Claude Code, Hermes, OpenClaw, and other hosts remain unclaimed until equivalent evidence exists.
