@@ -67,7 +67,8 @@ Do not claim support merely because a file format appears compatible.
 
 - [ ] Public remote `npx skills add` command tested from a clean environment.
 - [ ] Claude Code installation documented and tested.
-- [ ] Codex project-installation mechanism passes CI at the exact release commit.
+- [x] Codex project-installation mechanism passed with `skills@1.5.9` on [CI run #193](https://github.com/wilfgrainger/cave-pony/actions/runs/30133587016) at commit `ed172c6a5bffcc9a540bda628d72e10f8a498995`.
+- [ ] The exact `v1.0.0` release commit repeats the Codex installation proof.
 - [ ] Codex activation, level switching, audit, destructive clarity and stop behaviour tested in an authenticated fresh session. Tracked in [issue #22](https://github.com/wilfgrainger/cave-pony/issues/22).
 - [ ] Hermes installation documented and tested.
 - [ ] OpenClaw installation documented and tested.
