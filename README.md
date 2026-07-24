@@ -124,7 +124,7 @@ Published real-repository records:
 
 These records are not independent-user evidence or universal performance claims.
 
-CI includes a commit-pinned, project-scoped Codex installation smoke test. [Host verification](docs/HOST_VERIFICATION.md) states exactly what that proves and what still requires an authenticated Codex behaviour exercise.
+The public development URL and the documented Claude Code, Codex, Hermes Agent, and OpenClaw project installation layouts have passed clean GitHub-hosted Ubuntu probes using pinned `skills@1.5.9`. Recurring CI retains the exact-commit Codex installation smoke. [Host verification](docs/HOST_VERIFICATION.md) states exactly what this proves and what still requires authenticated host-behaviour exercises.
 
 Cave Pony does **not** publish a comparative numerical claim. Any future numerical comparison requires separately preregistered work with equivalent conditions, correctness and safety gates, raw artefacts, limitations, and losing cases.
 
@@ -134,7 +134,7 @@ Illustrative contract examples are in [Examples](docs/EXAMPLES.md). They are not
 
 Cave Pony is usable today but remains a pre-release `0.1.0`.
 
-Repository integrity, attribution, safety wording, CI, recovery documentation, artwork identity, and Codex install-path verification are protected in code. External launch gates—independent users, authenticated host-behaviour evidence, maintainer outreach, brand clearance, repository metadata, and an immutable release—remain recorded rather than falsely marked complete.
+Repository integrity, attribution, safety wording, CI, recovery documentation, artwork identity, and project-installation evidence are protected in code. External launch gates—independent users, authenticated host-behaviour evidence, maintainer outreach, brand clearance, repository metadata, and an immutable release—remain recorded rather than falsely marked complete.
 
 See [Release progress](PROGRESS.md), [Launch checklist](docs/LAUNCH_CHECKLIST.md), [FAQ](docs/FAQ.md), and [Security policy](SECURITY.md).
 

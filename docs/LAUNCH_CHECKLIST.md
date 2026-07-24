@@ -63,15 +63,16 @@ Do not publish a maintainer's private reply without permission.
 
 ## Installation coverage
 
-Do not claim support merely because a file format appears compatible.
+Do not claim behaviour support merely because installation layout is compatible.
 
 - [x] Public remote `npx skills add` command passed on [CI run #200](https://github.com/wilfgrainger/cave-pony/actions/runs/30134001186) with `skills@1.5.9`, Codex project scope, copy mode, and a clean temporary directory.
-- [ ] Claude Code installation documented and tested.
-- [x] Codex project-installation mechanism passed with `skills@1.5.9` on [CI run #193](https://github.com/wilfgrainger/cave-pony/actions/runs/30133587016) at commit `ed172c6a5bffcc9a540bda628d72e10f8a498995`.
-- [ ] The exact `v1.0.0` release commit repeats the Codex installation proof.
+- [x] Claude Code project installation path `.claude/skills/cave-pony/SKILL.md` passed on [CI run #207](https://github.com/wilfgrainger/cave-pony/actions/runs/30134217101).
+- [x] Codex project installation path `.agents/skills/cave-pony/SKILL.md` passed on [CI run #207](https://github.com/wilfgrainger/cave-pony/actions/runs/30134217101); recurring local-source proof also passed on [run #193](https://github.com/wilfgrainger/cave-pony/actions/runs/30133587016).
+- [x] Hermes Agent project installation path `.hermes/skills/cave-pony/SKILL.md` passed on [CI run #207](https://github.com/wilfgrainger/cave-pony/actions/runs/30134217101).
+- [x] OpenClaw project installation path `skills/cave-pony/SKILL.md` passed on [CI run #207](https://github.com/wilfgrainger/cave-pony/actions/runs/30134217101).
+- [ ] The exact `v1.0.0` release commit repeats the required installation proof.
 - [ ] Codex activation, level switching, audit, destructive clarity and stop behaviour tested in an authenticated fresh session. Tracked in [issue #22](https://github.com/wilfgrainger/cave-pony/issues/22).
-- [ ] Hermes installation documented and tested.
-- [ ] OpenClaw installation documented and tested.
+- [ ] Claude Code, Hermes Agent, and OpenClaw behavioural discovery and activation tested in fresh authenticated sessions.
 - [x] Generic manual installation, verification, upgrade, removal, and recovery documented.
 - [x] Host-specific limitations and support-claim policy recorded in [Host verification](HOST_VERIFICATION.md).
 
