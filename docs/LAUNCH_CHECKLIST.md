@@ -13,6 +13,7 @@ A checked item means committed evidence exists. Verbal confidence is not complet
 - [x] Clear explanation of why a coordinated skill exists instead of silently stacking parents.
 - [x] Activation, persistence, stop behaviour, audit mode, and safety override specified.
 - [x] Real field record published with limitations.
+- [x] Honest independent field-test template published at [`field-tests/TEMPLATE.md`](../field-tests/TEMPLATE.md).
 - [ ] At least three independent users have used Cave Pony on real repository work. Tracked in [issue #21](https://github.com/wilfgrainger/cave-pony/issues/21).
 - [x] A public neutral field record shows no demonstrated improvement to the core contract: [Cave Pony self-audit](../field-tests/2026-07-24-cave-pony-self-audit-neutral.md).
 - [ ] Repeated user confusion has been tested against the clarity override.
@@ -72,6 +73,7 @@ Do not claim behaviour support merely because installation layout is compatible.
 - [x] Hermes Agent project installation path `.hermes/skills/cave-pony/SKILL.md` passed on [CI run #207](https://github.com/wilfgrainger/cave-pony/actions/runs/30134217101).
 - [x] OpenClaw project installation path `skills/cave-pony/SKILL.md` passed on [CI run #207](https://github.com/wilfgrainger/cave-pony/actions/runs/30134217101).
 - [ ] The exact `v1.0.0` release commit repeats the required installation proof.
+- [x] Reproducible Codex behaviour protocol prepared at [`docs/CODEX_BEHAVIOUR_PROTOCOL.md`](CODEX_BEHAVIOUR_PROTOCOL.md).
 - [ ] Codex activation, level switching, audit, destructive clarity and stop behaviour tested in an authenticated fresh session. Tracked in [issue #22](https://github.com/wilfgrainger/cave-pony/issues/22).
 - [ ] Claude Code, Hermes Agent, and OpenClaw behavioural discovery and activation tested in fresh authenticated sessions.
 - [x] Generic manual installation, verification, upgrade, removal, and recovery documented.
