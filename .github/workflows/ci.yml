@@ -38,5 +38,4 @@ jobs:
             --copy \
             --yes
           test -f .agents/skills/cave-pony/SKILL.md
-          grep -q '^name: cave-pony$' .agents/skills/cave-pony/SKILL.md
-          grep -q '^version: 0.1.0$' .agents/skills/cave-pony/SKILL.md
+          cmp -s "$GITHUB_WORKSPACE/skills/cave-pony/SKILL.md" .agents/skills/cave-pony/SKILL.md

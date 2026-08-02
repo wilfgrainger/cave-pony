@@ -20,8 +20,7 @@ class InstallContractTests(unittest.TestCase):
             "--agent codex",
             "--copy",
             ".agents/skills/cave-pony/SKILL.md",
-            "^name: cave-pony$",
-            "^version: 0.1.0$",
+            'cmp -s "$GITHUB_WORKSPACE/skills/cave-pony/SKILL.md" .agents/skills/cave-pony/SKILL.md',
         ):
             self.assertIn(required, workflow)
 
