@@ -22,6 +22,8 @@ Cave Pony coordinates two budgets under one hard constraint:
 
 This repository is the canonical home of Cave Pony.
 
+> **Public preview — `0.1.0`.** Cave Pony is usable today, but `v1.0.0` is deliberately gated on independent real-repository evidence and authenticated host-behaviour testing. Try it on real work and report wins, neutral results, and failures.
+
 ## See it in 30 seconds
 
 Request:
@@ -132,13 +134,20 @@ Illustrative contract examples are in [Examples](docs/EXAMPLES.md). They are not
 
 ## Help validate it
 
-Cave Pony needs independent real-repository evidence before `v1.0.0`, including neutral and losing cases. See [issue #21](https://github.com/wilfgrainger/cave-pony/issues/21) and start from the [field-test template](field-tests/TEMPLATE.md).
+The best way to help Cave Pony reach `v1.0.0` is to use it on one real repository task and publish what actually happened.
+
+1. Install the public preview above.
+2. Use Cave Pony on a genuine coding task, or start with `/cave-pony audit` on an existing change.
+3. Record the result using the [field-test template](field-tests/TEMPLATE.md).
+4. Contribute the record through [issue #21](https://github.com/wilfgrainger/cave-pony/issues/21) or a pull request.
+
+Neutral and losing cases are explicitly welcome. Cave Pony needs independent real-repository evidence before `v1.0.0`; evidence that it made no difference or made a result worse is useful evidence too.
 
 Authenticated Codex behaviour testing has a reproducible [protocol](docs/CODEX_BEHAVIOUR_PROTOCOL.md) and remains open in [issue #22](https://github.com/wilfgrainger/cave-pony/issues/22). Installation compatibility alone is not behavioural support.
 
 ## Project status
 
-Cave Pony is usable today but remains a pre-release `0.1.0`.
+Cave Pony is usable today but remains a public-preview `0.1.0`.
 
 Repository integrity, attribution, safety wording, CI, recovery documentation, artwork identity, and project-installation evidence are protected in code. External launch gates—independent users, authenticated host-behaviour evidence, maintainer outreach, brand clearance, repository metadata, and an immutable release—remain recorded rather than falsely marked complete.
 
