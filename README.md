@@ -45,7 +45,7 @@ Small change. Small report. Enough evidence to trust both.
 
 ## Install
 
-Public preview version: `0.1.0`.
+Current development version: `0.1.0`.
 
 ```bash
 npx skills add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
