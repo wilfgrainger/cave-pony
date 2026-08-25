@@ -1,6 +1,6 @@
 # Codex behaviour verification protocol
 
-Issue: [#22](https://github.com/wilfgrainger/cave-pony/issues/22)
+Evidence gate: [#21](https://github.com/wilfgrainger/cave-pony/issues/21)
 Status: prepared, not yet executed
 
 This protocol tests the installed skill in a fresh authenticated Codex session. It does not replace repository tests or installation-path evidence.
@@ -135,4 +135,4 @@ Codex behavioural support may be claimed only for the exact tested environment w
 - no overlapping skill contaminated the result;
 - support wording is no broader than the evidence.
 
-A written protocol is preparation, not proof. Keep issue #22 open until the authenticated run and evidence are committed.
+A written protocol is preparation, not proof. Keep the #21 evidence gate open until the authenticated run and evidence are committed.

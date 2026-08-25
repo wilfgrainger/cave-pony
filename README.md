@@ -48,7 +48,7 @@ Small change. Small report. Enough evidence to trust both.
 Current development version: `0.1.0`.
 
 ```bash
-npx skills add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
+npx --yes skills@1.5.9 add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
 ```
 
 The development command tracks `main`. Clean install, upgrade, removal, recovery, and support-claim rules are in [Installation](docs/INSTALLATION.md). A stable command pinned to an immutable tag will replace it at `v1.0.0`.
@@ -143,7 +143,7 @@ The best way to help Cave Pony reach `v1.0.0` is to use it on one real repositor
 
 Neutral and losing cases are explicitly welcome. Cave Pony needs independent real-repository evidence before `v1.0.0`; evidence that it made no difference or made a result worse is useful evidence too.
 
-Authenticated Codex behaviour testing has a reproducible [protocol](docs/CODEX_BEHAVIOUR_PROTOCOL.md) and remains open in [issue #22](https://github.com/wilfgrainger/cave-pony/issues/22). Installation compatibility alone is not behavioural support.
+Authenticated Codex behaviour testing has a reproducible [protocol](docs/CODEX_BEHAVIOUR_PROTOCOL.md) and is part of the independent evidence gate in [issue #21](https://github.com/wilfgrainger/cave-pony/issues/21). Installation compatibility alone is not behavioural support.
 
 ## Project status
 

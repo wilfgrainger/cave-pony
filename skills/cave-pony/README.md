@@ -5,7 +5,7 @@ Cave Pony `0.1.0` is a standalone coding-agent skill for the smallest trustworth
 ## Install
 
 ```bash
-npx skills add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
+npx --yes skills@1.5.9 add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
 ```
 
 The development command tracks `main`. See the repository [installation guide](../../docs/INSTALLATION.md) for manual installation, upgrade, removal, recovery, and support status.

@@ -114,7 +114,12 @@ REQUIRED_CASES = {
     "data-loss",
     "accessibility",
     "repeated-question",
+    "untrusted-repository-content",
+    "untrusted-tool-output",
 }
+
+LOCAL_LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
+PUBLIC_SKILLS_COMMAND = "npx --yes skills@1.5.9"
 
 
 def frontmatter(text: str) -> dict[str, str]:
@@ -184,6 +189,9 @@ def validate_cases(errors: list[str], skill: str) -> None:
         for term in terms:
             if term.lower() not in skill.lower():
                 errors.append(f"behavioral contract term missing for {case_id}: {term}")
+        for rule in rules:
+            if not any(term.lower() in rule.lower() for term in terms):
+                errors.append(f"behavioral requirement must name a contract term: {case_id}")
 
     for case_id in sorted(REQUIRED_CASES - found):
         errors.append(f"required behavioral case missing: {case_id}")
@@ -220,6 +228,39 @@ def validate_ci(errors: list[str]) -> None:
     for action, commit in PINS.items():
         if f"{action}@{commit}" not in workflow:
             errors.append(f"CI action must use immutable commit: {action}")
+
+
+def validate_local_links(errors: list[str]) -> None:
+    for path in ROOT.rglob("*.md"):
+        if ".git" in path.parts:
+            continue
+        for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            for raw_target in LOCAL_LINK.findall(line):
+                target = raw_target.strip().split(maxsplit=1)[0].strip("<>")
+                if not target or target.startswith(("#", "http://", "https://", "mailto:", "tel:")):
+                    continue
+                relative = target.split("#", 1)[0]
+                if not relative:
+                    continue
+                destination = (path.parent / relative).resolve()
+                try:
+                    destination.relative_to(ROOT.resolve())
+                except ValueError:
+                    errors.append(f"local Markdown link escapes repository: {path.relative_to(ROOT)}:{line_number}: {target}")
+                    continue
+                if not destination.exists():
+                    errors.append(f"broken local Markdown link: {path.relative_to(ROOT)}:{line_number}: {target}")
+
+
+def validate_public_install_commands(errors: list[str]) -> None:
+    for path in (README, NESTED_README, ROOT / "docs/INSTALLATION.md"):
+        if not path.is_file():
+            continue
+        for line in path.read_text(encoding="utf-8").splitlines():
+            stripped = line.strip()
+            if stripped.startswith("npx") and "skills" in stripped and " add " in stripped:
+                if not stripped.startswith(PUBLIC_SKILLS_COMMAND + " add "):
+                    errors.append(f"public install command must pin skills@1.5.9: {path.relative_to(ROOT)}")
 
 
 def validate_png(errors: list[str], relative: str, dimensions: tuple[int, int]) -> None:
@@ -285,6 +326,8 @@ def validate() -> list[str]:
     validate_versions(errors, version)
     validate_ci(errors)
     validate_cases(errors, skill)
+    validate_local_links(errors)
+    validate_public_install_commands(errors)
     for relative, dimensions in PNG_ASSETS.items():
         validate_png(errors, relative, dimensions)
 

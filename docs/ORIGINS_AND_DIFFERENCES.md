@@ -109,7 +109,7 @@ Cave Pony is useful when users want:
 - one audit covering code surface and narration;
 - a smaller coordinated instruction contract.
 
-These claims are architectural descriptions. Numerical performance claims require the protocol in [`BENCHMARK_PLAN.md`](BENCHMARK_PLAN.md).
+These claims are architectural descriptions. Cave Pony makes no numerical performance claim; any future comparison must satisfy the deferred evidence rules in the [launch checklist](LAUNCH_CHECKLIST.md#evidence-and-claims).
 
 ## What Cave Pony does not claim
 
