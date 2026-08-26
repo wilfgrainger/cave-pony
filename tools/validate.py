@@ -82,6 +82,7 @@ ROOT_TERMS = (
 
 SAFETY_TERMS = (
     "trust-boundary validation",
+    "Recognized project-guidance files",
     "authentication or authorisation",
     "safe secrets handling",
     "error handling needed to prevent corruption or data loss",
@@ -183,6 +184,7 @@ def validate_cases(errors: list[str], skill: str) -> None:
             errors.append(f"behavioral trigger missing from skill: {trigger}")
         if not isinstance(rules, list) or len(rules) < 2 or not all(isinstance(rule, str) and rule.strip() for rule in rules):
             errors.append(f"behavioral case needs two written rules: {case_id}")
+            continue
         if not isinstance(terms, list) or not terms or not all(isinstance(term, str) and term.strip() for term in terms):
             errors.append(f"behavioral case needs contract terms: {case_id}")
             continue
@@ -253,14 +255,14 @@ def validate_local_links(errors: list[str]) -> None:
 
 
 def validate_public_install_commands(errors: list[str]) -> None:
-    for path in (README, NESTED_README, ROOT / "docs/INSTALLATION.md"):
+    for path in (README, NESTED_README, ROOT / "docs/INSTALLATION.md", ROOT / "docs/HOST_VERIFICATION.md"):
         if not path.is_file():
             continue
         for line in path.read_text(encoding="utf-8").splitlines():
             stripped = line.strip()
-            if stripped.startswith("npx") and "skills" in stripped and " add " in stripped:
-                if not stripped.startswith(PUBLIC_SKILLS_COMMAND + " add "):
-                    errors.append(f"public install command must pin skills@1.5.9: {path.relative_to(ROOT)}")
+            match = re.search(r"\bnpx(?:\s+--yes)?\s+skills(?:@\S+)?\s+add\b", stripped)
+            if match and match.group(0) != PUBLIC_SKILLS_COMMAND + " add":
+                errors.append(f"public install command must pin skills@1.5.9: {path.relative_to(ROOT)}")
 
 
 def validate_png(errors: list[str], relative: str, dimensions: tuple[int, int]) -> None:

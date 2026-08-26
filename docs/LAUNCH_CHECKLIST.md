@@ -38,7 +38,7 @@ A checked item means committed evidence exists. Verbal confidence is not complet
 - [ ] Interactive name and relevant software-class searches completed in official UK, EU and US trade mark databases.
 - [ ] Licensing and branding reviewed by a suitably qualified person before commercial use.
 - [x] Courtesy messages prepared in [Maintainer outreach](MAINTAINER_OUTREACH.md).
-- [ ] Courtesy note delivered to each parent maintainer if a future commercial or durable-brand decision makes outreach necessary. It is not a current public-preview gate.
+- [ ] Courtesy note delivered to each parent maintainer through a manually authorised route before `v1.0.0` or any commercial/durable-brand decision. It is not a current public-preview gate.
 - [ ] Any requested attribution correction resolved before launch.
 
 Do not publish a maintainer's private reply without permission.

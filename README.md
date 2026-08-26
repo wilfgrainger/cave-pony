@@ -155,11 +155,19 @@ See [Release progress](PROGRESS.md), [Launch checklist](docs/LAUNCH_CHECKLIST.md
 
 ## Development
 
-No runtime package or third-party Python dependency is required. Local checks require Python 3.10 or newer and `make`; CI uses Python 3.12.
+No runtime package or third-party Python dependency is required. Unix-like local checks use Python 3.10 or newer and `make`; CI uses Python 3.12.
 
 ```bash
 make validate
 make test
+```
+
+On Windows without GNU Make, run the same target commands directly in PowerShell:
+
+```powershell
+python tools/validate.py
+if (-not (Test-Path "tests/test_profile_artwork.py")) { throw "missing tests/test_profile_artwork.py" }
+python -m unittest discover -s tests -v
 ```
 
 ```text

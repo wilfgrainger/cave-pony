@@ -27,9 +27,19 @@ Authenticated Codex behaviour testing follows [`docs/CODEX_BEHAVIOUR_PROTOCOL.md
 
 ## Development
 
+On Unix-like systems:
+
 ```bash
 make validate
 make test
+```
+
+On Windows without GNU Make, run the same target commands directly in PowerShell:
+
+```powershell
+python tools/validate.py
+if (-not (Test-Path "tests/test_profile_artwork.py")) { throw "missing tests/test_profile_artwork.py" }
+python -m unittest discover -s tests -v
 ```
 
 Python 3.10 or newer is sufficient. CI uses Python 3.12. No third-party Python package is required.
