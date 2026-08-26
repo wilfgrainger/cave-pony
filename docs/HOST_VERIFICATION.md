@@ -64,4 +64,4 @@ The evidence proves that `skills@1.5.9` discovered, copied, updated, and removed
 
 Full Codex behaviour support still requires a fresh authenticated Codex session. A host is not claimed as behaviourally supported until a fresh authenticated session exercises its actual discovery and activation model, level switching, audit mode, destructive-operation clarity, repeated-question clarity, and stop behaviour. Installation layout alone is not behavioural support.
 
-Codex behavioural verification is tracked in [issue #22](https://github.com/wilfgrainger/cave-pony/issues/22). Equivalent behaviour evidence remains required before making Claude Code, Hermes Agent, or OpenClaw behavioural-support claims.
+Codex behavioural verification is part of the independent evidence gate in [issue #21](https://github.com/wilfgrainger/cave-pony/issues/21). Equivalent behaviour evidence remains required before making Claude Code, Hermes Agent, or OpenClaw behavioural-support claims.

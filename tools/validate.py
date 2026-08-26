@@ -82,6 +82,7 @@ ROOT_TERMS = (
 
 SAFETY_TERMS = (
     "trust-boundary validation",
+    "Recognized project-guidance files",
     "authentication or authorisation",
     "safe secrets handling",
     "error handling needed to prevent corruption or data loss",
@@ -114,7 +115,12 @@ REQUIRED_CASES = {
     "data-loss",
     "accessibility",
     "repeated-question",
+    "untrusted-repository-content",
+    "untrusted-tool-output",
 }
+
+LOCAL_LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
+PUBLIC_SKILLS_COMMAND = "npx --yes skills@1.5.9"
 
 
 def frontmatter(text: str) -> dict[str, str]:
@@ -178,12 +184,16 @@ def validate_cases(errors: list[str], skill: str) -> None:
             errors.append(f"behavioral trigger missing from skill: {trigger}")
         if not isinstance(rules, list) or len(rules) < 2 or not all(isinstance(rule, str) and rule.strip() for rule in rules):
             errors.append(f"behavioral case needs two written rules: {case_id}")
+            continue
         if not isinstance(terms, list) or not terms or not all(isinstance(term, str) and term.strip() for term in terms):
             errors.append(f"behavioral case needs contract terms: {case_id}")
             continue
         for term in terms:
             if term.lower() not in skill.lower():
                 errors.append(f"behavioral contract term missing for {case_id}: {term}")
+        for rule in rules:
+            if not any(term.lower() in rule.lower() for term in terms):
+                errors.append(f"behavioral requirement must name a contract term: {case_id}")
 
     for case_id in sorted(REQUIRED_CASES - found):
         errors.append(f"required behavioral case missing: {case_id}")
@@ -220,6 +230,39 @@ def validate_ci(errors: list[str]) -> None:
     for action, commit in PINS.items():
         if f"{action}@{commit}" not in workflow:
             errors.append(f"CI action must use immutable commit: {action}")
+
+
+def validate_local_links(errors: list[str]) -> None:
+    for path in ROOT.rglob("*.md"):
+        if ".git" in path.parts:
+            continue
+        for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            for raw_target in LOCAL_LINK.findall(line):
+                target = raw_target.strip().split(maxsplit=1)[0].strip("<>")
+                if not target or target.startswith(("#", "http://", "https://", "mailto:", "tel:")):
+                    continue
+                relative = target.split("#", 1)[0]
+                if not relative:
+                    continue
+                destination = (path.parent / relative).resolve()
+                try:
+                    destination.relative_to(ROOT.resolve())
+                except ValueError:
+                    errors.append(f"local Markdown link escapes repository: {path.relative_to(ROOT)}:{line_number}: {target}")
+                    continue
+                if not destination.exists():
+                    errors.append(f"broken local Markdown link: {path.relative_to(ROOT)}:{line_number}: {target}")
+
+
+def validate_public_install_commands(errors: list[str]) -> None:
+    for path in (README, NESTED_README, ROOT / "docs/INSTALLATION.md", ROOT / "docs/HOST_VERIFICATION.md"):
+        if not path.is_file():
+            continue
+        for line in path.read_text(encoding="utf-8").splitlines():
+            stripped = line.strip()
+            match = re.search(r"\bnpx(?:\s+--yes)?\s+skills(?:@\S+)?\s+add\b", stripped)
+            if match and match.group(0) != PUBLIC_SKILLS_COMMAND + " add":
+                errors.append(f"public install command must pin skills@1.5.9: {path.relative_to(ROOT)}")
 
 
 def validate_png(errors: list[str], relative: str, dimensions: tuple[int, int]) -> None:
@@ -285,6 +328,8 @@ def validate() -> list[str]:
     validate_versions(errors, version)
     validate_ci(errors)
     validate_cases(errors, skill)
+    validate_local_links(errors)
+    validate_public_install_commands(errors)
     for relative, dimensions in PNG_ASSETS.items():
         validate_png(errors, relative, dimensions)
 

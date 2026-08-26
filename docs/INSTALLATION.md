@@ -5,7 +5,7 @@ Cave Pony is one skill directory containing Markdown. It has no executable insta
 ## Development install
 
 ```bash
-npx skills add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
+npx --yes skills@1.5.9 add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
 ```
 
 This follows moving `main` and is appropriate for evaluation, not an immutable production pin. Clean GitHub-hosted Ubuntu runs verified this public URL with `skills@1.5.9`, copy mode, and non-interactive confirmation for the project layouts below:
