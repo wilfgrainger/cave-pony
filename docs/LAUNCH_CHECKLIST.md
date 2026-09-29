@@ -38,7 +38,7 @@ A checked item means committed evidence exists. Verbal confidence is not complet
 - [ ] Interactive name and relevant software-class searches completed in official UK, EU and US trade mark databases.
 - [ ] Licensing and branding reviewed by a suitably qualified person before commercial use.
 - [x] Courtesy messages prepared in [Maintainer outreach](MAINTAINER_OUTREACH.md).
-- [ ] Courtesy note delivered to each parent maintainer. Tracked with brand diligence in [issue #24](https://github.com/wilfgrainger/cave-pony/issues/24).
+- [ ] Courtesy note delivered to each parent maintainer through a manually authorised route before `v1.0.0` or any commercial/durable-brand decision. It is not a current public-preview gate.
 - [ ] Any requested attribution correction resolved before launch.
 
 Do not publish a maintainer's private reply without permission.
@@ -61,7 +61,9 @@ Do not publish a maintainer's private reply without permission.
 - [x] Codex project update, removal, and manual backup recovery passed on [CI run #216](https://github.com/wilfgrainger/cave-pony/actions/runs/30134550258) using pinned `skills@1.5.9`.
 - [ ] Equivalent lifecycle evidence exists for every host claimed at release.
 - [ ] Repository social preview configured using the original logo.
-- [ ] Repository description and topics set for discovery. Both metadata items are tracked in [issue #23](https://github.com/wilfgrainger/cave-pony/issues/23).
+- [x] Social-preview asset decodes as a complete 1280x640 PNG and keeps the approved logo intact.
+- [x] Repository description and topics set for discovery (observed in the GitHub repository metadata on 2026-09-29).
+- [ ] Social preview and README mobile/desktop rendering observed; tracked in [issue #23](https://github.com/wilfgrainger/cave-pony/issues/23).
 
 ## Installation coverage
 
@@ -74,7 +76,7 @@ Do not claim behaviour support merely because installation layout is compatible.
 - [x] OpenClaw project installation path `skills/cave-pony/SKILL.md` passed on [CI run #207](https://github.com/wilfgrainger/cave-pony/actions/runs/30134217101).
 - [ ] The exact `v1.0.0` release commit repeats the required installation proof.
 - [x] Reproducible Codex behaviour protocol prepared at [`docs/CODEX_BEHAVIOUR_PROTOCOL.md`](CODEX_BEHAVIOUR_PROTOCOL.md).
-- [ ] Codex activation, level switching, audit, destructive clarity and stop behaviour tested in an authenticated fresh session. Tracked in [issue #22](https://github.com/wilfgrainger/cave-pony/issues/22).
+- [ ] Codex activation, level switching, audit, destructive clarity and stop behaviour tested in an authenticated fresh session. Part of the independent evidence gate in [issue #21](https://github.com/wilfgrainger/cave-pony/issues/21).
 - [ ] Claude Code, Hermes Agent, and OpenClaw behavioural discovery and activation tested in fresh authenticated sessions.
 - [x] Generic manual installation, verification, upgrade, removal, and recovery documented.
 - [x] Host-specific limitations and support-claim policy recorded in [Host verification](HOST_VERIFICATION.md).

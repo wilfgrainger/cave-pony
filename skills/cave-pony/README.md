@@ -5,21 +5,19 @@ Cave Pony `0.1.0` is a standalone coding-agent skill for the smallest trustworth
 ## Install
 
 ```bash
-npx skills add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
+npx --yes skills@1.5.9 add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
 ```
 
 The development command tracks `main`. See the repository [installation guide](../../docs/INSTALLATION.md) for manual installation, upgrade, removal, recovery, and support status.
 
-## Commands
+## First use
 
 ```text
-/cave-pony                         # build=full voice=full
-/cave-pony lite                    # both axes lite
-/cave-pony ultra                   # both axes ultra
-/cave-pony build=ultra voice=lite  # independent controls
-/cave-pony audit                   # read-only review
-stop cave-pony                     # disable Cave Pony only
+Use Cave Pony to make the smallest trustworthy change.    # full by default
+Use Cave Pony audit on the current diff.                  # read-only review
 ```
+
+Codex CLI/IDE selects the skill with `$cave-pony` or `/skills`; Claude Code uses `/cave-pony`. ChatGPT uses `@cave-pony` when the skill is available there. These are host interfaces, not commands defined by the skill. Advanced `lite`, `ultra`, independent build/voice controls and `stop cave-pony` are in `SKILL.md`.
 
 Cave Pony is intended to be activated instead of Ponytail and Caveman in the same session. It cannot unload another host-managed skill; disable overlapping skills through the host when needed.
 

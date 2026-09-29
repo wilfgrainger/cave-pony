@@ -23,7 +23,7 @@ Cave Pony remains a standalone pre-release `0.1.0`. The core behavioural contrac
 - Preliminary brand diligence and ready-to-send parent-maintainer courtesy messages recorded.
 - Release-readiness work merged through pull requests [#20](https://github.com/wilfgrainger/cave-pony/pull/20), [#25](https://github.com/wilfgrainger/cave-pony/pull/25), [#26](https://github.com/wilfgrainger/cave-pony/pull/26), [#27](https://github.com/wilfgrainger/cave-pony/pull/27), and [#28](https://github.com/wilfgrainger/cave-pony/pull/28), each after exact-head CI passed.
 - Comparative benchmark follow-up tracked in issue #19.
-- Independent field testing, authenticated Codex behaviour, repository metadata, and external diligence tracked in issues #21–#24.
+- Independent field testing and authenticated Codex behaviour are tracked in [issue #21](https://github.com/wilfgrainger/cave-pony/issues/21); public-preview metadata is tracked in [issue #23](https://github.com/wilfgrainger/cave-pony/issues/23). Comparative benchmarking and external diligence are currently not planned for the preview path.
 
 ## External gates
 
@@ -31,7 +31,7 @@ Cave Pony remains a standalone pre-release `0.1.0`. The core behavioural contrac
 - Execute the Codex behaviour protocol in a fresh authenticated session and commit the observed result.
 - Complete interactive UK, EU, and US trade mark searches and obtain qualified branding advice where required.
 - Send courtesy provenance notes to Ponytail and Caveman maintainers through a manually authorised route.
-- Apply the approved GitHub description, topics, and social preview.
+- Verify the applied GitHub description and topics after this PR, and configure and check the social preview at desktop and mobile widths.
 - Exercise equivalent discovery and behaviour paths for other hosts before claiming behavioural support.
 
 ## Release rule

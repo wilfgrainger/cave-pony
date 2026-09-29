@@ -66,8 +66,8 @@ Destructive and order-sensitive work temporarily returns to explicit prose.
 Cave Pony separates implementation pressure from communication pressure:
 
 ```text
-/cave-pony build=ultra voice=lite
-/cave-pony build=lite voice=ultra
+Use Cave Pony with build=ultra voice=lite
+Use Cave Pony with build=lite voice=ultra
 ```
 
 This allows a user to challenge speculative architecture while keeping a full professional explanation, or accept a requested implementation while aggressively removing narration.
@@ -93,7 +93,7 @@ A repeated question is treated as evidence that compression failed.
 
 ## One audit mode
 
-`/cave-pony audit` reviews both implementation footprint and attention cost. It ranks real findings by impact and asks for the smallest correction. It does not manufacture a fixed number of findings.
+The audit mode reviews both implementation footprint and attention cost. It ranks real findings by impact and asks for the smallest correction. It does not manufacture a fixed number of findings.
 
 ## Why not install both parents?
 
@@ -109,7 +109,7 @@ Cave Pony is useful when users want:
 - one audit covering code surface and narration;
 - a smaller coordinated instruction contract.
 
-These claims are architectural descriptions. Numerical performance claims require the protocol in [`BENCHMARK_PLAN.md`](BENCHMARK_PLAN.md).
+These claims are architectural descriptions. Cave Pony makes no numerical performance claim; any future comparison must satisfy the deferred evidence rules in the [launch checklist](LAUNCH_CHECKLIST.md#evidence-and-claims).
 
 ## What Cave Pony does not claim
 

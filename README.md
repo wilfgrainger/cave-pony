@@ -12,9 +12,9 @@
   <img src="https://img.shields.io/badge/version-0.1.0-blue.svg" alt="Version 0.1.0">
 </p>
 
-<p align="center">An open-source coding-agent skill for producing the <strong>smallest trustworthy change</strong>.</p>
+<p align="center">A coding-agent skill for the <strong>smallest trustworthy change</strong>.</p>
 
-Cave Pony coordinates two budgets under one hard constraint:
+Cave Pony helps an agent inspect the real path, choose the least code that solves the task, and show enough proof to trust the result. It coordinates:
 
 - **Footprint:** own as little new implementation surface as the task allows.
 - **Attention:** consume as little human attention as clear communication allows.
@@ -22,56 +22,38 @@ Cave Pony coordinates two budgets under one hard constraint:
 
 This repository is the canonical home of Cave Pony.
 
-> **Public preview — `0.1.0`.** Cave Pony is usable today, but `v1.0.0` is deliberately gated on independent real-repository evidence and authenticated host-behaviour testing. Try it on real work and report wins, neutral results, and failures.
+> **Public preview — `0.1.0`.** Installation is verified in the documented project layouts. Independent agent-behavior evidence is still being collected.
 
-## See it in 30 seconds
-
-Request:
-
-> Add a flexible retry framework for this one HTTP call.
-
-A typical over-build adds a package, retry interface, adapters, configuration, logging hooks, and several files before a second caller exists.
-
-Cave Pony first checks whether the existing client already retries. If it does, it configures the idempotent request. Otherwise it adds one bounded local retry and one decisive regression check.
-
-```text
-Done: Reused the existing retry policy for the idempotent GET.
-Proof: Retry-limit test and existing suite pass.
-Skipped: New dependency and wrapper hierarchy; revisit when a second caller needs shared policy.
-Risk: POST requests remain non-retrying by design.
-```
-
-Small change. Small report. Enough evidence to trust both.
-
-## Install
+## Quick start
 
 Current development version: `0.1.0`.
 
 ```bash
-npx skills add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
+npx --yes skills@1.5.9 add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
 ```
 
-The development command tracks `main`. Clean install, upgrade, removal, recovery, and support-claim rules are in [Installation](docs/INSTALLATION.md). A stable command pinned to an immutable tag will replace it at `v1.0.0`.
+The command follows moving `main`; it is for trying the preview. Choose the agent and project or user scope in the installer. For manual installation, upgrade and removal, see [Installation](docs/INSTALLATION.md).
 
-## Use
+| Host | Explicit invocation after installation |
+|---|---|
+| Codex CLI or IDE | Select the skill with `/skills`, or type `$cave-pony` in the prompt. |
+| ChatGPT | Select `@cave-pony` when distributed as a plugin or available in the skill picker; a local CLI install does not add it to ChatGPT. |
+| Claude Code | Type `/cave-pony` in the session. |
+| Other compatible hosts | Use that host's skill picker or request Cave Pony by name; the slash syntax is not universal. |
 
-```text
-/cave-pony
-/cave-pony lite
-/cave-pony ultra
-/cave-pony build=ultra voice=lite
-/cave-pony audit
-stop cave-pony
-```
+### Full
 
-| Axis | `lite` | `full` (default) | `ultra` |
-|---|---|---|---|
-| `build` | Build requested scope; name a smaller equivalent | Enforce the footprint ladder | Challenge speculative scope; prefer deletion or no change |
-| `voice` | Concise full sentences | Short direct sentences or fragments | Minimum unambiguous words |
+Ask your agent: **“Use Cave Pony. Fix this bug with the smallest trustworthy change.”** Full is the default. The agent should inspect the affected flow, reuse what exists, run decisive checks, and report the result and material risk.
 
-Cave Pony activates after explicit invocation or a clear request for minimalism, brevity, relief from bloat, or an audit within coding or agent work. Generic requests for a brief non-coding answer do not activate it.
+### Audit
 
-Cave Pony is intended to be activated instead of Ponytail and Caveman in the same session. It cannot unload another host-managed skill; disable overlapping skills through the host when needed. `stop cave-pony` disables Cave Pony only.
+Ask: **“Use Cave Pony audit on the current diff.”** Audit is read-only unless you ask for fixes. Findings should cite the defect, evidence, consequence and smallest correction. It can also say that it found no material issue.
+
+Installation does not prove agent behavior. The [host verification](docs/HOST_VERIFICATION.md) records install evidence and its limits; the [behavior protocol](docs/CODEX_BEHAVIOUR_PROTOCOL.md) is prepared for fresh authenticated sessions.
+
+## Advanced controls
+
+Optional `lite`, `ultra`, `build=ultra voice=lite`, and `stop cave-pony` controls are documented in the [skill](skills/cave-pony/SKILL.md#advanced-controls). Pass them as words with the skill invocation; hosts do not share one command grammar. Cave Pony does not unload another host-managed skill.
 
 ## How it works
 
@@ -84,6 +66,19 @@ Cave Pony is intended to be activated instead of Ponytail and Caveman in the sam
 YAGNI decides whether work is presently needed. KISS selects the simplest correct design. DRY centralises stable repeated knowledge, not merely similar syntax. Correctness comes first.
 
 The full agent contract is in [`skills/cave-pony/SKILL.md`](skills/cave-pony/SKILL.md).
+
+## Illustrative example
+
+Request: “Add a flexible retry framework for this one HTTP call.” If the existing client already has retries, Cave Pony should configure the idempotent request and verify its limit, rather than add a package and wrapper hierarchy.
+
+```text
+Done: Reused the existing retry policy for the idempotent GET.
+Proof: Retry-limit test and existing suite pass.
+Skipped: New dependency and wrapper; revisit if another client needs shared policy.
+Risk: POST requests remain non-retrying by design.
+```
+
+This illustrates the contract; it is not an observed benchmark run. [Real field records](#evidence) include their limitations.
 
 ## Safety under compression
 
@@ -137,29 +132,39 @@ Illustrative contract examples are in [Examples](docs/EXAMPLES.md). They are not
 The best way to help Cave Pony reach `v1.0.0` is to use it on one real repository task and publish what actually happened.
 
 1. Install the public preview above.
-2. Use Cave Pony on a genuine coding task, or start with `/cave-pony audit` on an existing change.
+2. Use Cave Pony on a genuine coding task, or start with audit on an existing change.
 3. Record the result using the [field-test template](field-tests/TEMPLATE.md).
 4. Contribute the record through [issue #21](https://github.com/wilfgrainger/cave-pony/issues/21) or a pull request.
 
 Neutral and losing cases are explicitly welcome. Cave Pony needs independent real-repository evidence before `v1.0.0`; evidence that it made no difference or made a result worse is useful evidence too.
 
-Authenticated Codex behaviour testing has a reproducible [protocol](docs/CODEX_BEHAVIOUR_PROTOCOL.md) and remains open in [issue #22](https://github.com/wilfgrainger/cave-pony/issues/22). Installation compatibility alone is not behavioural support.
+Authenticated Codex behaviour testing has a reproducible [protocol](docs/CODEX_BEHAVIOUR_PROTOCOL.md) and is part of the independent evidence gate in [issue #21](https://github.com/wilfgrainger/cave-pony/issues/21). Installation compatibility alone is not behavioural support.
+
+The protocol covers six real-task classes, paired baseline and skill runs where feasible, and review that judges correctness and safety before size or verbosity. It has not yet produced an independent result.
 
 ## Project status
 
 Cave Pony is usable today but remains a public-preview `0.1.0`.
 
-Repository integrity, attribution, safety wording, CI, recovery documentation, artwork identity, and project-installation evidence are protected in code. External launch gates—independent users, authenticated host-behaviour evidence, maintainer outreach, brand clearance, repository metadata, and an immutable release—remain recorded rather than falsely marked complete.
+Repository checks and installation-path evidence are documented. Independent users, authenticated host-behavior evidence, social-preview verification, brand diligence and an immutable release remain open before `v1.0.0`.
 
 See [Release progress](PROGRESS.md), [Launch checklist](docs/LAUNCH_CHECKLIST.md), [FAQ](docs/FAQ.md), and [Security policy](SECURITY.md).
 
 ## Development
 
-No runtime package or third-party Python dependency is required. Local checks require Python 3.10 or newer and `make`; CI uses Python 3.12.
+No runtime package or third-party Python dependency is required. Unix-like local checks use Python 3.10 or newer and `make`; CI uses Python 3.12.
 
 ```bash
 make validate
 make test
+```
+
+On Windows without GNU Make, run the same target commands directly in PowerShell:
+
+```powershell
+python tools/validate.py
+if (-not (Test-Path "tests/test_profile_artwork.py")) { throw "missing tests/test_profile_artwork.py" }
+python -m unittest discover -s tests -v
 ```
 
 ```text

@@ -28,6 +28,10 @@ It requires explicit prerequisites, ordering, consequences, preservation, and re
 
 Only agents with committed clean-install and behaviour evidence should be listed as supported. File-format compatibility alone is not a support claim.
 
+## Why doesn't `/cave-pony` work in Codex?
+
+That is Claude Code's skill syntax. Codex CLI and IDE use `$cave-pony` in a prompt or the `/skills` picker. ChatGPT uses `@cave-pony` when the skill is available there. Installation into a local CLI does not add the skill to ChatGPT.
+
 ## Can I use it commercially?
 
 The repository is MIT licensed. The project name and branding still require normal legal and trademark diligence, especially before commercial use. The repository's notices are provenance records, not legal advice.

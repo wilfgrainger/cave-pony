@@ -14,7 +14,7 @@ DISABLE_TELEMETRY=1 npx --yes skills@1.5.9 add \
   --yes
 ```
 
-The CLI version is pinned to `1.5.9`. The check verifies that Codex receives `.agents/skills/cave-pony/SKILL.md` and that the installed frontmatter contains the expected name and version. Using the checked-out path removes branch movement and remote-clone ambiguity from the recurring installation proof.
+The CLI version is pinned to `1.5.9`. The check verifies that Codex receives an exact copy at `.agents/skills/cave-pony/SKILL.md`. Using the checked-out path removes branch movement and remote-clone ambiguity from the recurring installation proof.
 
 ## Observed installation evidence
 
@@ -41,7 +41,7 @@ A second one-off probe installed the same public URL into four documented projec
 | Hermes Agent | `.hermes/skills/cave-pony/SKILL.md` |
 | OpenClaw | `skills/cave-pony/SKILL.md` |
 
-GitHub Actions pull-request run [#207](https://github.com/wilfgrainger/cave-pony/actions/runs/30134217101) passed `make test`, the recurring Codex installation, and `Verify documented host install paths` at commit `c1dacebae070c6a13324edbbc813b423b5edb6a2`. Each installed copy retained the expected `name: cave-pony` and `version: 0.1.0` frontmatter. The temporary cross-host probe was then removed from recurring CI.
+GitHub Actions pull-request run [#207](https://github.com/wilfgrainger/cave-pony/actions/runs/30134217101) passed `make test`, the recurring Codex installation, and `Verify documented host install paths` at commit `c1dacebae070c6a13324edbbc813b423b5edb6a2`. Each installed copy retained the then-current `name: cave-pony` and top-level `version: 0.1.0` frontmatter. The current source uses `metadata.version`; a new install check is required at this exact head. The temporary cross-host probe was then removed from recurring CI.
 
 ## Observed lifecycle evidence
 
@@ -64,4 +64,4 @@ The evidence proves that `skills@1.5.9` discovered, copied, updated, and removed
 
 Full Codex behaviour support still requires a fresh authenticated Codex session. A host is not claimed as behaviourally supported until a fresh authenticated session exercises its actual discovery and activation model, level switching, audit mode, destructive-operation clarity, repeated-question clarity, and stop behaviour. Installation layout alone is not behavioural support.
 
-Codex behavioural verification is tracked in [issue #22](https://github.com/wilfgrainger/cave-pony/issues/22). Equivalent behaviour evidence remains required before making Claude Code, Hermes Agent, or OpenClaw behavioural-support claims.
+Codex behavioural verification is part of the independent evidence gate in [issue #21](https://github.com/wilfgrainger/cave-pony/issues/21). Equivalent behaviour evidence remains required before making Claude Code, Hermes Agent, or OpenClaw behavioural-support claims.
