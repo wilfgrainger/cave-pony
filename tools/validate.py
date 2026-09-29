@@ -8,6 +8,8 @@ from pathlib import Path
 import re
 import struct
 import sys
+from urllib.parse import unquote
+import zlib
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "skills/cave-pony/SKILL.md"
@@ -56,16 +58,15 @@ FILES = (
 SECTIONS = (
     "## Core contract",
     "## Activation and persistence",
-    "## Execution loop",
-    "## Build levels",
-    "## Voice levels",
+    "## Full mode",
     "## Audit mode",
+    "## Advanced controls",
     "## Clarity override",
     "## Non-negotiable boundaries",
 )
 
 ROOT_TERMS = (
-    "Build like Ponytail. Speak like Caveman.",
+    "smallest trustworthy change",
     "Climb the footprint ladder",
     "standard library",
     "native browser",
@@ -83,6 +84,7 @@ ROOT_TERMS = (
 SAFETY_TERMS = (
     "trust-boundary validation",
     "Recognized project-guidance files",
+    "Authorization already supplied by the user",
     "authentication or authorisation",
     "safe secrets handling",
     "error handling needed to prevent corruption or data loss",
@@ -130,7 +132,10 @@ def frontmatter(text: str) -> dict[str, str]:
     values: dict[str, str] = {}
     active = ""
     for line in block.splitlines():
-        if line.startswith("  ") and active:
+        if line.startswith("  ") and active == "metadata" and ":" in line:
+            key, value = line.strip().split(":", 1)
+            values[key] = value.strip().strip('"')
+        elif line.startswith("  ") and active:
             values[active] += " " + line.strip()
         elif ":" in line:
             active, value = line.split(":", 1)
@@ -238,13 +243,16 @@ def validate_local_links(errors: list[str]) -> None:
             continue
         for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
             for raw_target in LOCAL_LINK.findall(line):
-                target = raw_target.strip().split(maxsplit=1)[0].strip("<>")
+                parts = raw_target.strip().split(maxsplit=1)
+                if not parts:
+                    continue
+                target = parts[0].strip("<>")
                 if not target or target.startswith(("#", "http://", "https://", "mailto:", "tel:")):
                     continue
                 relative = target.split("#", 1)[0]
                 if not relative:
                     continue
-                destination = (path.parent / relative).resolve()
+                destination = (path.parent / unquote(relative)).resolve()
                 try:
                     destination.relative_to(ROOT.resolve())
                 except ValueError:
@@ -270,13 +278,48 @@ def validate_png(errors: list[str], relative: str, dimensions: tuple[int, int]) 
     if not path.is_file() or path.stat().st_size < 24:
         errors.append(f"PNG asset missing or empty: {relative}")
         return
-    header = path.read_bytes()[:24]
+    data = path.read_bytes()
+    header = data[:24]
     if not header.startswith(b"\x89PNG\r\n\x1a\n"):
         errors.append(f"asset must be a PNG: {relative}")
         return
     width, height = struct.unpack(">II", header[16:24])
     if (width, height) != dimensions:
         errors.append(f"PNG dimensions must be {dimensions[0]}x{dimensions[1]}: {relative}")
+        return
+
+    # A header-only check previously accepted a corrupt social preview. Check
+    # chunk boundaries, CRCs and the complete non-interlaced 8-bit pixel stream.
+    offset = 8
+    image_data = bytearray()
+    finished = False
+    color_type = data[25] if len(data) > 25 else -1
+    bit_depth = data[24] if len(data) > 24 else -1
+    interlace = data[28] if len(data) > 28 else -1
+    while offset + 12 <= len(data):
+        length = struct.unpack_from(">I", data, offset)[0]
+        end = offset + 12 + length
+        if end > len(data):
+            break
+        kind = data[offset + 4:offset + 8]
+        payload = data[offset + 8:offset + 8 + length]
+        expected_crc = struct.unpack_from(">I", data, offset + 8 + length)[0]
+        if zlib.crc32(kind + payload) & 0xffffffff != expected_crc:
+            break
+        if kind == b"IDAT":
+            image_data.extend(payload)
+        offset = end
+        if kind == b"IEND":
+            finished = True
+            break
+
+    channels = {2: 3, 3: 1, 6: 4}.get(color_type)
+    try:
+        pixels = zlib.decompress(image_data) if image_data else b""
+    except zlib.error:
+        pixels = b""
+    if not finished or offset != len(data) or bit_depth != 8 or interlace != 0 or channels is None or len(pixels) != height * (1 + width * channels):
+        errors.append(f"PNG corrupt or unsupported pixel data: {relative}")
 
 
 def validate() -> list[str]:
@@ -303,7 +346,7 @@ def validate() -> list[str]:
     if not re.fullmatch(r"\d+\.\d+\.\d+", version):
         errors.append("frontmatter version must be semantic")
     description = meta.get("description", "")
-    if "/cave-pony" not in description or "coding or agent-work" not in description:
+    if "cave-pony" not in description or "coding or agent-work" not in description:
         errors.append("activation must remain explicit and coding-scoped")
 
     for text in SECTIONS + ROOT_TERMS + SAFETY_TERMS:

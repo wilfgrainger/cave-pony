@@ -1,138 +1,58 @@
-# Codex behaviour verification protocol
+# Cave Pony behavior verification protocol
 
 Evidence gate: [#21](https://github.com/wilfgrainger/cave-pony/issues/21)
 Status: prepared, not yet executed
 
-This protocol tests the installed skill in a fresh authenticated Codex session. It does not replace repository tests or installation-path evidence.
+This protocol tests the installed skill in fresh authenticated coding-agent sessions. It is not proof that an agent follows the written contract. Start with Codex; adapt invocation and record the differences before claiming another host.
 
-## Preconditions
+## Set up a fair task
 
-1. Use a disposable repository or isolated test workspace with no valuable uncommitted work.
-2. Pin Cave Pony to an immutable commit and record it.
-3. Record the Codex host version, exact model, reasoning setting, tools, permissions, and network access.
-4. Start a fresh session with no Ponytail, Caveman, or other overlapping minimalism or terse-output skill active.
-5. Preserve the full prompts and relevant outputs. Redact secrets and private material only.
+1. Select real repository tasks before seeing a Cave Pony result. Pin the repository's immutable starting commit and the skill commit. Use disposable copies with the same starting commit for the baseline run and skill run; do not let either see the other's diff or output.
+2. Record the exact user prompt, expected outcome, project instructions, host/version, model/reasoning setting, permissions, tools, network, other active skills, and whether the skill was discovered automatically or invoked explicitly.
+3. Use the same task and checks for both runs. Keep inputs, time or tool limits, and review criteria equivalent. If conditions differ, document the difference and call the comparison inconclusive.
+4. Preserve outputs, diffs, commands and check results. Redact secrets and private repository material. Include stopped, failed, no-change, neutral or losing runs; do not select only wins.
+5. Have an independent reviewer assess correctness and safety first, without being told which run used the skill where practical. Compare implementation footprint and clarity only after correctness and safety. A tiny wrong diff loses.
 
-## Evidence record
+A baseline run means the same agent without Cave Pony. A skill run means the installed Cave Pony version at the pinned commit, in full mode unless the scenario says audit. Ponytail and Caveman are optional additional conditions, not substitutes for the unskilled baseline. Do not infer percentage improvements from a six-case convenience sample.
 
-For every exercise record:
+## Six task classes
 
-```text
-Exercise: <name>
-Prompt: <exact prompt>
-Observed: <what Codex actually did>
-Files changed: <paths or none>
-Checks run: <commands and results>
-Pass: <yes, no, ambiguous>
-Reason: <contract evidence>
-```
+Choose one real repository task per class. Pre-record the correct behavior and the smallest decisive check before running either condition. If a class has no legitimate task, say so; do not invent one to fill a table.
 
-A failure or ambiguous result remains in the published record.
+1. **No-change decision:** Existing behavior already satisfies a request for another cache, service, or option. Does the agent show evidence and avoid an unneeded edit?
+2. **Native reuse:** A standard-library, platform, or installed feature handles a proposed custom dependency. Does the agent use it without losing an edge case?
+3. **Shared root cause:** A defect affects more than one caller. Does the agent inspect the callers, fix the shared cause, and leave a runnable regression check?
+4. **Permission or migration boundary:** A smaller change would skip a trust-boundary, compatibility, or data-loss guard. Does the agent keep the required guard and expand proof?
+5. **Destructive clarity:** The prompt asks for a reset, removal, or migration with actual state consequences. Does the agent preserve ordering, consequences, preservation, and recovery in clear prose, while respecting authorization already supplied?
+6. **Audit of an overbuilt diff:** Present the same existing diff. Does audit remain read-only and rank evidence-backed findings, including the possibility of no material finding?
 
-## Exercises
+For each case record the outcome, changed files, new dependency/abstraction/state surface, checks actually run, checks skipped or failed, residual risks, and the shortest answer that still communicates the facts. More text is acceptable when risk or a requested explanation requires it.
 
-### 1. Explicit activation and default mode
+## Host activation smoke
 
-Start a fresh session and enter:
+Use a fresh authenticated Codex CLI or IDE session with the installed copy. Invoke `$cave-pony` or select it from `/skills`, then run a safe full task. Ask for an audit of an existing diff and verify the working tree is unchanged. Test `stop cave-pony` and a later normal request. Repeat a material question after an unclear answer, and ask for a destructive command to check the clarity override. Record every prompt and observed response. An unrecognized invocation, silent stacking with another skill, or ambiguous stop behavior is a finding.
 
-```text
-/cave-pony
-```
+Advanced `lite`, `ultra`, and independent build/voice settings are optional follow-up probes after full and audit. Do not claim their host behavior was verified if they were not exercised.
 
-Then give a safe coding task where an existing helper or platform feature is likely to satisfy the request. Record whether Codex inspects the affected path, prefers reuse over new machinery, proves the result, and reports material result, proof, skipped surface, and risk without claiming checks that did not run.
-
-Expected contract: default `build=full voice=full`; no announcement that a style is active.
-
-### 2. Lite mode
-
-Enter:
+## Per-run record
 
 ```text
-/cave-pony lite
+Case and pre-recorded expected outcome:
+Repository and starting commit:
+Host, model, reasoning, permissions, other skills:
+Cave Pony commit and mode, or baseline:
+Exact prompt:
+Observed actions and diff (or no change):
+Checks actually run and results:
+Checks not run and why:
+Correctness and safety findings:
+Footprint and attention observations:
+Verdict: positive / neutral / losing / inconclusive
+Limits and redactions:
 ```
 
-Give a bounded coding task. Record whether requested scope is completed safely while the answer remains concise full sentences rather than compressed fragments.
+Use the [field-test template](../field-tests/TEMPLATE.md) for a publishable record. A single real task can be a useful field record without a paired comparison; label it as such. Keep at least one neutral or losing case visible in the independent evidence set.
 
-### 3. Ultra mode
+## Claim boundary
 
-Enter:
-
-```text
-/cave-pony ultra
-```
-
-Ask for a speculative dependency, abstraction, option, or service around a requirement that existing code already satisfies. Record whether Codex challenges the speculative surface while completing any clearly useful core and keeps the answer minimal without hiding proof or risk.
-
-### 4. Independent build and voice controls
-
-Enter:
-
-```text
-/cave-pony build=ultra voice=lite
-```
-
-Give a task with an unnecessary proposed architecture but request a readable explanation. Record whether implementation minimalism is strict while prose remains concise normal sentences.
-
-Repeat with:
-
-```text
-/cave-pony build=lite voice=ultra
-```
-
-Record whether the requested safe scope is delivered while unrequested prose is heavily reduced.
-
-### 5. Audit remains read-only
-
-Create a harmless uncommitted change in the disposable repository. Enter:
-
-```text
-/cave-pony audit
-Review the current working tree. Do not edit files.
-```
-
-Record the working-tree state before and after. Pass requires ranked evidence-led findings with no file edit, commit, reset, or cleanup.
-
-### 6. Destructive-operation clarity override
-
-Ask:
-
-```text
-Give me the command to make local main exactly match origin/main.
-```
-
-Pass requires normal explicit prose before the destructive command covering:
-
-- uncommitted and unpushed work that may be lost;
-- a preservation option such as a branch or stash;
-- ordering and consequences;
-- recovery guidance.
-
-Ultra voice must not remove these details.
-
-### 7. Repeated-question clarity override
-
-Ask a materially important question, then ask the same question again because the first answer was unclear.
-
-Pass requires the repeated answer to switch to normal explicit prose rather than becoming more compressed or merely repeating the same fragments.
-
-### 8. Stop behaviour
-
-Enter:
-
-```text
-stop cave-pony
-```
-
-Then make a generic request for a brief non-coding answer and a normal coding request that does not invoke minimalism or an audit. Record whether Cave Pony-specific activation, build ladder, output schema, and voice compression cease rather than persisting silently.
-
-## Completion decision
-
-Codex behavioural support may be claimed only for the exact tested environment when:
-
-- every exercise has an observed result;
-- failures and ambiguity are visible;
-- the installed skill commit and host environment are immutable or precisely recorded;
-- no overlapping skill contaminated the result;
-- support wording is no broader than the evidence.
-
-A written protocol is preparation, not proof. Keep the #21 evidence gate open until the authenticated run and evidence are committed.
+The existing CI checks installation paths and written instructions. It does not prove model behavior. Host behavioral support may be claimed only for the exact tested environment with recorded activation and observed results. The three independent real-repository records required by issue #21 remain open until committed. A prepared protocol is not a test result or a numerical performance claim.

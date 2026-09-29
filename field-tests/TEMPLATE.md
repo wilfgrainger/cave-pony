@@ -49,6 +49,16 @@ Safety and trust-boundary observations: `<facts>`
 Clarity and attention observations: `<facts>`
 Compatibility and maintenance observations: `<facts>`
 
+## Comparison (optional)
+
+Complete this section only if both conditions used the same starting commit and equivalent task conditions. An unpaired field use remains useful; label it unpaired.
+
+Baseline run: `<host/model, immutable start, prompt, diff, checks, output, link to raw record>`
+Skill run: `<same fields, Cave Pony commit and mode, link to raw record>`
+Independent reviewer: `<identifier, whether conditions were blinded, correctness and safety judgment>`
+Conditions that differed: `<none or exact difference>`
+Neutral or losing evidence: `<what did not improve or got worse; none if genuinely absent>`
+
 ## Verdict
 
 Verdict: `<positive, neutral, losing, inconclusive>`

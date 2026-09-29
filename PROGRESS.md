@@ -31,7 +31,7 @@ Cave Pony remains a standalone pre-release `0.1.0`. The core behavioural contrac
 - Execute the Codex behaviour protocol in a fresh authenticated session and commit the observed result.
 - Complete interactive UK, EU, and US trade mark searches and obtain qualified branding advice where required.
 - Send courtesy provenance notes to Ponytail and Caveman maintainers through a manually authorised route.
-- Apply the approved GitHub description, topics, and social preview.
+- Verify the applied GitHub description and topics after this PR, and configure and check the social preview at desktop and mobile widths.
 - Exercise equivalent discovery and behaviour paths for other hosts before claiming behavioural support.
 
 ## Release rule

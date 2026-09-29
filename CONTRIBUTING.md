@@ -23,6 +23,8 @@ Independent real-repository records are especially useful before `v1.0.0`. Start
 
 A useful record pins the repository and Cave Pony commits, names the host and model, preserves the prompt, distinguishes checks that ran from checks that did not, and states what Cave Pony improved, failed to improve, or made worse. Do not infer a numerical superiority claim from an individual record or a small convenience sample.
 
+For a comparison, use the same starting commit and task conditions for a baseline run without Cave Pony and a skill run. Preserve both raw outcomes, including neutral or losing results. The six-case [behavior protocol](docs/CODEX_BEHAVIOUR_PROTOCOL.md) gives task classes and an independent-review order. An unpaired real field record is welcome when comparison is impractical; mark it unpaired.
+
 Authenticated Codex behaviour testing follows [`docs/CODEX_BEHAVIOUR_PROTOCOL.md`](docs/CODEX_BEHAVIOUR_PROTOCOL.md). A prepared protocol is not proof; publish the observed result.
 
 ## Development

@@ -61,7 +61,9 @@ Do not publish a maintainer's private reply without permission.
 - [x] Codex project update, removal, and manual backup recovery passed on [CI run #216](https://github.com/wilfgrainger/cave-pony/actions/runs/30134550258) using pinned `skills@1.5.9`.
 - [ ] Equivalent lifecycle evidence exists for every host claimed at release.
 - [ ] Repository social preview configured using the original logo.
-- [ ] Repository description and topics set for discovery. Both metadata items are tracked in [issue #23](https://github.com/wilfgrainger/cave-pony/issues/23).
+- [x] Social-preview asset decodes as a complete 1280x640 PNG and keeps the approved logo intact.
+- [x] Repository description and topics set for discovery (observed in the GitHub repository metadata on 2026-09-29).
+- [ ] Social preview and README mobile/desktop rendering observed; tracked in [issue #23](https://github.com/wilfgrainger/cave-pony/issues/23).
 
 ## Installation coverage
 

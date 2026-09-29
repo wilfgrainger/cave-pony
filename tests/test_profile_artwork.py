@@ -10,7 +10,7 @@ README = ROOT / "README.md"
 LOGO = ROOT / "assets/cave-pony-logo.png"
 SOCIAL_PREVIEW = ROOT / "assets/cave-pony-social-preview.png"
 APPROVED_LOGO_GIT_BLOB_SHA = "7641946df2d6b11f1cad8a6b109fee7766a4411f"
-APPROVED_SOCIAL_PREVIEW_GIT_BLOB_SHA = "2d44d734d88bc1b72ea794d37e4f9803738777c1"
+APPROVED_SOCIAL_PREVIEW_GIT_BLOB_SHA = "34a45bf44113850f65099478c9cdace1af169d6a"
 
 
 def png_dimensions(path: Path) -> tuple[int, int]:

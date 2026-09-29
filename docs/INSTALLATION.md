@@ -19,6 +19,17 @@ This follows moving `main` and is appropriate for evaluation, not an immutable p
 
 See [Host verification](HOST_VERIFICATION.md) for exact runs and limitations. Installation layout evidence does not establish host discovery or model behaviour.
 
+## Invoke the installed skill
+
+| Host | First use |
+|---|---|
+| Codex CLI or IDE | Select from `/skills` or mention `$cave-pony` in the prompt. |
+| Claude Code | Invoke `/cave-pony`, then provide the task or `audit`. |
+| ChatGPT | A local CLI installation does not install a ChatGPT skill. When distributed there, select `@cave-pony` from the skill picker. |
+| Hermes Agent, OpenClaw, other hosts | Use the host's discovery and invocation method; only the project file layout was verified here. |
+
+Ask for full (the default) or audit (read-only review). Pass optional mode words with the invocation; syntax is host-specific.
+
 ## Recurring Codex project-install check
 
 CI checks out the exact pull-request head or push commit, then verifies a clean, non-interactive, project-scoped Codex installation with the `skills` CLI pinned to `1.5.9`:
@@ -48,11 +59,12 @@ Confirm that the installed directory contains `SKILL.md` with:
 
 ```yaml
 name: cave-pony
-version: 0.1.0
 license: MIT
+metadata:
+  version: "0.1.0"
 ```
 
-Then start a fresh session, invoke `/cave-pony audit`, and confirm the host loads the skill without silently stacking another minimalism or terse-output skill.
+Then start a fresh session, invoke the skill using the host method above, and ask for an audit. Confirm the host loads the skill without silently stacking another minimalism or terse-output skill.
 
 ## Upgrade
 
@@ -85,7 +97,7 @@ Then:
 1. confirm `.agents/skills/cave-pony` no longer exists;
 2. remove any host configuration that explicitly activates Cave Pony;
 3. restart or reload the host;
-4. start a fresh session and confirm `/cave-pony` is no longer available.
+4. start a fresh session and confirm Cave Pony is no longer available in that host's skill picker.
 
 Deleting the skill directory does not revert code changes previously made while the skill was active.
 
