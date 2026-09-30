@@ -67,18 +67,11 @@ YAGNI decides whether work is presently needed. KISS selects the simplest correc
 
 The full agent contract is in [`skills/cave-pony/SKILL.md`](skills/cave-pony/SKILL.md).
 
-## Illustrative example
+## A real audit example
 
-Request: “Add a flexible retry framework for this one HTTP call.” If the existing client already has retries, Cave Pony should configure the idempotent request and verify its limit, rather than add a package and wrapper hierarchy.
+The [gov-pulse repository audit](field-tests/2026-09-30-gov-pulse-repository-audit.md) inspected the evidence pipeline, public pages, accessibility and release path at a pinned commit. It found that a valid government-contracts payload can be dropped by a `maxAgeHours` versus `maxAgeDays` contract mismatch, a code-deleting PR can skip code checks, and international comparisons lack a public age limit. Each finding names the exact boundary, consequence, proof and smallest correction. The full record includes further observations and places where the existing design was sound.
 
-```text
-Done: Reused the existing retry policy for the idempotent GET.
-Proof: Retry-limit test and existing suite pass.
-Skipped: New dependency and wrapper; revisit if another client needs shared policy.
-Risk: POST requests remain non-retrying by design.
-```
-
-This illustrates the contract; it is not an observed benchmark run. [Real field records](#evidence) include their limitations.
+The audit was read-only and maintainer-led. It was **unpaired**, so it does not measure an advantage over a baseline agent or prove installed-host behavior.
 
 ## Safety under compression
 
@@ -116,6 +109,7 @@ It is not a fork, official successor, or endorsed project. Its influences, quota
 
 Published real-repository records:
 
+- [Gov Pulse repository audit](field-tests/2026-09-30-gov-pulse-repository-audit.md): a read-only, unpaired review across data, public UI and delivery.
 - [Gov Metrics publication diagnostics](field-tests/2026-07-19-gov-metrics-publication-diagnostics.md): one applied use with stated limitations.
 - [Cave Pony self-audit: neutral result](field-tests/2026-07-24-cave-pony-self-audit-neutral.md): a case where the core behavioural contract correctly received no change.
 
