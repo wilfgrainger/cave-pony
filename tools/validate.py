@@ -209,9 +209,9 @@ def validate_versions(errors: list[str], version: str) -> None:
         return
     checks = {
         "README version badge": (README, f"version-{version}-blue.svg"),
-        "README development version": (README, f"Current development version: `{version}`."),
+        "README preview version": (README, f"**Public preview — [`v{version}`]("),
         "nested README version": (NESTED_README, f"Cave Pony `{version}`"),
-        "launch status version": (LAUNCH, f"Current state: pre-release `{version}`"),
+        "launch status version": (LAUNCH, f"Current state: tagged [`v{version}` public prerelease]("),
     }
     for label, (path, expected) in checks.items():
         if not path.is_file() or expected not in path.read_text(encoding="utf-8"):
