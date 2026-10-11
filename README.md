@@ -22,17 +22,18 @@ Cave Pony helps an agent inspect the real path, choose the least code that solve
 
 This repository is the canonical home of Cave Pony.
 
-> **Public preview — `0.1.0`.** Installation is verified in the documented project layouts. Independent agent-behavior evidence is still being collected.
+> **Public preview — [`v0.1.0`](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.0), released 11 October 2026.** Installation is verified in the documented project layouts. Independent agent-behaviour evidence is still being collected; this is not a stable `v1.0.0` claim.
 
 ## Quick start
 
-Current development version: `0.1.0`.
+Install the [tagged public preview](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.0) from an exact-version checkout:
 
 ```bash
-npx --yes skills@1.5.9 add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
+git clone --depth 1 --branch v0.1.0 https://github.com/wilfgrainger/cave-pony.git
+npx --yes skills@1.5.9 add "$PWD/cave-pony/skills/cave-pony"
 ```
 
-The command follows moving `main`; it is for trying the preview. Choose the agent and project or user scope in the installer. For manual installation, upgrade and removal, see [Installation](docs/INSTALLATION.md).
+Choose the agent and project or user scope in the installer. For a moving development preview instead, use `npx --yes skills@1.5.9 add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony`. That command follows `main` and is not a fixed-version installation. For manual installation, upgrade and removal, see [Installation](docs/INSTALLATION.md).
 
 | Host | Explicit invocation after installation |
 |---|---|

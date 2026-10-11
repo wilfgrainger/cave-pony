@@ -1,10 +1,20 @@
 # Launch checklist
 
 Owner: Wilfred Grainger
-Target: public `v1.0.0`
-Current state: pre-release `0.1.0`
+Target: evidence-backed public `v1.0.0`
+Current state: tagged [`v0.1.0` public prerelease](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.0); `v1.0.0` remains blocked by independent evidence and external diligence.
 
 A checked item means committed evidence exists. Verbal confidence is not completion.
+
+## v0.1.0 public preview — released 11 October 2026
+
+- [x] GitHub prerelease created at [`v0.1.0`](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.0).
+- [x] Annotated `v0.1.0` tag points to exact tested commit `609cf4f392566f716c2686275537af669a5e9246`.
+- [x] Main CI passed at release commit: [run 38129015710](https://github.com/wilfgrainger/cave-pony/actions/runs/38129015710).
+- [x] Release workflow validated the exact commit, checked a clean Codex installation, verified the public tagged archive, and published the prerelease: [run 38129015704](https://github.com/wilfgrainger/cave-pony/actions/runs/38129015704).
+- [x] Release notes explicitly state that independent real-user and host-behaviour evidence is still missing.
+
+This section confirms the preview release only. Every unchecked `v1.0.0` gate below remains unchecked.
 
 ## Product truth
 

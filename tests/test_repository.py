@@ -138,6 +138,26 @@ class RepositoryContractTests(unittest.TestCase):
 
         self.assert_mutation_fails(mutate, "version drift")
 
+    def test_public_preview_readme_version_drift_is_caught(self) -> None:
+        def mutate(clone: Path) -> None:
+            path = clone / "README.md"
+            path.write_text(path.read_text(encoding="utf-8").replace(
+                "**Public preview — [`v0.1.0`]",
+                "**Public preview — [`v9.9.9`]",
+            ), encoding="utf-8")
+
+        self.assert_mutation_fails(mutate, "README preview version")
+
+    def test_public_preview_launch_status_drift_is_caught(self) -> None:
+        def mutate(clone: Path) -> None:
+            path = clone / "docs/LAUNCH_CHECKLIST.md"
+            path.write_text(path.read_text(encoding="utf-8").replace(
+                "Current state: tagged [`v0.1.0` public prerelease]",
+                "Current state: tagged [`v9.9.9` public prerelease]",
+            ), encoding="utf-8")
+
+        self.assert_mutation_fails(mutate, "launch status version")
+
     def test_safety_boundary_regression_is_caught(self) -> None:
         def mutate(clone: Path) -> None:
             path = clone / "skills/cave-pony/SKILL.md"

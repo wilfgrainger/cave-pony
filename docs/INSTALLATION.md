@@ -2,13 +2,22 @@
 
 Cave Pony is one skill directory containing Markdown. It has no executable installer of its own, no runtime package, and no network access.
 
+## Install the v0.1.0 tagged public preview
+
+```bash
+git clone --depth 1 --branch v0.1.0 https://github.com/wilfgrainger/cave-pony.git
+npx --yes skills@1.5.9 add "$PWD/cave-pony/skills/cave-pony"
+```
+
+This checks out the exact [v0.1.0 prerelease](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.0) and passes its skill directory to the skills installer. The release workflow verified the tag's public archive against the tested source; the local CLI installation path was separately exercised by CI. Select your host and scope in the installer.
+
 ## Development install
 
 ```bash
 npx --yes skills@1.5.9 add https://github.com/wilfgrainger/cave-pony/tree/main/skills/cave-pony
 ```
 
-This follows moving `main` and is appropriate for evaluation, not an immutable production pin. Clean GitHub-hosted Ubuntu runs verified this public URL with `skills@1.5.9`, copy mode, and non-interactive confirmation for the project layouts below:
+This follows moving `main` and is appropriate for trying unreleased changes, not a fixed version. Clean GitHub-hosted Ubuntu runs verified this public URL with `skills@1.5.9`, copy mode, and non-interactive confirmation for the project layouts below:
 
 | Host target | Installed project path |
 |---|---|
