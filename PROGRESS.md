@@ -1,11 +1,13 @@
 # Release progress
 
 Owner: Wilfred Grainger
-Target: honest public `v1.0.0`
+Target: evidence-backed public `v1.0.0`
 
 ## Current state
 
-Cave Pony remains a standalone pre-release `0.1.0`. The core behavioural contract is stable. All repository-internal release-readiness work that can currently be proved is merged. Remaining work depends on independent people, authenticated host sessions, external GitHub settings, maintainer contact, or formal brand diligence.
+[`v0.1.0` public preview](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.0) was released on 11 October 2026 from commit `609cf4f392566f716c2686275537af669a5e9246` as a GitHub prerelease. The [release workflow](https://github.com/wilfgrainger/cave-pony/actions/runs/38129015704) passed validation, tests, a clean Codex installation and tagged-archive verification. This proves packaging and the tested installation path, not model-behaviour improvement.
+
+The core behavioural contract is stable. The `v1.0.0` evidence gate remains open: independent users, authenticated host sessions, GitHub social-preview settings, maintainer contact and formal brand diligence still require work. Do not infer their completion from the preview release.
 
 ## Completed
 
