@@ -1,0 +1,101 @@
+name: Publish v0.1.0 public preview
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/releases/v0.1.0.md"
+
+concurrency:
+  group: publish-cave-pony-v0.1.0
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify release commit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: Validate and test
+        run: |
+          make validate
+          make test
+      - name: Verify clean Codex installation
+        env:
+          DISABLE_TELEMETRY: "1"
+        run: |
+          temp_dir="$(mktemp -d)"
+          cd "$temp_dir"
+          npx --yes skills@1.5.9 add \
+            "$GITHUB_WORKSPACE/skills/cave-pony" \
+            --agent codex \
+            --copy \
+            --yes
+          test -f .agents/skills/cave-pony/SKILL.md
+          cmp -s "$GITHUB_WORKSPACE/skills/cave-pony/SKILL.md" \
+            .agents/skills/cave-pony/SKILL.md
+
+  publish:
+    name: Tag, verify archive, and publish preview
+    needs: verify
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: v0.1.0
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+      - name: Refuse to move a published tag
+        run: |
+          if git show-ref --verify --quiet "refs/tags/$TAG"; then
+            tagged_sha="$(git rev-list -n 1 "$TAG")"
+            if [ "$tagged_sha" != "$GITHUB_SHA" ]; then
+              echo "Tag $TAG already points to $tagged_sha; refusing to retag $GITHUB_SHA." >&2
+              exit 1
+            fi
+          else
+            git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              tag -a "$TAG" -m "Cave Pony $TAG public preview" "$GITHUB_SHA"
+            git push origin "refs/tags/$TAG"
+          fi
+      - name: Verify public tagged archive
+        run: |
+          archive="$RUNNER_TEMP/cave-pony-$TAG.tar.gz"
+          extract="$RUNNER_TEMP/cave-pony-archive"
+          mkdir -p "$extract"
+          curl --fail --location --silent --show-error --retry 3 \
+            "https://github.com/$GITHUB_REPOSITORY/archive/refs/tags/$TAG.tar.gz" \
+            --output "$archive"
+          tar -xzf "$archive" -C "$extract" --strip-components=1
+          cmp -s "$GITHUB_WORKSPACE/skills/cave-pony/SKILL.md" \
+            "$extract/skills/cave-pony/SKILL.md"
+          cmp -s "$GITHUB_WORKSPACE/.github/releases/v0.1.0.md" \
+            "$extract/.github/releases/v0.1.0.md"
+          test -s "$extract/LICENSE"
+          test -s "$extract/THIRD_PARTY_NOTICES.md"
+          test -s "$extract/assets/cave-pony-social-preview.png"
+      - name: Publish GitHub prerelease
+        run: |
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "$TAG is already published from this commit; no changes made."
+            exit 0
+          fi
+          gh release create "$TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --verify-tag \
+            --prerelease \
+            --title "Cave Pony $TAG — public preview" \
+            --notes-file .github/releases/v0.1.0.md
