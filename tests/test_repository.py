@@ -26,9 +26,9 @@ class RepositoryContractTests(unittest.TestCase):
 
     def test_version_uses_standard_metadata_mapping(self) -> None:
         skill = (ROOT / "skills/cave-pony/SKILL.md").read_text(encoding="utf-8")
-        self.assertRegex(skill, r"(?m)^metadata:\n  version: \"0\.1\.0\"$")
+        self.assertRegex(skill, r"(?m)^metadata:\n  version: \"0\.1\.1\"$")
         self.assertNotRegex(skill, r"(?m)^version:")
-        self.assertEqual("0.1.0", validate.frontmatter(skill).get("version"))
+        self.assertEqual("0.1.1", validate.frontmatter(skill).get("version"))
 
     def run_clone_validation(self, mutate) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as directory:
@@ -71,6 +71,11 @@ class RepositoryContractTests(unittest.TestCase):
             ), encoding="utf-8")
 
         self.assert_mutation_fails(mutate, "activation")
+
+    def test_ladder_precedence_is_explicit(self) -> None:
+        skill = (ROOT / "skills/cave-pony/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("choose the earliest applicable rung", skill)
+        self.assertNotIn("take the higher one", skill)
 
     def test_ponytail_ladder_regression_is_caught(self) -> None:
         def mutate(clone: Path) -> None:
@@ -132,7 +137,7 @@ class RepositoryContractTests(unittest.TestCase):
         def mutate(clone: Path) -> None:
             path = clone / "skills/cave-pony/README.md"
             path.write_text(path.read_text(encoding="utf-8").replace(
-                "Cave Pony `0.1.0`",
+                "Cave Pony `0.1.1`",
                 "Cave Pony `9.9.9`",
             ), encoding="utf-8")
 
@@ -142,7 +147,7 @@ class RepositoryContractTests(unittest.TestCase):
         def mutate(clone: Path) -> None:
             path = clone / "README.md"
             path.write_text(path.read_text(encoding="utf-8").replace(
-                "**Public preview — [`v0.1.0`]",
+                "**Public preview — [`v0.1.1`]",
                 "**Public preview — [`v9.9.9`]",
             ), encoding="utf-8")
 
@@ -152,7 +157,7 @@ class RepositoryContractTests(unittest.TestCase):
         def mutate(clone: Path) -> None:
             path = clone / "docs/LAUNCH_CHECKLIST.md"
             path.write_text(path.read_text(encoding="utf-8").replace(
-                "Current state: tagged [`v0.1.0` public prerelease]",
+                "Current state: tagged [`v0.1.1` public prerelease]",
                 "Current state: tagged [`v9.9.9` public prerelease]",
             ), encoding="utf-8")
 

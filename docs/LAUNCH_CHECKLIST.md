@@ -2,9 +2,17 @@
 
 Owner: Wilfred Grainger
 Target: evidence-backed public `v1.0.0`
-Current state: tagged [`v0.1.0` public prerelease](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.0); `v1.0.0` remains blocked by independent evidence and external diligence.
+Current state: tagged [`v0.1.1` public prerelease](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.1); `v1.0.0` remains blocked by independent evidence and external diligence.
 
 A checked item means committed evidence exists. Verbal confidence is not completion.
+
+## v0.1.1 public preview — 13 October 2026
+
+- [x] Clarified that the earliest applicable footprint-ladder rung wins.
+- [x] Advanced the skill version and public tagged-install entry points to `0.1.1`.
+- [x] Added the `v0.1.1` release workflow trigger and notes, retaining immutable-tag refusal and archive verification.
+- [ ] Confirm the `v0.1.1` publication workflow completed on `main`; the release workflow, not this checklist, is the evidence.
+- [ ] Verify the repository social preview in GitHub settings and at mobile and desktop widths; tracked in [issue #23](https://github.com/wilfgrainger/cave-pony/issues/23).
 
 ## v0.1.0 public preview — released 11 October 2026
 
@@ -61,7 +69,7 @@ Do not publish a maintainer's private reply without permission.
 - [x] CI runs the validator and tests once on Python 3.12.
 - [x] No runtime package or third-party Python dependency required.
 - [x] Default branch contains no obsolete release automation or benchmark artefacts.
-- [x] Version `0.1.0` is consistent across skill and documentation.
+- [x] Version `0.1.1` is consistent across skill and documentation.
 - [x] Upgrade, removal, and recovery instructions documented.
 - [x] Security reporting route documented.
 - [ ] Immutable `v1.0.0` tag created from a verified commit.
