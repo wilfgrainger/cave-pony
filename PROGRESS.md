@@ -7,6 +7,8 @@ Target: evidence-backed public `v1.0.0`
 
 [`v0.1.0` public preview](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.0) was released on 11 October 2026 from commit `609cf4f392566f716c2686275537af669a5e9246` as a GitHub prerelease. The [release workflow](https://github.com/wilfgrainger/cave-pony/actions/runs/38129015704) passed validation, tests, a clean Codex installation and tagged-archive verification. This proves packaging and the tested installation path, not model-behaviour improvement.
 
+`v0.1.1` clarifies the ladder's precedence, makes tagged installation the default in both READMEs, and advances the documented version and release automation. Release status is authoritative in the GitHub tag, release, and workflow results; do not treat a document's checked items as proof of publication.
+
 The core behavioural contract is stable. The `v1.0.0` evidence gate remains open: independent users, authenticated host sessions, GitHub social-preview settings, maintainer contact and formal brand diligence still require work. Do not infer their completion from the preview release.
 
 ## Completed
@@ -33,7 +35,7 @@ The core behavioural contract is stable. The `v1.0.0` evidence gate remains open
 - Execute the Codex behaviour protocol in a fresh authenticated session and commit the observed result.
 - Complete interactive UK, EU, and US trade mark searches and obtain qualified branding advice where required.
 - Send courtesy provenance notes to Ponytail and Caveman maintainers through a manually authorised route.
-- Verify the applied GitHub description and topics after this PR, and configure and check the social preview at desktop and mobile widths.
+- GitHub description and seven topics were verified through repository metadata on 13 October 2026. Configure and check the social preview at desktop and mobile widths; this external settings task remains open.
 - Exercise equivalent discovery and behaviour paths for other hosts before claiming behavioural support.
 
 ## Release rule

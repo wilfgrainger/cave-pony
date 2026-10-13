@@ -2,14 +2,14 @@
 
 Cave Pony is one skill directory containing Markdown. It has no executable installer of its own, no runtime package, and no network access.
 
-## Install the v0.1.0 tagged public preview
+## Install the v0.1.1 tagged public preview
 
 ```bash
-git clone --depth 1 --branch v0.1.0 https://github.com/wilfgrainger/cave-pony.git
+git clone --depth 1 --branch v0.1.1 https://github.com/wilfgrainger/cave-pony.git
 npx --yes skills@1.5.9 add "$PWD/cave-pony/skills/cave-pony"
 ```
 
-This checks out the exact [v0.1.0 prerelease](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.0) and passes its skill directory to the skills installer. The release workflow verified the tag's public archive against the tested source; the local CLI installation path was separately exercised by CI. Select your host and scope in the installer.
+This checks out the exact [v0.1.1 prerelease](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.1) and passes its skill directory to the skills installer. The release workflow verified the tag's public archive against the tested source; the local CLI installation path was separately exercised by CI. Select your host and scope in the installer.
 
 ## Development install
 
@@ -70,7 +70,7 @@ Confirm that the installed directory contains `SKILL.md` with:
 name: cave-pony
 license: MIT
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
 ```
 
 Then start a fresh session, invoke the skill using the host method above, and ask for an audit. Confirm the host loads the skill without silently stacking another minimalism or terse-output skill.
@@ -91,7 +91,7 @@ Then:
 2. start a fresh session and repeat the audit smoke check;
 3. restore the backup if discovery or activation regresses.
 
-A clean CI lifecycle probe deliberately changed the installed version marker, ran this update command, and confirmed restoration to `0.1.0`.
+The previously recorded `v0.1.0` CI lifecycle probe deliberately changed the installed version marker, ran this update command, and confirmed restoration to `0.1.0`. It is historical evidence, not a claim that update to `v0.1.1` has been exercised.
 
 ## Remove
 

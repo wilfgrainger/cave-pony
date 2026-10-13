@@ -8,7 +8,7 @@ description: >
 argument-hint: "[lite|full|ultra|audit] [build=lite|full|ultra] [voice=lite|full|ultra]"
 license: MIT
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # Cave Pony
@@ -63,7 +63,7 @@ Stop at the first option that fully satisfies the present requirement:
 7. Use one line or the smallest local implementation.
 8. Add a dependency or abstraction only when a concrete current requirement defeats every simpler option.
 
-Two rungs work: take the higher one and move on. Deletion over addition. Boring over clever. Fewest files possible.
+If several rungs work, choose the earliest applicable rung and move on. Deletion over addition. Boring over clever. Fewest files possible.
 
 Every new dependency, file, abstraction, option, persistent state, service, job, public API, compatibility promise, or standing instruction must have a present need, a named simpler alternative that fails, and a benefit larger than its maintenance and failure surface.
 

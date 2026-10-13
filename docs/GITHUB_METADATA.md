@@ -20,4 +20,4 @@ Use these values in the repository settings before broad promotion.
 
 Use `assets/cave-pony-social-preview.png` as the repository social preview.
 
-Repository settings are external state. This file records the approved values but does not claim that GitHub settings have been changed.
+Repository metadata checked on 13 October 2026: the approved description and all seven topics are applied. The social-preview setting and its actual rendering are not verified and remain an external task in [issue #23](https://github.com/wilfgrainger/cave-pony/issues/23).

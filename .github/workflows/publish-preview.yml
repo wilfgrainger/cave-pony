@@ -1,13 +1,13 @@
-name: Publish v0.1.0 public preview
+name: Publish v0.1.1 public preview
 
 on:
   push:
     branches: [main]
     paths:
-      - ".github/releases/v0.1.0.md"
+      - ".github/releases/v0.1.1.md"
 
 concurrency:
-  group: publish-cave-pony-v0.1.0
+  group: publish-cave-pony-v0.1.1
   cancel-in-progress: false
 
 permissions:
@@ -52,7 +52,7 @@ jobs:
       contents: write
     env:
       GH_TOKEN: ${{ github.token }}
-      TAG: v0.1.0
+      TAG: v0.1.1
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -82,8 +82,8 @@ jobs:
           tar -xzf "$archive" -C "$extract" --strip-components=1
           cmp -s "$GITHUB_WORKSPACE/skills/cave-pony/SKILL.md" \
             "$extract/skills/cave-pony/SKILL.md"
-          cmp -s "$GITHUB_WORKSPACE/.github/releases/v0.1.0.md" \
-            "$extract/.github/releases/v0.1.0.md"
+          cmp -s "$GITHUB_WORKSPACE/.github/releases/v0.1.1.md" \
+            "$extract/.github/releases/v0.1.1.md"
           test -s "$extract/LICENSE"
           test -s "$extract/THIRD_PARTY_NOTICES.md"
           test -s "$extract/assets/cave-pony-social-preview.png"
@@ -98,4 +98,4 @@ jobs:
             --verify-tag \
             --prerelease \
             --title "Cave Pony $TAG — public preview" \
-            --notes-file .github/releases/v0.1.0.md
+            --notes-file .github/releases/v0.1.1.md

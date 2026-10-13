@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/wilfgrainger/cave-pony/actions/workflows/ci.yml"><img src="https://github.com/wilfgrainger/cave-pony/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT licence"></a>
-  <img src="https://img.shields.io/badge/version-0.1.0-blue.svg" alt="Version 0.1.0">
+  <img src="https://img.shields.io/badge/version-0.1.1-blue.svg" alt="Version 0.1.1">
 </p>
 
 <p align="center">A coding-agent skill for the <strong>smallest trustworthy change</strong>.</p>
@@ -22,14 +22,14 @@ Cave Pony helps an agent inspect the real path, choose the least code that solve
 
 This repository is the canonical home of Cave Pony.
 
-> **Public preview — [`v0.1.0`](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.0), released 11 October 2026.** Installation is verified in the documented project layouts. Independent agent-behaviour evidence is still being collected; this is not a stable `v1.0.0` claim.
+> **Public preview — [`v0.1.1`](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.1), released 13 October 2026.** This patch clarifies the footprint ladder and version-pins the recommended installation. Clean project installation is verified; independent agent-behaviour evidence is still being collected. This is not a stable `v1.0.0` claim.
 
 ## Quick start
 
-Install the [tagged public preview](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.0) from an exact-version checkout:
+Install the [tagged public preview](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.1) from an exact-version checkout:
 
 ```bash
-git clone --depth 1 --branch v0.1.0 https://github.com/wilfgrainger/cave-pony.git
+git clone --depth 1 --branch v0.1.1 https://github.com/wilfgrainger/cave-pony.git
 npx --yes skills@1.5.9 add "$PWD/cave-pony/skills/cave-pony"
 ```
 
@@ -59,7 +59,7 @@ Optional `lite`, `ultra`, `build=ultra voice=lite`, and `stop cave-pony` control
 ## How it works
 
 1. Understand the affected flow, callers, data, configuration, tests, and trust boundaries.
-2. Stop at the first correct rung: no change, deletion, reuse, standard library, native platform, installed dependency, then the smallest local implementation.
+2. Stop at the first correct rung: no change, deletion, reuse, standard library, native platform, installed dependency, then the smallest local implementation. If several work, choose the earliest applicable rung.
 3. Fix the narrowest shared root cause rather than guarding the same symptom repeatedly.
 4. Run the smallest decisive proof, expanded for material risk.
 5. Put the result first and report only useful Done, Proof, Skipped, and Risk lines.
@@ -139,7 +139,7 @@ The protocol covers six real-task classes, paired baseline and skill runs where 
 
 ## Project status
 
-Cave Pony is usable today but remains a public-preview `0.1.0`.
+Cave Pony is usable today but remains a public-preview `0.1.1`.
 
 Repository checks and installation-path evidence are documented. Independent users, authenticated host-behavior evidence, social-preview verification, brand diligence and an immutable release remain open before `v1.0.0`.
 

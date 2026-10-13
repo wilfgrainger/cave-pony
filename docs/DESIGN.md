@@ -24,7 +24,7 @@ The loop has five steps:
 4. prove enough;
 5. report tersely.
 
-The ladder is ordered by owned surface: no change, deletion, reuse, standard library, native platform, installed dependency, smallest local implementation, then a dependency or abstraction only when simpler options fail a present requirement.
+The ladder is ordered by owned surface: no change, deletion, reuse, standard library, native platform, installed dependency, smallest local implementation, then a dependency or abstraction only when simpler options fail a present requirement. When multiple choices fully meet the requirement, the earliest applicable rung wins.
 
 YAGNI decides whether work is needed. KISS chooses the simplest correct design. DRY centralises stable repeated knowledge rather than similar syntax.
 
