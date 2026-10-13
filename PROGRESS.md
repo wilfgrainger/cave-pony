@@ -7,7 +7,7 @@ Target: evidence-backed public `v1.0.0`
 
 [`v0.1.0` public preview](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.0) was released on 11 October 2026 from commit `609cf4f392566f716c2686275537af669a5e9246` as a GitHub prerelease. The [release workflow](https://github.com/wilfgrainger/cave-pony/actions/runs/38129015704) passed validation, tests, a clean Codex installation and tagged-archive verification. This proves packaging and the tested installation path, not model-behaviour improvement.
 
-`v0.1.1` clarifies the ladder's precedence, makes tagged installation the default in both READMEs, and advances the documented version and release automation. Release status is authoritative in the GitHub tag, release, and workflow results; do not treat a document's checked items as proof of publication.
+[`v0.1.1` public preview](https://github.com/wilfgrainger/cave-pony/releases/tag/v0.1.1) was published on 13 October 2026 from commit `da18f2542292983ee2058ea903c688f100c5b4b3`. The [release workflow](https://github.com/wilfgrainger/cave-pony/actions/runs/38366941301) passed repository tests, clean Codex installation, immutable tag creation and public tagged-archive verification. The [main CI run](https://github.com/wilfgrainger/cave-pony/actions/runs/38366941420) also passed. This establishes a verified release package, not behavioural superiority. The patch clarifies ladder precedence and makes tagged installation the default.
 
 The core behavioural contract is stable. The `v1.0.0` evidence gate remains open: independent users, authenticated host sessions, GitHub social-preview settings, maintainer contact and formal brand diligence still require work. Do not infer their completion from the preview release.
 
