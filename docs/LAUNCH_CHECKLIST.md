@@ -11,7 +11,7 @@ A checked item means committed evidence exists. Verbal confidence is not complet
 - [x] Clarified that the earliest applicable footprint-ladder rung wins.
 - [x] Advanced the skill version and public tagged-install entry points to `0.1.1`.
 - [x] Added the `v0.1.1` release workflow trigger and notes, retaining immutable-tag refusal and archive verification.
-- [ ] Confirm the `v0.1.1` publication workflow completed on `main`; the release workflow, not this checklist, is the evidence.
+- [x] Verified [v0.1.1 release workflow](https://github.com/wilfgrainger/cave-pony/actions/runs/38366941301), immutable tag `da18f2542292983ee2058ea903c688f100c5b4b3`, and [main CI](https://github.com/wilfgrainger/cave-pony/actions/runs/38366941420).
 - [ ] Verify the repository social preview in GitHub settings and at mobile and desktop widths; tracked in [issue #23](https://github.com/wilfgrainger/cave-pony/issues/23).
 
 ## v0.1.0 public preview — released 11 October 2026
