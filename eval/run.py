@@ -55,7 +55,7 @@ def run_one(task, arm, rep, model):
     sh(["git", "-c", "user.name=eval", "-c", "user.email=eval@local", "commit", "-qm", "base", "--allow-empty"], repo)
 
     cmd = ["claude", "-p", (task / "prompt.txt").read_text().strip(),
-           "--model", model, "--output-format", "json",
+           "--model", model, "--output-format", "stream-json", "--verbose",
            # Sandboxed: file tools plus python only, inside a throwaway dir.
            "--permission-mode", "acceptEdits",
            "--tools", "Read,Edit,Write,Glob,Grep,Bash",
@@ -67,10 +67,18 @@ def run_one(task, arm, rep, model):
     if sp:
         cmd += ["--append-system-prompt", sp]
     r = sh(cmd, repo, timeout=900)
-    try:
-        data = json.loads(r.stdout)
-    except json.JSONDecodeError:
+    events = []
+    for line in r.stdout.splitlines():
+        try:
+            events.append(json.loads(line))
+        except json.JSONDecodeError:
+            pass
+    data = next((e for e in events if e.get("type") == "result"), None)
+    if data is None:
         return {"task": task.name, "arm": arm, "rep": rep, "error": (r.stderr or r.stdout)[-500:]}
+    ran = sum(1 for e in events if e.get("type") == "assistant"
+              for c in e.get("message", {}).get("content", [])
+              if c.get("type") == "tool_use" and c.get("name") == "Bash")
     reply = data.get("result", "") or ""
     (work / "reply.txt").write_text(reply)
 
@@ -89,19 +97,23 @@ def run_one(task, arm, rep, model):
         "out": data.get("usage", {}).get("output_tokens", 0),
         "cost": round(data.get("total_cost_usd", 0), 4),
         "words": len(reply.split()),
+        "ran": ran,
         "reply": reply,
     }
 
 
 def summarise(rows):
     arms = list(dict.fromkeys(r["arm"] for r in rows))
-    print(f"\n{'arm':<10} {'pass':>7} {'diff':>6} {'words':>6} {'out tok':>8} {'cost $':>7}")
+    # verified: share of code-changing runs where the agent executed anything
+    print(f"\n{'arm':<10} {'pass':>7} {'verified':>9} {'diff':>6} {'words':>6} {'out tok':>8} {'cost $':>7}")
     for arm in arms:
         rs = [r for r in rows if r["arm"] == arm and "error" not in r]
         if not rs:
             continue
         n = len(rs)
-        print(f"{arm:<10} {sum(r['pass'] for r in rs):>3}/{n:<3} {sum(r['diff'] for r in rs)/n:>6.1f} "
+        code = [r for r in rs if r["diff"]]
+        ver = f"{sum(r.get('ran', 0) > 0 for r in code)}/{len(code)}"
+        print(f"{arm:<10} {sum(r['pass'] for r in rs):>3}/{n:<3} {ver:>9} {sum(r['diff'] for r in rs)/n:>6.1f} "
               f"{sum(r['words'] for r in rs)/n:>6.0f} {sum(r['out'] for r in rs)/n:>8.0f} {sum(r['cost'] for r in rs):>7.2f}")
 
 

@@ -41,7 +41,7 @@ Use plain full sentences for: security warnings, anything irreversible (delete, 
 
 Run the smallest check that would catch a regression. New non-trivial logic leaves one small test. Never say a check passed unless it ran this session. Untested is not failed; say which.
 
-End completed work with only the lines that apply:
+Trivial change: one line saying what changed and whether it ran. Otherwise end with only the lines that apply:
 
 ```text
 Done: <what changed, where>
