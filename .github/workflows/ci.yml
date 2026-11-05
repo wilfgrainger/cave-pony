@@ -39,3 +39,11 @@ jobs:
             --yes
           test -f .agents/skills/cave-pony/SKILL.md
           cmp -s "$GITHUB_WORKSPACE/skills/cave-pony/SKILL.md" .agents/skills/cave-pony/SKILL.md
+      - name: Verify repo-root installation (the README's command)
+        env:
+          DISABLE_TELEMETRY: "1"
+        run: |
+          temp_dir="$(mktemp -d)"
+          cd "$temp_dir"
+          npx --yes skills@1.5.9 add "$GITHUB_WORKSPACE" --agent codex --copy --yes
+          cmp "$GITHUB_WORKSPACE/skills/cave-pony/SKILL.md" .agents/skills/cave-pony/SKILL.md

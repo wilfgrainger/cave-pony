@@ -47,7 +47,12 @@ class EvalTaskTests(unittest.TestCase):
     PASS_ON_BASE = {"already-works", "keep-validation"}
 
     def test_checks_discriminate(self):
-        empty = Path(tempfile.mkstemp()[1])
+        with tempfile.TemporaryDirectory() as tmp:
+            empty = Path(tmp) / "reply.txt"
+            empty.write_text("")
+            self._check_all(empty)
+
+    def _check_all(self, empty):
         for task in sorted(TASKS.iterdir()):
             with self.subTest(task=task.name):
                 self.assertTrue((task / "prompt.txt").read_text().strip())

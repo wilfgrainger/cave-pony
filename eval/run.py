@@ -112,7 +112,8 @@ def summarise(rows):
             continue
         n = len(rs)
         code = [r for r in rs if r["diff"]]
-        ver = f"{sum(r.get('ran', 0) > 0 for r in code)}/{len(code)}"
+        tracked = all("ran" in r for r in rs)  # runs before 'ran' was recorded show n/a
+        ver = f"{sum(r['ran'] > 0 for r in code)}/{len(code)}" if tracked else "n/a"
         print(f"{arm:<10} {sum(r['pass'] for r in rs):>3}/{n:<3} {ver:>9} {sum(r['diff'] for r in rs)/n:>6.1f} "
               f"{sum(r['words'] for r in rs)/n:>6.0f} {sum(r['out'] for r in rs)/n:>8.0f} {sum(r['cost'] for r in rs):>7.2f}")
 
