@@ -1,2 +1,4 @@
 __pycache__/
-*.py[cod]
+eval/.cache/
+eval/results/run-*.jsonl
+eval/results/*.partial

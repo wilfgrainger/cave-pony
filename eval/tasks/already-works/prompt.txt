@@ -1,0 +1,1 @@
+Make sure slugify in text.py lowercases its output.
