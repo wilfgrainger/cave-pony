@@ -30,26 +30,31 @@ The whole contract is [`skills/cave-pony/SKILL.md`](skills/cave-pony/SKILL.md). 
 
 ## Does it work?
 
-Measured, not claimed. [`eval/`](eval/) runs the same 8 tasks through headless Claude Code with no skill, Caveman, Ponytail, both stacked, and Cave Pony. It scores hidden-test correctness first, then diff size, reply length and cost.
+Measured, not claimed. [`eval/`](eval/) runs the same 8 tasks through headless Claude Code with no skill, Caveman, Ponytail, both stacked, and Cave Pony. It scores hidden-test correctness first, then whether the agent verified its change, diff size, reply length and cost.
 
 <!-- results -->
-Run on 5 November 2026: Claude Sonnet 5.5, 8 tasks × 3 runs per arm ([raw results](eval/results/latest.jsonl)).
+Run on 5 November 2026: Claude Sonnet 5.5, 8 tasks × 3 runs per arm ([raw results with every command run](eval/results/published.jsonl)).
 
-| Arm | Correct | Verified its change | Diff lines | Reply words | Output tokens |
-|---|---|---|---|---|---|
-| No skill | 24/24 | 9/18 | 14.5 | 84 | 644 |
-| Caveman | 24/24 | 12/18 | 13.2 | 62 | 637 |
-| Ponytail | 24/24 | 14/18 | 11.5 | 81 | 686 |
-| Caveman + Ponytail | 24/24 | 14/18 | 12.1 | 73 | 700 |
-| **Cave Pony** | 24/24 | **16/18** | **11.2** | **61** | 867 |
+| Arm | Correct | Verified its change | Diff lines | Reply words | Output tokens | $/run |
+|---|---|---|---|---|---|---|
+| No skill | 24/24 | 10/18 | 14.5 | 85 | 641 | 0.015 |
+| Caveman | 24/24 | 8/18 | 14.4 | 68 | 688 | 0.016 |
+| Ponytail | 24/24 | 13/18 | 12.5 | 85 | 673 | 0.016 |
+| Caveman + Ponytail | 24/24 | 13/18 | 11.4 | 73 | 709 | 0.017 |
+| **Cave Pony** | 24/24 | **16/18** | **10.9** | **56** | 704 | 0.016 |
+
+"Verified" means the agent successfully ran Python or pytest after editing, on runs that changed code. Diff lines, words and tokens are means per run; output tokens cover the whole session.
 
 What this shows:
 
-- **Smallest diffs** (23% below no skill) and **shortest replies** (27% below; level with Caveman), from one skill instead of two.
-- **Verifies most often.** Cave Pony ran a check on 16 of 18 code changes; the agent with no skill did on 9.
-- **It costs more.** Output tokens are about 35% higher than with no skill, because running checks takes tool calls. Cave Pony trades tokens for proof. If you only want fewer tokens, use Caveman.
-- **No correctness difference.** Every arm solved every task, and no arm claimed a check it had not run. These tasks are too easy to separate the arms on correctness. Harder tasks are needed and welcome.
-- The sample is small (3 runs per task). Treat differences of one or two lines or words as noise.
+- **Shortest replies:** 34% fewer words than no skill, and 18% fewer than Caveman alone.
+- **Smallest diffs:** 25% below no skill; level with Caveman + Ponytail stacked.
+- **Verifies most often:** 16 of 18 code changes, against 10 with no skill and 8 with Caveman alone.
+- **Costs about the same:** output tokens are about 10% above no skill, and cost per run is level with Caveman and Ponytail.
+- **No correctness difference:** every arm solved every task, so these tasks are too easy to separate the arms on correctness. Harder tasks are needed.
+- **Small sample:** 3 runs per task. Treat gaps of one or two lines, or a couple of runs, as noise.
+
+Earlier runs on the same day are kept in [`eval/results/`](eval/results/). An independent review found that their verification and token metrics were too loose, so they are not comparable with this table.
 <!-- /results -->
 
 Reproduce: `make eval` (about $2 for 120 runs). Eval tasks where Cave Pony loses are the most welcome contribution. See [CONTRIBUTING](CONTRIBUTING.md).
