@@ -18,8 +18,8 @@ prompt, with only the appended skill text changing. Each run is scored on:
 
 Usage:
   eval/fetch-arms.sh                       # once: pinned Caveman and Ponytail
-  python3 eval/run.py                      # all tasks x all arms x 3 reps (~$4 on Sonnet)
-  python3 eval/run.py --model claude-haiku-5-5   # the same on Haiku (~$0.50)
+  python3 eval/run.py                      # all tasks x all arms x 3 reps (~$4.20 on Sonnet)
+  python3 eval/run.py --model claude-haiku-5-5   # the same on Haiku (~$0.46)
   python3 eval/run.py --tasks dedupe --arms baseline,cave-pony --reps 1
   python3 eval/run.py --summary-only       # re-print eval/results/published.jsonl
   python3 eval/run.py --summary-only --out eval/results/haiku-2026-11-05.jsonl
