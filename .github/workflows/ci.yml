@@ -26,7 +26,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: make test
-      - name: Verify clean Codex installation
+      - name: Verify clean skill installation
         env:
           DISABLE_TELEMETRY: "1"
         run: |

@@ -1,31 +1,7 @@
 # Security policy
 
-Cave Pony is an instruction contract, not executable runtime software. Security reports are still important when a change could weaken authentication, authorisation, trust-boundary validation, secret handling, destructive-operation warnings, recovery, accessibility, data integrity, or workflow supply-chain safety.
+Cave Pony is an instruction file plus an offline eval harness. It runs no service.
 
-## Sensitive reports
+Report anything in the skill that could lead an agent to drop validation, auth or secrets handling, hide the consequences of a destructive command, or claim a check passed when it did not run.
 
-Use GitHub's **Security → Report a vulnerability** route when it is available for this repository.
-
-When private vulnerability reporting is unavailable, open a public issue titled `Private security contact requested`. Do not include exploit details, secrets, personal data, or reproduction steps that would create risk. A maintainer can then arrange a private channel.
-
-## Non-sensitive reports
-
-Open a normal GitHub issue with:
-
-- the affected file and version;
-- the unsafe or misleading behaviour;
-- the smallest reproduction that contains no secrets;
-- the expected safe behaviour;
-- any proposed minimal correction.
-
-## Scope
-
-Examples include:
-
-- wording that encourages removal of authentication or authorisation;
-- compression that hides destructive consequences or recovery;
-- instructions that expose secrets or personal data;
-- CI changes that grant unnecessary write permissions or use mutable third-party actions;
-- claims that tests or checks passed when they did not run.
-
-Do not test against systems, repositories, accounts, or data you do not own or have permission to assess.
+For sensitive reports, use GitHub's **Security → Report a vulnerability**. For everything else, open an issue with the file, the behaviour you saw, and a minimal reproduction that contains no secrets.

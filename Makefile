@@ -1,11 +1,9 @@
-.PHONY: validate test clean
-
-validate:
-	python3 tools/validate.py
+.PHONY: test eval
 
 test:
-	test -f tests/test_profile_artwork.py
 	python3 -m unittest discover -s tests -v
 
-clean:
-	rm -rf tools/__pycache__ tests/__pycache__
+# Spends real model tokens (~$0.02 per run). See eval/README.md.
+eval:
+	eval/fetch-arms.sh
+	python3 eval/run.py

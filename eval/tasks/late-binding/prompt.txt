@@ -1,0 +1,1 @@
+Why does this print 2 2 2 instead of 0 1 2? How do I fix it? `fs = [lambda: i for i in range(3)]; print(*[f() for f in fs])`

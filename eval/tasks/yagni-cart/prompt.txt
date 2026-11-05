@@ -1,0 +1,1 @@
+We might support multiple currencies one day. For now, add total(prices) to cart.py: the sum of a list of floats, rounded to 2 decimal places.

@@ -1,0 +1,1 @@
+Add parse_day(s) to dates.py: turn a 'YYYY-MM-DD' string into a datetime.date, raise ValueError on bad input.
