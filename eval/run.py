@@ -1,18 +1,24 @@
 #!/usr/bin/env python3
-"""Paired eval: same tasks, same model, different skill text.
+"""Paired eval for coding-agent skills.
 
-Each run copies a task repo into a fresh git dir, runs headless Claude Code
-with one skill appended to the system prompt, then scores:
-  pass      - hidden check passes (errored runs count as failures)
-  verified  - code-changing runs that successfully ran python/pytest after the first edit
-  unbacked  - replies claiming success ("tests pass", "verified"...) with no such command
-  diff      - lines added + removed (including new files)
-  words     - words in the final reply
-  out tok   - output tokens, whole session
-  $/run     - USD reported by Claude Code
+Every task runs through headless Claude Code once per arm: the same model, tools and
+prompt, with only the appended skill text changing. Each run is scored on:
 
-Usage: python3 eval/run.py [--model M] [--reps N] [--arms a,b] [--tasks t] [--jobs J] [--out F]
-Arms needing outside skills are fetched by eval/fetch-arms.sh into eval/.cache.
+  pass      hidden check passes (an errored run counts as a failure)
+  verified  ran python/pytest successfully after editing (code-changing runs only)
+  unbacked  reply claims success ("tests pass", "verified") but nothing ran; rough regex flag
+  diff      lines added + removed, new files included
+  words     words in the final reply
+  out tok   output tokens across the whole session
+  $/run     cost reported by Claude Code
+
+Usage:
+  eval/fetch-arms.sh                       # once: pinned Caveman and Ponytail
+  python3 eval/run.py                      # all tasks x all arms x 3 reps (~$2)
+  python3 eval/run.py --tasks dedupe --arms baseline,cave-pony --reps 1
+  python3 eval/run.py --summary-only       # re-print eval/results/published.jsonl
+
+Not a sandbox: the agent gets file tools plus python, and python can reach the host.
 """
 import argparse
 import concurrent.futures as cf
@@ -30,28 +36,41 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 TASKS = ROOT / "tasks"
 CACHE = ROOT / ".cache"
+PUBLISHED = ROOT / "results" / "published.jsonl"
 
+CAVEMAN = CACHE / "caveman/skills/caveman/SKILL.md"
+PONYTAIL = CACHE / "ponytail/skills/ponytail/SKILL.md"
 ARMS = {
     "baseline": [],
-    "caveman": [CACHE / "caveman/skills/caveman/SKILL.md"],
-    "ponytail": [CACHE / "ponytail/skills/ponytail/SKILL.md"],
-    "both": [CACHE / "caveman/skills/caveman/SKILL.md", CACHE / "ponytail/skills/ponytail/SKILL.md"],
+    "caveman": [CAVEMAN],
+    "ponytail": [PONYTAIL],
+    "both": [CAVEMAN, PONYTAIL],
     "cave-pony": [ROOT.parent / "skills/cave-pony/SKILL.md"],
 }
 
+TOOLS = "Read,Edit,Write,Glob,Grep,Bash"
+ALLOWED = "Read,Edit,Write,Glob,Grep,Bash(python3:*),Bash(python:*)"
 
-def system_prompt(arm):
+EDIT_CMD = re.compile(r"(^|[^0-9&])>>?\s*[\w./-]|\btee\b|\bsed\s+-i|\.write(_text)?\(")
+RUNS_CODE = re.compile(r"\b(python3?|pytest)\b")
+CLAIM = re.compile(r"\b(tests? pass(es|ed)?|passes|passed|verified|confirmed|works now)\b", re.I)
+
+
+# --- building a run ---------------------------------------------------------------
+
+def skill_prompt(arm):
+    """Appended system prompt for an arm. Changing this text changes skill_sha."""
     parts = [p.read_text() for p in ARMS[arm]]
     if not parts:
         return None
     return "These skills are active for this whole session. Follow them.\n\n" + "\n\n---\n\n".join(parts)
 
 
-def sh(cmd, cwd, **kw):
-    return subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, **kw)
+def sha(text):
+    return hashlib.sha256((text or "").encode()).hexdigest()[:12]
 
 
-def tree_hash(path):
+def tree_sha(path):
     h = hashlib.sha256()
     for f in sorted(path.rglob("*")):
         if f.is_file() and "__pycache__" not in f.parts:
@@ -59,16 +78,43 @@ def tree_hash(path):
     return h.hexdigest()[:12]
 
 
-CLAIM = re.compile(r"\b(tests? pass(es|ed)?|passes|passed|verified|confirmed|works now)\b", re.I)
+def sh(cmd, cwd, **kw):
+    return subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, **kw)
 
 
-EDITS = re.compile(r"(^|[^0-9&])>>?\s*[\w./-]|\btee\b|\bsed\s+-i|\.write(_text)?\(")
+def git_repo(src, dst):
+    shutil.copytree(src, dst)
+    sh(["git", "init", "-q"], dst)
+    sh(["git", "add", "-A"], dst)
+    sh(["git", "-c", "user.name=eval", "-c", "user.email=eval@local", "commit", "-qm", "base", "--allow-empty"], dst)
 
+
+def claude(prompt, model, system, cwd):
+    cmd = ["claude", "-p", prompt, "--model", model,
+           "--output-format", "stream-json", "--verbose",
+           "--permission-mode", "acceptEdits", "--tools", TOOLS, "--allowedTools", ALLOWED,
+           "--disable-slash-commands", "--strict-mcp-config", "--setting-sources", "project",
+           "--no-session-persistence"]
+    if system:
+        cmd += ["--append-system-prompt", system]
+    out = sh(cmd, cwd, timeout=900)
+    events = []
+    for line in out.stdout.splitlines():
+        try:
+            events.append(json.loads(line))
+        except json.JSONDecodeError:
+            pass
+    return events, out.stderr
+
+
+# --- scoring ---------------------------------------------------------------------
 
 def bash_trace(events):
-    """Every Bash command in order, with whether it succeeded and whether the agent had edited by then."""
-    results = {c.get("tool_use_id"): c for e in events if e.get("type") == "user"
-               for c in (e.get("message", {}).get("content") or []) if isinstance(c, dict) and c.get("type") == "tool_result"}
+    """Each Bash command in order: did it succeed, and had the agent edited anything yet?"""
+    results = {c.get("tool_use_id"): c
+               for e in events if e.get("type") == "user"
+               for c in (e.get("message", {}).get("content") or [])
+               if isinstance(c, dict) and c.get("type") == "tool_result"}
     edited, trace = False, []
     for e in events:
         if e.get("type") != "assistant":
@@ -80,149 +126,126 @@ def bash_trace(events):
                 edited = True
             elif c.get("name") == "Bash":
                 cmd = c.get("input", {}).get("command", "")
-                edited = edited or bool(EDITS.search(cmd))  # heredoc or redirect edits count too
+                edited = edited or bool(EDIT_CMD.search(cmd))  # heredoc and redirect edits count
                 res = results.get(c.get("id"))
                 trace.append({"cmd": cmd, "ok": bool(res) and not res.get("is_error"), "after_edit": edited})
     return trace
 
 
 def verified_runs(events):
-    """Successful python/pytest commands run after (or together with) the agent's first edit."""
-    return [t["cmd"] for t in bash_trace(events)
-            if t["ok"] and t["after_edit"] and re.search(r"\b(python3?|pytest)\b", t["cmd"])]
+    """Successful python/pytest commands at or after the first edit."""
+    return [t["cmd"] for t in bash_trace(events) if t["ok"] and t["after_edit"] and RUNS_CODE.search(t["cmd"])]
 
 
-def run_one(task, arm, rep, model, sp):
-    try:
-        return _run_one(task, arm, rep, model, sp)
-    except Exception as e:  # one bad run must not sink the whole eval
-        return {"task": task.name, "arm": arm, "rep": rep, "error": f"{type(e).__name__}: {e}"[:500]}
+def diff_lines(repo):
+    sh(["git", "add", "-A"], repo)
+    numstat = sh(["git", "diff", "--cached", "--numstat", "--", ".", ":!*__pycache__*"], repo).stdout
+    return sum(int(a) + int(d) for a, d, _ in (l.split("\t") for l in numstat.splitlines()) if a.isdigit())
 
 
-def _run_one(task, arm, rep, model, sp):
+def run_one(task, arm, rep, model, system):
+    base = {"task": task.name, "arm": arm, "rep": rep}
     work = Path(tempfile.mkdtemp(prefix=f"cp-{task.name}-{arm}-"))
     try:
         repo = work / "repo"
-        shutil.copytree(task / "repo", repo)
-        # The hidden check runs from a private copy, so edits elsewhere cannot change scoring.
-        check_py = work / "check.py"
-        shutil.copy(task / "check.py", check_py)
-        sh(["git", "init", "-q"], repo)
-        sh(["git", "add", "-A"], repo)
-        sh(["git", "-c", "user.name=eval", "-c", "user.email=eval@local", "commit", "-qm", "base", "--allow-empty"], repo)
-        before = tree_hash(TASKS)
+        git_repo(task / "repo", repo)
+        check = shutil.copy(task / "check.py", work / "check.py")  # private copy: edits elsewhere can't change scoring
+        before = tree_sha(TASKS)
 
-        cmd = ["claude", "-p", (task / "prompt.txt").read_text().strip(),
-               "--model", model, "--output-format", "stream-json", "--verbose",
-               # Not a sandbox: python can still touch the host. Tools are limited to
-               # file edits plus python so every arm has the same narrow surface.
-               "--permission-mode", "acceptEdits",
-               "--tools", "Read,Edit,Write,Glob,Grep,Bash",
-               "--allowedTools", "Read,Edit,Write,Glob,Grep,Bash(python3:*),Bash(python:*)",
-               "--disable-slash-commands",
-               "--strict-mcp-config", "--setting-sources", "project",
-               "--no-session-persistence"]
-        if sp:
-            cmd += ["--append-system-prompt", sp]
-        r = sh(cmd, repo, timeout=900)
-        events = []
-        for line in r.stdout.splitlines():
-            try:
-                events.append(json.loads(line))
-            except json.JSONDecodeError:
-                pass
-        data = next((e for e in events if e.get("type") == "result"), None)
-        if data is None:
-            return {"task": task.name, "arm": arm, "rep": rep, "error": (r.stderr or r.stdout)[-500:]}
-        reply = data.get("result", "") or ""
-        reply_file = work / "reply.txt"
-        reply_file.write_text(reply)
+        events, stderr = claude((task / "prompt.txt").read_text().strip(), model, system, repo)
+        result = next((e for e in events if e.get("type") == "result"), None)
+        if result is None:
+            return {**base, "error": stderr[-500:] or "no result event"}
 
-        sh(["git", "add", "-A"], repo)
-        numstat = sh(["git", "diff", "--cached", "--numstat", "--", ".", ":!*__pycache__*"], repo).stdout
-        diff = sum(int(a) + int(d) for a, d, _ in (l.split("\t") for l in numstat.splitlines()) if a.isdigit())
-
+        reply = result.get("result") or ""
+        (work / "reply.txt").write_text(reply)
         env = dict(os.environ, PYTHONPATH=str(repo), PYTHONDONTWRITEBYTECODE="1")
-        check = sh([sys.executable, str(check_py), str(reply_file)], repo, env=env, timeout=60)
+        checked = sh([sys.executable, str(check), str(work / "reply.txt")], repo, env=env, timeout=60)
         cmds = verified_runs(events)
-        # Session total across every model call, not just the last turn.
-        out_tokens = sum(m.get("outputTokens", 0) for m in data.get("modelUsage", {}).values()) \
-            or data.get("usage", {}).get("output_tokens", 0)
+        tokens = sum(m.get("outputTokens", 0) for m in result.get("modelUsage", {}).values()) \
+            or result.get("usage", {}).get("output_tokens", 0)
         return {
-            "task": task.name, "arm": arm, "rep": rep,
-            "pass": check.returncode == 0,
-            "fail_reason": (check.stderr.strip().splitlines() or [""])[-1] if check.returncode else "",
-            "diff": diff,
-            "out": out_tokens,
-            "cost": round(data.get("total_cost_usd", 0), 4),
+            **base,
+            "pass": checked.returncode == 0,
+            "fail_reason": (checked.stderr.strip().splitlines() or [""])[-1] if checked.returncode else "",
+            "diff": diff_lines(repo),
+            "out": tokens,
+            "cost": round(result.get("total_cost_usd", 0), 4),
             "words": len(reply.split()),
             "verified_cmds": cmds,
-            "bash": bash_trace(events),  # full trace, so scoring can be revised without re-running
             "unbacked_claim": bool(CLAIM.search(reply)) and not cmds,
-            "tampered": tree_hash(TASKS) != before,
-            "skill_sha": hashlib.sha256((sp or "").encode()).hexdigest()[:12],
+            "tampered": tree_sha(TASKS) != before,
+            "skill_sha": sha(system),
+            "bash": bash_trace(events),
             "reply": reply,
         }
+    except Exception as e:  # one bad run must not sink the whole eval
+        return {**base, "error": f"{type(e).__name__}: {e}"[:500]}
     finally:
         shutil.rmtree(work, ignore_errors=True)
 
 
+# --- reporting -------------------------------------------------------------------
+
 def summarise(rows):
-    arms = list(dict.fromkeys(r["arm"] for r in rows))
-    print(f"\n{'arm':<10} {'pass':>7} {'err':>4} {'verified':>9} {'unbacked':>9} {'diff':>6} {'words':>6} {'out tok':>8} {'$/run':>7}")
-    for arm in arms:
-        allr = [r for r in rows if r["arm"] == arm]
-        rs = [r for r in allr if "error" not in r]
-        if not rs:
+    print(f"\n{'arm':<10} {'pass':>7} {'err':>4} {'verified':>9} {'unbacked':>9} "
+          f"{'diff':>6} {'words':>6} {'out tok':>8} {'$/run':>7}")
+    for arm in dict.fromkeys(r["arm"] for r in rows):
+        every = [r for r in rows if r["arm"] == arm]
+        ok = [r for r in every if "error" not in r]
+        if not ok:
+            print(f"{arm:<10} all {len(every)} runs errored")
             continue
-        n = len(rs)
-        code = [r for r in rs if r["diff"]]
-        new = all("verified_cmds" in r for r in rs)  # older result files lack these fields
-        ver = f"{sum(bool(r['verified_cmds']) for r in code)}/{len(code)}" if new else "n/a"
-        unb = f"{sum(r['unbacked_claim'] for r in rs)}" if new else "n/a"
-        print(f"{arm:<10} {sum(r['pass'] for r in rs):>3}/{len(allr):<3} {len(allr) - n:>4} {ver:>9} {unb:>9} "
-              f"{sum(r['diff'] for r in rs)/n:>6.1f} {sum(r['words'] for r in rs)/n:>6.0f} "
-              f"{sum(r['out'] for r in rs)/n:>8.0f} {sum(r['cost'] for r in rs)/n:>7.3f}")
+        n, code = len(ok), [r for r in ok if r["diff"]]
+        print(f"{arm:<10} {sum(r['pass'] for r in ok):>3}/{len(every):<3} {len(every) - n:>4} "
+              f"{sum(bool(r['verified_cmds']) for r in code):>5}/{len(code):<3} "
+              f"{sum(r['unbacked_claim'] for r in ok):>9} "
+              f"{sum(r['diff'] for r in ok) / n:>6.1f} {sum(r['words'] for r in ok) / n:>6.0f} "
+              f"{sum(r['out'] for r in ok) / n:>8.0f} {sum(r['cost'] for r in ok) / n:>7.3f}")
     if any(r.get("tampered") for r in rows):
-        print("WARNING: task files changed during a run; see 'tampered' rows")
+        print("WARNING: task files changed during a run; see rows with tampered=true")
 
 
 def main():
-    ap = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--model", default="claude-sonnet-5-5")
     ap.add_argument("--reps", type=int, default=3)
     ap.add_argument("--arms", default=",".join(ARMS))
-    ap.add_argument("--tasks", default="")
+    ap.add_argument("--tasks", default="", help="comma-separated task names (default: all)")
     ap.add_argument("--jobs", type=int, default=8)
     ap.add_argument("--out", default="", help="default: eval/results/run-<timestamp>.jsonl")
     ap.add_argument("--summary-only", action="store_true")
     a = ap.parse_args()
+
     if a.summary_only:
-        out = Path(a.out or ROOT / "results" / "published.jsonl")
-        summarise([json.loads(l) for l in out.read_text().splitlines()])
+        summarise([json.loads(l) for l in Path(a.out or PUBLISHED).read_text().splitlines()])
         return
-    out = Path(a.out or ROOT / "results" / f"run-{time.strftime('%Y%m%d-%H%M%S')}.jsonl")
+
     arms = a.arms.split(",")
-    for arm in arms:
-        for p in ARMS[arm]:
-            if not p.exists():
-                sys.exit(f"missing {p}; run eval/fetch-arms.sh")
-    prompts = {arm: system_prompt(arm) for arm in arms}  # read once: mid-run edits cannot mix versions
+    unknown = [x for x in arms if x not in ARMS]
+    missing = [p for x in arms if x in ARMS for p in ARMS[x] if not p.exists()]
+    if unknown:
+        sys.exit(f"unknown arm(s): {', '.join(unknown)}; choose from {', '.join(ARMS)}")
+    if missing:
+        sys.exit(f"missing {missing[0]}; run eval/fetch-arms.sh")
     tasks = [t for t in sorted(TASKS.iterdir()) if not a.tasks or t.name in a.tasks.split(",")]
-    jobs = [(t, arm, rep) for rep in range(a.reps) for t in tasks for arm in arms]
+    systems = {x: skill_prompt(x) for x in arms}  # read once, so mid-run edits can't mix versions
+
+    out = Path(a.out or ROOT / "results" / f"run-{time.strftime('%Y%m%d-%H%M%S')}.jsonl")
     out.parent.mkdir(parents=True, exist_ok=True)
+    partial = out.with_suffix(".partial")
     rows = []
-    tmp = out.with_suffix(".partial")
-    with cf.ThreadPoolExecutor(a.jobs) as ex, tmp.open("w") as f:
-        futs = [ex.submit(run_one, t, arm, rep, a.model, prompts[arm]) for t, arm, rep in jobs]
-        for fut in cf.as_completed(futs):
+    with cf.ThreadPoolExecutor(a.jobs) as pool, partial.open("w") as f:
+        futures = [pool.submit(run_one, t, x, rep, a.model, systems[x])
+                   for rep in range(a.reps) for t in tasks for x in arms]
+        for fut in cf.as_completed(futures):
             row = fut.result()
             rows.append(row)
             f.write(json.dumps(row) + "\n")
             f.flush()
-            print(row["task"], row["arm"], row.get("pass", "ERR"), row.get("diff"), row.get("words"),
-                  len(row.get("verified_cmds", [])), row.get("error", "")[:200], flush=True)
-    tmp.replace(out)
+            status = "ERR " + row["error"][:120] if "error" in row else ("pass" if row["pass"] else "FAIL")
+            print(f"{row['task']:<16} {row['arm']:<10} {status}", flush=True)
+    partial.replace(out)
     print(f"\nwrote {out}")
     summarise(rows)
 

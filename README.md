@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/cave-pony-logo.png" width="360" alt="Cave Pony logo">
+  <img src="./assets/cave-pony-logo.png" width="320" alt="Cave Pony logo">
 </p>
 
 <h1 align="center">Cave Pony</h1>
@@ -12,28 +12,28 @@
   <img src="https://img.shields.io/badge/version-0.2.0-blue.svg" alt="Version 0.2.0">
 </p>
 
-[Caveman](https://github.com/JuliusBrussee/caveman) makes your agent talk less. [Ponytail](https://github.com/DietrichGebert/ponytail) makes it build less. Cave Pony does both in **one ~350-word skill**, and adds one rule neither has: *never say a check passed unless it ran.*
+[Caveman](https://github.com/JuliusBrussee/caveman) makes your agent talk less. [Ponytail](https://github.com/DietrichGebert/ponytail) makes it build less. **Cave Pony does both in one ~350-word skill**, and adds the rule neither has: *never say a check passed unless it ran.*
 
 ```bash
 npx skills add wilfgrainger/cave-pony
 ```
 
-Then say `/cave-pony` in Claude Code, or `$cave-pony` in Codex. Say `stop cave-pony` to turn it off.
+Then type `/cave-pony` in Claude Code or `$cave-pony` in Codex. Say `stop cave-pony` to turn it off.
 
 ## What it does
 
-- **Build less:** read the touched code, then take the first rung that works: no change, delete, reuse, stdlib, installed dependency, new code. Fix the root cause once.
-- **Say less:** answer first, no filler, exact code and errors. Plain sentences for anything risky or irreversible.
-- **Prove enough:** run the check that would catch a regression. Never claim a check ran when it didn't. End with `Done` / `Proof` / `Skipped` / `Risk`, using only the lines that apply.
+- **Build less:** read the code the task touches, then take the first option that works: no change, delete, reuse, stdlib, installed dependency, new code. Fix the root cause once.
+- **Say less:** answer first, no filler, exact code and errors. Plain sentences for warnings, ordered steps, and anything written to disk.
+- **Prove enough:** run the check that would catch a regression, and say plainly what did and didn't run. Finish with `Done` / `Proof` / `Skipped` / `Risk`, using only the lines that apply.
+- **Never cut:** input validation, auth, secrets handling, error handling that prevents data loss, accessibility. Before anything irreversible, it explains the damage and the recovery, then waits for your go-ahead.
 
-The whole contract is [`skills/cave-pony/SKILL.md`](skills/cave-pony/SKILL.md). It takes a minute to read.
+That's the whole product: [`skills/cave-pony/SKILL.md`](skills/cave-pony/SKILL.md). It takes a minute to read.
 
 ## Does it work?
 
-Measured, not claimed. [`eval/`](eval/) runs the same 8 tasks through headless Claude Code with no skill, Caveman, Ponytail, both stacked, and Cave Pony. It scores hidden-test correctness first, then whether the agent verified its change, diff size, reply length and cost.
+Measured, not claimed. [`eval/`](eval/) gives the same 8 coding tasks to headless Claude Code with no skill, Caveman, Ponytail, both stacked, and Cave Pony. It scores hidden-test correctness first, then whether the agent verified its change, diff size, reply length and cost.
 
-<!-- results -->
-Run on 5 November 2026: Claude Sonnet 5.5, 8 tasks × 3 runs per arm ([raw results with every command run](eval/results/published.jsonl)).
+Results from 5 November 2026: Claude Sonnet 5.5, 3 runs per task per arm ([raw results, including every command run](eval/results/published.jsonl)).
 
 | Arm | Correct | Verified its change | Diff lines | Reply words | Output tokens | $/run |
 |---|---|---|---|---|---|---|
@@ -43,26 +43,26 @@ Run on 5 November 2026: Claude Sonnet 5.5, 8 tasks × 3 runs per arm ([raw resul
 | Caveman + Ponytail | 24/24 | 13/18 | 11.4 | 73 | 709 | 0.017 |
 | **Cave Pony** | 24/24 | **16/18** | **10.9** | **56** | 704 | 0.016 |
 
-"Verified" means the agent successfully ran Python or pytest after editing, on runs that changed code. Diff lines, words and tokens are means per run; output tokens cover the whole session.
-
-What this shows:
+"Verified" counts the code-changing runs where the agent successfully ran Python or pytest after editing. The other columns are means per run.
 
 - **Shortest replies:** 34% fewer words than no skill, and 18% fewer than Caveman alone.
-- **Smallest diffs:** 25% below no skill; level with Caveman + Ponytail stacked.
-- **Verifies most often:** 16 of 18 code changes, against 10 with no skill and 8 with Caveman alone.
-- **Costs about the same:** output tokens are about 10% above no skill, and cost per run is level with Caveman and Ponytail.
-- **No correctness difference:** every arm solved every task, so these tasks are too easy to separate the arms on correctness. Harder tasks are needed.
-- **Small sample:** 3 runs per task. Treat gaps of one or two lines, or a couple of runs, as noise.
+- **Verifies most often:** it checked 16 of 18 code changes, against 10 with no skill.
+- **Smallest diffs:** 25% below no skill, level with Caveman and Ponytail stacked.
+- **Costs the same:** cost is level with the other skills. Output tokens are about 10% above no skill, which pays for the checks.
+- **Not yet shown:** a correctness difference. Every arm solved every task, so harder tasks are needed. With 3 runs per task, treat small gaps as noise.
 
-Earlier runs on the same day are kept in [`eval/results/`](eval/results/). An independent review found that their verification and token metrics were too loose, so they are not comparable with this table.
-<!-- /results -->
+Reproduce it with `make eval` (about $2). `make test` fails if this table drifts from the raw results.
 
-Reproduce: `make eval` (about $2 for 120 runs). Eval tasks where Cave Pony loses are the most welcome contribution. See [CONTRIBUTING](CONTRIBUTING.md).
+## Contributing
 
-## Rules it never breaks
+The skill should stay small and earn every word.
 
-It never cuts input validation, auth, secrets handling, error handling that prevents data loss, or accessibility. Anything irreversible (delete, reset, force-push, drop, migrate) gets full plain sentences. Commits, docs and code comments use normal grammar.
+1. **Show a failure:** the prompt, what the agent did, and what it should have done. Best of all, add it as an eval task: `eval/tasks/<name>/` with `repo/`, `prompt.txt` and a hidden `check.py`.
+2. **Measure it:** run `make eval` before and after your change, and paste both summary tables in the PR.
+3. **The bar:** a change that adds words must win on the eval. A change that removes words only has to not lose.
+
+Tasks where Cave Pony loses are the most useful contribution.
 
 ## Credits
 
-Built on ideas from Caveman and Ponytail. It is independently written and not endorsed by either project; see [Third-party notices](THIRD_PARTY_NOTICES.md). The previous, longer 0.1.x contract lives at tag [`v0.1.1`](https://github.com/wilfgrainger/cave-pony/tree/v0.1.1). MIT licensed.
+Built on ideas from Caveman and Ponytail. It is independently written and not endorsed by either project; see [NOTICE](NOTICE.md). The earlier 0.1 contract is at tag [`v0.1.1`](https://github.com/wilfgrainger/cave-pony/tree/v0.1.1). MIT licensed.

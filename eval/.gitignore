@@ -1,4 +1,0 @@
-.cache/
-__pycache__/
-results/run-*.jsonl
-results/*.partial
