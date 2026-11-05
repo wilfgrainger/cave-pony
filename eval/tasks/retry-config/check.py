@@ -1,4 +1,5 @@
 import inspect
+import re
 import client
 calls = []
 def flaky(fails):
@@ -16,7 +17,7 @@ except ConnectionError:
     pass
 calls.clear()
 params = inspect.signature(client.fetch).parameters
-name = [p for p in params if p not in ("get", "url")]
+name = [p for p in params if re.search(r"retr|attempt|tries", p)]
 assert name, "no retry parameter"
 calls.clear()
 assert client.fetch(flaky(4), "u", **{name[0]: 5}) == "ok"

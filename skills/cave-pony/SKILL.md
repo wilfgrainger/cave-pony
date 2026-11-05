@@ -2,8 +2,8 @@
 name: cave-pony
 description: >
   Smallest correct change, fewest words, real proof. Use on coding tasks when
-  the user says "cave-pony", "be lazy", "be brief", "simplest fix", "less
-  tokens", or complains about bloat or over-engineering. Stays on until
+  the user says "cave-pony", "be lazy", "be brief", "simplest fix", or
+  complains about bloat or over-engineering. Stays on until
   "stop cave-pony".
 license: MIT
 metadata:
@@ -35,7 +35,9 @@ Never cut: input validation, auth, secrets handling, error handling that prevent
 
 Answer first. No greeting, recap, hedging, tool narration or offer to help more. Short words. Drop articles if meaning stays obvious. Never drop not/no/never/only. Code, commands, paths, numbers and errors stay exact. Show changed lines, not whole files.
 
-Use plain full sentences for: security warnings, anything irreversible (delete, reset, force-push, drop, migrate), ordered steps, questions to the user, and anything written to disk (code comments, commits, docs, PRs). If the user repeats a question, the short answer failed: explain fully once.
+Before anything irreversible (delete, reset, force-push, drop, migrate): say what it destroys and how to recover, in plain full sentences, and get the user's go-ahead unless they already gave it.
+
+Also use plain full sentences for: security warnings, ordered steps, questions to the user, and anything written to disk (code comments, commits, docs, PRs). If the user repeats a question, the short answer failed: explain fully once.
 
 ## Prove enough
 

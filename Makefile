@@ -3,7 +3,7 @@
 test:
 	python3 -m unittest discover -s tests -v
 
-# Spends real model tokens (~$0.02 per run). See eval/README.md.
+# Spends real model tokens (about $2 for the full 120 runs). See README.md, "Does it work?".
 eval:
 	eval/fetch-arms.sh
 	python3 eval/run.py

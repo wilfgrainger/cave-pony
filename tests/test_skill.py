@@ -33,7 +33,7 @@ class SkillTests(unittest.TestCase):
         self.assertLessEqual(len(body.split()), WORD_BUDGET)
 
     def test_safety_rules_present(self):
-        for phrase in ["Never cut", "input validation", "irreversible", "force-push",
+        for phrase in ["Never cut", "input validation", "irreversible", "go-ahead", "force-push",
                        "Never say a check passed unless it ran", "Never drop not/no/never/only"]:
             self.assertIn(phrase, self.text)
 
@@ -60,6 +60,20 @@ class EvalTaskTests(unittest.TestCase):
                 r = subprocess.run([sys.executable, str(task / "check.py"), str(empty)],
                                    cwd=task / "repo", env=env, capture_output=True)
                 self.assertEqual(r.returncode == 0, task.name in self.PASS_ON_BASE, r.stderr.decode()[-300:])
+
+
+class ScorerTests(unittest.TestCase):
+    def test_verified_counts_only_successful_code_runs_after_an_edit(self):
+        sys.path.insert(0, str(ROOT / "eval"))
+        import run
+        def use(i, name, cmd=""):
+            return {"type": "assistant", "message": {"content": [
+                {"type": "tool_use", "id": i, "name": name, "input": {"command": cmd}}]}}
+        events = [use("a", "Bash", "python3 repro.py"), use("b", "Edit"), use("c", "Bash", "git diff"),
+                  use("d", "Bash", "python3 -c 1"), use("e", "Bash", "pytest"),
+                  {"type": "user", "message": {"content": [
+                      {"type": "tool_result", "tool_use_id": i, "is_error": i == "e"} for i in "acde"]}}]
+        self.assertEqual(run.verified_runs(events), ["python3 -c 1"])
 
 
 if __name__ == "__main__":
