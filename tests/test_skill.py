@@ -74,6 +74,10 @@ class ScorerTests(unittest.TestCase):
                   {"type": "user", "message": {"content": [
                       {"type": "tool_result", "tool_use_id": i, "is_error": i == "e"} for i in "acde"]}}]
         self.assertEqual(run.verified_runs(events), ["python3 -c 1"])
+        heredoc = [use("f", "Bash", "cat >> cart.py <<'EOF'\nx = 1\nEOF\npython3 -c 'import cart'"),
+                   {"type": "user", "message": {"content": [{"type": "tool_result", "tool_use_id": "f"}]}}]
+        self.assertEqual(len(run.verified_runs(heredoc)), 1)
+        self.assertFalse(run.EDITS.search("python3 t.py 2>&1"))
 
 
 if __name__ == "__main__":
