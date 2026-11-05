@@ -99,18 +99,27 @@ class UnbackedFlag(unittest.TestCase):
 
 
 class PublishedResults(unittest.TestCase):
-    """The README table must match eval/results/published.jsonl exactly."""
+    """Each README results table must match its raw results file exactly."""
     NAMES = {"No skill": "baseline", "Caveman": "caveman", "Ponytail": "ponytail",
              "Caveman + Ponytail": "both", "Cave Pony": "cave-pony"}
+    # (README section heading, raw file, cost decimals). Haiku costs ~$0.002 a run, so it needs more digits.
+    TABLES = [("Sonnet 5.5", run.PUBLISHED, 3),
+              ("Haiku 5.5", ROOT / "eval/results/haiku-2026-11-05.jsonl", 4)]
 
-    def test_readme_table_matches_raw_results(self):
-        rows = [json.loads(l) for l in run.PUBLISHED.read_text().splitlines()]
-        self.assertFalse([r for r in rows if "error" in r or r.get("tampered")], "errored or tampered rows")
+    def section(self, heading):
+        for part in README.split("\n### "):
+            if part.startswith(heading):
+                return part
+        self.fail(f"README has no '### {heading}' section")
+
+    def check_table(self, heading, path, cost_digits):
+        rows = [json.loads(l) for l in path.read_text().splitlines()]
+        self.assertFalse([r for r in rows if "error" in r or r.get("tampered")], f"{path.name}: errored or tampered rows")
         sha = run.sha(run.skill_prompt("cave-pony"))
         self.assertEqual({r["skill_sha"] for r in rows if r["arm"] == "cave-pony"}, {sha},
-                         "published results were measured with a different SKILL.md; re-run the eval")
+                         f"{path.name}: measured with a different SKILL.md; re-run the eval")
         table = 0
-        for line in README.splitlines():
+        for line in self.section(heading).splitlines():
             cells = [c.strip().strip("*") for c in line.strip("|").split("|")]
             if len(cells) != 7 or cells[0] not in self.NAMES:
                 continue
@@ -123,9 +132,15 @@ class PublishedResults(unittest.TestCase):
                         f"{sum(r['diff'] for r in rs) / n:.1f}",
                         f"{sum(r['words'] for r in rs) / n:.0f}",
                         f"{sum(r['total_tokens'] for r in rs) / n:.0f}",
-                        f"{sum(r['cost'] for r in rs) / n:.3f}"]
-            self.assertEqual(cells[1:], expected, cells[0])
-        self.assertEqual(table, len(self.NAMES), "README results table not found")
+                        f"{sum(r['cost'] for r in rs) / n:.{cost_digits}f}"]
+            self.assertEqual(cells[1:], expected, f"{heading}: {cells[0]}")
+        self.assertEqual(table, len(self.NAMES), f"{heading}: results table not found")
+
+    def test_sonnet_table_matches_raw_results(self):
+        self.check_table(*self.TABLES[0])
+
+    def test_haiku_table_matches_raw_results(self):
+        self.check_table(*self.TABLES[1])
 
 
 if __name__ == "__main__":

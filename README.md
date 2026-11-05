@@ -35,7 +35,9 @@ That's the whole product: [`skills/cave-pony/SKILL.md`](skills/cave-pony/SKILL.m
 
 Measured, not claimed. [`eval/`](eval/) gives 12 coding tasks to headless Claude Code with no skill, Caveman, Ponytail, both stacked, and Cave Pony. Four tasks are built to catch the failures minimal-change skills are known for: a quoted-CSV edge case, a return-shape change whose caller must be updated, the same bug duplicated in a second file, and a two-part requirement where one half is easy to drop. Each hidden check rejects the plausible-but-incomplete fix.
 
-Results from 5 November 2026: Claude Sonnet 5.5, 3 runs per task per arm, 180 runs in total ([raw results, including every command run](eval/results/published.jsonl)). The `partial-failure` task was re-run on every arm after its check was found to reject a correct, more detailed summary line.
+Two models, 3 runs per task per arm, 180 runs each, on 5 November 2026. Raw results, including every command run: [Sonnet 5.5](eval/results/published.jsonl) and [Haiku 5.5](eval/results/haiku-2026-11-05.jsonl).
+
+### Sonnet 5.5
 
 | Arm | Correct | Verified its change | Diff lines | Reply words | Total tokens | $/run |
 |---|---|---|---|---|---|---|
@@ -45,15 +47,27 @@ Results from 5 November 2026: Claude Sonnet 5.5, 3 runs per task per arm, 180 ru
 | Caveman + Ponytail | 36/36 | 24/30 | 12.1 | 79 | 42310 | 0.019 |
 | **Cave Pony** | 35/36 | **30/30** | **10.7** | **69** | 35728 | 0.020 |
 
-"Verified" counts the code-changing runs where the agent successfully ran Python or pytest after editing. Total tokens are input + cache + output for the whole session, which is what the bill is made of. The other columns are means per run.
+### Haiku 5.5
 
-- **It checks its work.** Cave Pony verified every one of its 30 code changes; no skill verified 15. A rough text flag found no reply, from any arm, claiming a check that hadn't run.
-- **Smallest diffs and shortest reports:** 25% fewer changed lines and 20% fewer reply words than no skill.
-- **It costs more, like every skill here:** 19% more total tokens and 14% more per run than no skill, which pays for the checks. Caveman used 28% more and the stacked pair 41% more. This matches [an independent 140-run study](https://www.stet.sh/blog/gpt-56-token-saving-modes) on GPT 5.6 models, in which no token-saving method, Caveman and Ponytail included, cut total tokens in both of its runs. Compressing the output doesn't compress the work.
-- **One real miss:** in 1 of 3 runs, Cave Pony's date parser accepted an ISO week date (`2026-W10-6`) that the task ruled out. Every other arm scored 36/36. With 3 runs per task, that gap is within noise, but it is a loss.
-- **Not yet shown:** a correctness win. Every arm handled the harder tasks in this run, so they don't separate the arms yet.
+| Arm | Correct | Verified its change | Diff lines | Reply words | Total tokens | $/run |
+|---|---|---|---|---|---|---|
+| No skill | 36/36 | 30/30 | 17.4 | 138 | 47930 | 0.0020 |
+| Caveman | 36/36 | 29/30 | 13.9 | 87 | 58177 | 0.0020 |
+| Ponytail | 36/36 | 29/30 | 13.7 | 145 | 52855 | 0.0022 |
+| Caveman + Ponytail | 36/36 | 30/30 | 14.1 | 105 | 60274 | 0.0021 |
+| **Cave Pony** | 36/36 | 30/30 | **13.4** | **109** | 52949 | 0.0022 |
 
-Reproduce it with `make eval` (about $3.50). `make test` fails if this table drifts from the raw results.
+"Verified" counts code-changing runs where the agent successfully ran Python or pytest after editing. Total tokens are input + cache + output for the whole session, which is what the bill is made of. The other columns are means per run.
+
+What the two models show:
+
+- **Smaller changes and shorter replies hold on both models.** Against no skill, Cave Pony changes 25% fewer lines and writes 21% fewer reply words on Sonnet, and 23% fewer lines and 21% fewer words on Haiku.
+- **Checking its work is a Sonnet effect.** On Sonnet, Cave Pony verified 30 of 30 changes against 15 of 30 with no skill. On Haiku, no skill already verified 30 of 30, so there is no gain to claim there.
+- **No skill saves tokens.** Every skill raised total tokens on both models: on Sonnet, Cave Pony +19%, Caveman +28%, both together +41%; on Haiku, Cave Pony +10%, Caveman +21%, both together +26%. This matches [an independent 140-run study](https://www.stet.sh/blog/gpt-56-token-saving-modes) on GPT 5.6, where no token-saving method cut total tokens in both runs.
+- **Correctness does not separate the arms yet.** On Haiku every arm passed all 36 runs, including the four hard tasks. On Sonnet, Cave Pony's one miss was a date parser that accepted an ISO week date (`2026-W10-6`) the task ruled out. With 3 runs per task, treat gaps of a few runs as noise.
+- **Haiku costs about 1/8 of Sonnet per run** ($0.002 against $0.017), though it used more tokens and tool calls to get there.
+
+Reproduce Sonnet with `make eval` (about $3.50), or Haiku with `python3 eval/run.py --model claude-haiku-5-5` (about $0.40). `make test` fails if this table drifts from the raw results.
 
 ## Contributing
 
