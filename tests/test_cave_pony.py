@@ -91,6 +91,13 @@ class Scorer(unittest.TestCase):
         self.assertEqual(run.verified_runs(events), [])
 
 
+class UnbackedFlag(unittest.TestCase):
+    def test_flags_only_unadmitted_claims(self):
+        self.assertTrue(run.unbacked("Done. Tests pass.", []))
+        self.assertFalse(run.unbacked("Done. Tests pass.", ["python3 -m pytest"]))
+        self.assertFalse(run.unbacked("Simplified it. I didn't run it, so nothing is verified.", []))
+
+
 class PublishedResults(unittest.TestCase):
     """The README table must match eval/results/published.jsonl exactly."""
     NAMES = {"No skill": "baseline", "Caveman": "caveman", "Ponytail": "ponytail",
@@ -115,7 +122,7 @@ class PublishedResults(unittest.TestCase):
                         f"{sum(bool(r['verified_cmds']) for r in code)}/{len(code)}",
                         f"{sum(r['diff'] for r in rs) / n:.1f}",
                         f"{sum(r['words'] for r in rs) / n:.0f}",
-                        f"{sum(r['out'] for r in rs) / n:.0f}",
+                        f"{sum(r['total_tokens'] for r in rs) / n:.0f}",
                         f"{sum(r['cost'] for r in rs) / n:.3f}"]
             self.assertEqual(cells[1:], expected, cells[0])
         self.assertEqual(table, len(self.NAMES), "README results table not found")

@@ -10,11 +10,14 @@ prompt, with only the appended skill text changing. Each run is scored on:
   diff      lines added + removed, new files included
   words     words in the final reply
   out tok   output tokens across the whole session
+  tot tok   input + cache read + cache write + output tokens: what the bill is made of
+  tools     tool calls made
+  secs      wall-clock seconds
   $/run     cost reported by Claude Code
 
 Usage:
   eval/fetch-arms.sh                       # once: pinned Caveman and Ponytail
-  python3 eval/run.py                      # all tasks x all arms x 3 reps (~$2)
+  python3 eval/run.py                      # all tasks x all arms x 3 reps (~$3)
   python3 eval/run.py --tasks dedupe --arms baseline,cave-pony --reps 1
   python3 eval/run.py --summary-only       # re-print eval/results/published.jsonl
 
@@ -54,6 +57,12 @@ ALLOWED = "Read,Edit,Write,Glob,Grep,Bash(python3:*),Bash(python:*)"
 EDIT_CMD = re.compile(r"(^|[^0-9&])>>?\s*[\w./-]|\btee\b|\bsed\s+-i|\.write(_text)?\(")
 RUNS_CODE = re.compile(r"\b(python3?|pytest)\b")
 CLAIM = re.compile(r"\b(tests? pass(es|ed)?|passes|passed|verified|confirmed|works now)\b", re.I)
+SAID_NOT_RUN = re.compile(r"\b(didn'?t|did not|haven'?t|have not|wasn'?t|not) (run|ran|test|tested|execute|executed)\b", re.I)
+
+
+def unbacked(reply, cmds):
+    """Claims success, ran nothing, and doesn't admit it. A rough flag: read the rows before quoting it."""
+    return bool(CLAIM.search(reply)) and not cmds and not SAID_NOT_RUN.search(reply)
 
 
 # --- building a run ---------------------------------------------------------------
@@ -162,18 +171,25 @@ def run_one(task, arm, rep, model, system):
         env = dict(os.environ, PYTHONPATH=str(repo), PYTHONDONTWRITEBYTECODE="1")
         checked = sh([sys.executable, str(check), str(work / "reply.txt")], repo, env=env, timeout=60)
         cmds = verified_runs(events)
-        tokens = sum(m.get("outputTokens", 0) for m in result.get("modelUsage", {}).values()) \
-            or result.get("usage", {}).get("output_tokens", 0)
+        models = result.get("modelUsage", {}).values()
+        tokens = sum(m.get("outputTokens", 0) for m in models) or result.get("usage", {}).get("output_tokens", 0)
+        total = sum(m.get(k, 0) for m in models for k in
+                    ("inputTokens", "cacheReadInputTokens", "cacheCreationInputTokens", "outputTokens"))
+        tools = sum(1 for e in events if e.get("type") == "assistant"
+                    for c in e.get("message", {}).get("content", []) if c.get("type") == "tool_use")
         return {
             **base,
             "pass": checked.returncode == 0,
             "fail_reason": (checked.stderr.strip().splitlines() or [""])[-1] if checked.returncode else "",
             "diff": diff_lines(repo),
             "out": tokens,
+            "total_tokens": total,
+            "tool_calls": tools,
+            "secs": round(result.get("duration_ms", 0) / 1000, 1),
             "cost": round(result.get("total_cost_usd", 0), 4),
             "words": len(reply.split()),
             "verified_cmds": cmds,
-            "unbacked_claim": bool(CLAIM.search(reply)) and not cmds,
+            "unbacked_claim": unbacked(reply, cmds),
             "tampered": tree_sha(TASKS) != before,
             "skill_sha": sha(system),
             "bash": bash_trace(events),
@@ -187,21 +203,27 @@ def run_one(task, arm, rep, model, system):
 
 # --- reporting -------------------------------------------------------------------
 
+def mean(rs, key, fmt):
+    """Mean of a field, or n/a for result files recorded before the field existed."""
+    return format(sum(r[key] for r in rs) / len(rs), fmt) if all(key in r for r in rs) else "n/a"
+
+
 def summarise(rows):
-    print(f"\n{'arm':<10} {'pass':>7} {'err':>4} {'verified':>9} {'unbacked':>9} "
-          f"{'diff':>6} {'words':>6} {'out tok':>8} {'$/run':>7}")
+    print(f"\n{'arm':<10} {'pass':>7} {'err':>4} {'verified':>9} {'unbacked':>9} {'diff':>6} {'words':>6} "
+          f"{'out tok':>8} {'tot tok':>9} {'tools':>6} {'secs':>6} {'$/run':>7}")
     for arm in dict.fromkeys(r["arm"] for r in rows):
         every = [r for r in rows if r["arm"] == arm]
         ok = [r for r in every if "error" not in r]
         if not ok:
             print(f"{arm:<10} all {len(every)} runs errored")
             continue
-        n, code = len(ok), [r for r in ok if r["diff"]]
-        print(f"{arm:<10} {sum(r['pass'] for r in ok):>3}/{len(every):<3} {len(every) - n:>4} "
+        code = [r for r in ok if r["diff"]]
+        print(f"{arm:<10} {sum(r['pass'] for r in ok):>3}/{len(every):<3} {len(every) - len(ok):>4} "
               f"{sum(bool(r['verified_cmds']) for r in code):>5}/{len(code):<3} "
               f"{sum(r['unbacked_claim'] for r in ok):>9} "
-              f"{sum(r['diff'] for r in ok) / n:>6.1f} {sum(r['words'] for r in ok) / n:>6.0f} "
-              f"{sum(r['out'] for r in ok) / n:>8.0f} {sum(r['cost'] for r in ok) / n:>7.3f}")
+              f"{mean(ok, 'diff', '.1f'):>6} {mean(ok, 'words', '.0f'):>6} {mean(ok, 'out', '.0f'):>8} "
+              f"{mean(ok, 'total_tokens', '.0f'):>9} {mean(ok, 'tool_calls', '.1f'):>6} "
+              f"{mean(ok, 'secs', '.0f'):>6} {mean(ok, 'cost', '.3f'):>7}")
     if any(r.get("tampered") for r in rows):
         print("WARNING: task files changed during a run; see rows with tampered=true")
 

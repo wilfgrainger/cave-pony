@@ -14,6 +14,8 @@
 
 [Caveman](https://github.com/JuliusBrussee/caveman) makes your agent talk less. [Ponytail](https://github.com/DietrichGebert/ponytail) makes it build less. **Cave Pony does both in one ~350-word skill**, and adds the rule neither has: *never say a check passed unless it ran.*
 
+It is **not a token saver.** Nothing in this category is (see below). What it buys is a change you can trust at a glance: small, checked, and reported in a few lines.
+
 ```bash
 npx skills add wilfgrainger/cave-pony
 ```
@@ -31,27 +33,27 @@ That's the whole product: [`skills/cave-pony/SKILL.md`](skills/cave-pony/SKILL.m
 
 ## Does it work?
 
-Measured, not claimed. [`eval/`](eval/) gives the same 8 coding tasks to headless Claude Code with no skill, Caveman, Ponytail, both stacked, and Cave Pony. It scores hidden-test correctness first, then whether the agent verified its change, diff size, reply length and cost.
+Measured, not claimed. [`eval/`](eval/) gives 12 coding tasks to headless Claude Code with no skill, Caveman, Ponytail, both stacked, and Cave Pony. Four tasks are built to catch the failures minimal-change skills are known for: a quoted-CSV edge case, a return-shape change whose caller must be updated, the same bug duplicated in a second file, and a two-part requirement where one half is easy to drop. Each hidden check rejects the plausible-but-incomplete fix.
 
-Results from 5 November 2026: Claude Sonnet 5.5, 3 runs per task per arm ([raw results, including every command run](eval/results/published.jsonl)).
+Results from 5 November 2026: Claude Sonnet 5.5, 3 runs per task per arm, 180 runs in total ([raw results, including every command run](eval/results/published.jsonl)). The `partial-failure` task was re-run on every arm after its check was found to reject a correct, more detailed summary line.
 
-| Arm | Correct | Verified its change | Diff lines | Reply words | Output tokens | $/run |
+| Arm | Correct | Verified its change | Diff lines | Reply words | Total tokens | $/run |
 |---|---|---|---|---|---|---|
-| No skill | 24/24 | 10/18 | 14.5 | 85 | 641 | 0.015 |
-| Caveman | 24/24 | 8/18 | 14.4 | 68 | 688 | 0.016 |
-| Ponytail | 24/24 | 13/18 | 12.5 | 85 | 673 | 0.016 |
-| Caveman + Ponytail | 24/24 | 13/18 | 11.4 | 73 | 709 | 0.017 |
-| **Cave Pony** | 24/24 | **16/18** | **10.9** | **56** | 704 | 0.016 |
+| No skill | 36/36 | 15/30 | 14.4 | 87 | 30039 | 0.017 |
+| Caveman | 36/36 | 18/30 | 12.8 | 76 | 38468 | 0.019 |
+| Ponytail | 36/36 | 23/30 | 11.6 | 93 | 33940 | 0.018 |
+| Caveman + Ponytail | 36/36 | 24/30 | 12.1 | 79 | 42310 | 0.019 |
+| **Cave Pony** | 35/36 | **30/30** | **10.7** | **69** | 35728 | 0.020 |
 
-"Verified" counts the code-changing runs where the agent successfully ran Python or pytest after editing. The other columns are means per run.
+"Verified" counts the code-changing runs where the agent successfully ran Python or pytest after editing. Total tokens are input + cache + output for the whole session, which is what the bill is made of. The other columns are means per run.
 
-- **Shortest replies:** 34% fewer words than no skill, and 18% fewer than Caveman alone.
-- **Verifies most often:** it checked 16 of 18 code changes, against 10 with no skill.
-- **Smallest diffs:** 25% below no skill, level with Caveman and Ponytail stacked.
-- **Costs the same:** cost is level with the other skills. Output tokens are about 10% above no skill, which pays for the checks.
-- **Not yet shown:** a correctness difference. Every arm solved every task, so harder tasks are needed. With 3 runs per task, treat small gaps as noise.
+- **It checks its work.** Cave Pony verified every one of its 30 code changes; no skill verified 15. A rough text flag found no reply, from any arm, claiming a check that hadn't run.
+- **Smallest diffs and shortest reports:** 25% fewer changed lines and 20% fewer reply words than no skill.
+- **It costs more, like every skill here:** 19% more total tokens and 14% more per run than no skill, which pays for the checks. Caveman used 28% more and the stacked pair 41% more. This matches [an independent 140-run study](https://www.stet.sh/blog/gpt-56-token-saving-modes) on GPT 5.6 models, in which no token-saving method, Caveman and Ponytail included, cut total tokens in both of its runs. Compressing the output doesn't compress the work.
+- **One real miss:** in 1 of 3 runs, Cave Pony's date parser accepted an ISO week date (`2026-W10-6`) that the task ruled out. Every other arm scored 36/36. With 3 runs per task, that gap is within noise, but it is a loss.
+- **Not yet shown:** a correctness win. Every arm handled the harder tasks in this run, so they don't separate the arms yet.
 
-Reproduce it with `make eval` (about $2). `make test` fails if this table drifts from the raw results.
+Reproduce it with `make eval` (about $3.50). `make test` fails if this table drifts from the raw results.
 
 ## Contributing
 

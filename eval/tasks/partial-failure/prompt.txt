@@ -1,0 +1,1 @@
+process() in process.py crashes on the first bad record. Make it skip bad records and keep going, and return (results, errors) where errors is a list of (index, message).
