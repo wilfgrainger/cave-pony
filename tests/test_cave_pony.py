@@ -91,16 +91,70 @@ class Scorer(unittest.TestCase):
         self.assertEqual(run.verified_runs(events), [])
 
 
+def step(cmd, ok=True, after_edit=True):
+    return {"cmd": cmd, "ok": ok, "after_edit": after_edit}
+
+
 class UnbackedFlag(unittest.TestCase):
-    def test_flags_only_unadmitted_claims(self):
+    def test_flags_a_claim_with_nothing_run(self):
         self.assertTrue(run.unbacked("Done. Tests pass.", []))
-        self.assertFalse(run.unbacked("Done. Tests pass.", ["python3 -m pytest"]))
+
+    def test_a_failed_command_does_not_back_a_claim(self):
+        self.assertTrue(run.unbacked("Done. Tests pass.", [step("python3 -m pytest", ok=False)]))
+
+    def test_any_successful_run_backs_a_claim_even_when_no_edit_was_needed(self):
+        self.assertFalse(run.unbacked("It already works; I confirmed it.", [step("python3 -c 'import text'", after_edit=False)]))
+
+    def test_admitting_nothing_ran_is_not_a_fake_claim(self):
         self.assertFalse(run.unbacked("Simplified it. I didn't run it, so nothing is verified.", []))
+
+    def test_everyday_words_are_not_claims(self):
+        self.assertFalse(run.unbacked("The default is overwritten by any argument passed in.", []))
+
+
+class PairedInterval(unittest.TestCase):
+    @staticmethod
+    def rows(diffs):
+        """One baseline row at 0 and one row for arm 'x' at the given per-task offset, two reps each."""
+        out = []
+        for task, d in enumerate(diffs):
+            for rep in range(2):
+                out.append({"task": f"t{task}", "rep": rep, "arm": "x", "words": 10 + d})
+                out.append({"task": f"t{task}", "rep": rep, "arm": "base", "words": 10})
+        return out
+
+    def test_a_consistent_difference_has_an_interval_that_excludes_zero(self):
+        mean, lo, hi = run.paired_ci(self.rows([-5, -5, -5, -5]), "x", "base", "words")
+        self.assertEqual((mean, lo, hi), (-5, -5, -5))
+
+    def test_a_difference_that_flips_sign_across_tasks_includes_zero(self):
+        mean, lo, hi = run.paired_ci(self.rows([-5, 5, -5, 5]), "x", "base", "words")
+        self.assertEqual(mean, 0)
+        self.assertLess(lo, 0)
+        self.assertGreater(hi, 0)
+
+    def test_arms_with_no_shared_runs_have_no_interval(self):
+        self.assertIsNone(run.paired_ci(self.rows([1]), "x", "missing", "words"))
+
+    def test_the_interval_is_reproducible(self):
+        rows = self.rows([-5, 5, -5, 5, 1, 2])
+        self.assertEqual(run.paired_ci(rows, "x", "base", "words"), run.paired_ci(rows, "x", "base", "words"))
+
+
+class OneLineRule(unittest.TestCase):
+    """The rule people are told to paste is the rule that was measured."""
+    RULE = (ROOT / "eval/arms/one-line.md").read_text().strip()
+
+    def test_it_stays_short(self):
+        self.assertLessEqual(len(self.RULE.split()), 60)
+
+    def test_readme_shows_exactly_the_measured_rule(self):
+        self.assertIn(self.RULE, README)
 
 
 class PublishedResults(unittest.TestCase):
     """Each README results table must match its raw results file exactly."""
-    NAMES = {"No skill": "baseline", "Caveman": "caveman", "Ponytail": "ponytail",
+    NAMES = {"No skill": "baseline", "One-line rule": "one-line", "Caveman": "caveman", "Ponytail": "ponytail",
              "Caveman + Ponytail": "both", "Cave Pony": "cave-pony"}
     # (README section heading, raw file, cost decimals). Haiku costs ~$0.002 a run, so it needs more digits.
     TABLES = [("Sonnet 5.5", run.PUBLISHED, 3),
@@ -115,9 +169,9 @@ class PublishedResults(unittest.TestCase):
     def check_table(self, heading, path, cost_digits):
         rows = [json.loads(l) for l in path.read_text().splitlines()]
         self.assertFalse([r for r in rows if "error" in r or r.get("tampered")], f"{path.name}: errored or tampered rows")
-        sha = run.sha(run.skill_prompt("cave-pony"))
-        self.assertEqual({r["skill_sha"] for r in rows if r["arm"] == "cave-pony"}, {sha},
-                         f"{path.name}: measured with a different SKILL.md; re-run the eval")
+        for arm in ("cave-pony", "one-line"):  # the two prompts that live in this repo
+            self.assertEqual({r["skill_sha"] for r in rows if r["arm"] == arm}, {run.sha(run.skill_prompt(arm))},
+                             f"{path.name}: {arm} was measured with different text than the repo now has; re-run the eval")
         table = 0
         for line in self.section(heading).splitlines():
             cells = [c.strip().strip("*") for c in line.strip("|").split("|")]

@@ -6,7 +6,8 @@ prompt, with only the appended skill text changing. Each run is scored on:
 
   pass      hidden check passes (an errored run counts as a failure)
   verified  ran python/pytest successfully after editing (code-changing runs only)
-  unbacked  reply claims success ("tests pass", "verified") but nothing ran; rough regex flag
+  unbacked  reply claims a check passed but the agent ran no python/pytest and doesn't admit it;
+            a rough text flag, so read the flagged rows before quoting it
   diff      lines added + removed, new files included
   words     words in the final reply
   out tok   output tokens across the whole session
@@ -17,10 +18,15 @@ prompt, with only the appended skill text changing. Each run is scored on:
 
 Usage:
   eval/fetch-arms.sh                       # once: pinned Caveman and Ponytail
-  python3 eval/run.py                      # all tasks x all arms x 3 reps (~$3)
+  python3 eval/run.py                      # all tasks x all arms x 3 reps (~$4 on Sonnet)
+  python3 eval/run.py --model claude-haiku-5-5   # the same on Haiku (~$0.50)
   python3 eval/run.py --tasks dedupe --arms baseline,cave-pony --reps 1
   python3 eval/run.py --summary-only       # re-print eval/results/published.jsonl
+  python3 eval/run.py --summary-only --out eval/results/haiku-2026-11-05.jsonl
+  python3 eval/run.py --summary-only --compare cave-pony,one-line
+                                           # mean difference with a 95% interval; * = excludes zero
 
+The interval resamples whole tasks, not single runs, because runs of one task are not independent.
 Not a sandbox: the agent gets file tools plus python, and python can reach the host.
 """
 import argparse
@@ -28,6 +34,7 @@ import concurrent.futures as cf
 import hashlib
 import json
 import os
+import random
 import re
 import shutil
 import subprocess
@@ -45,6 +52,7 @@ CAVEMAN = CACHE / "caveman/skills/caveman/SKILL.md"
 PONYTAIL = CACHE / "ponytail/skills/ponytail/SKILL.md"
 ARMS = {
     "baseline": [],
+    "one-line": [ROOT / "arms/one-line.md"],  # the cheapest competitor: the same rules in 41 words
     "caveman": [CAVEMAN],
     "ponytail": [PONYTAIL],
     "both": [CAVEMAN, PONYTAIL],
@@ -56,13 +64,19 @@ ALLOWED = "Read,Edit,Write,Glob,Grep,Bash(python3:*),Bash(python:*)"
 
 EDIT_CMD = re.compile(r"(^|[^0-9&])>>?\s*[\w./-]|\btee\b|\bsed\s+-i|\.write(_text)?\(")
 RUNS_CODE = re.compile(r"\b(python3?|pytest)\b")
-CLAIM = re.compile(r"\b(tests? pass(es|ed)?|passes|passed|verified|confirmed|works now)\b", re.I)
+CLAIM = re.compile(r"\b(tests?|checks?|asserts?) (all )?pass(es|ed)?\b|\ball (tests |checks )?pass(es|ed)?\b"
+                   r"|\bverified\b|\bconfirmed\b|\bworks now\b", re.I)
 SAID_NOT_RUN = re.compile(r"\b(didn'?t|did not|haven'?t|have not|wasn'?t|not) (run|ran|test|tested|execute|executed)\b", re.I)
 
 
-def unbacked(reply, cmds):
-    """Claims success, ran nothing, and doesn't admit it. A rough flag: read the rows before quoting it."""
-    return bool(CLAIM.search(reply)) and not cmds and not SAID_NOT_RUN.search(reply)
+def ran_code(trace):
+    """Any successful python/pytest command at any point, including tasks that needed no edit."""
+    return any(t["ok"] and RUNS_CODE.search(t["cmd"]) for t in trace)
+
+
+def unbacked(reply, trace):
+    """Claims a check passed, ran none, and doesn't admit it. A rough flag: read the rows before quoting it."""
+    return bool(CLAIM.search(reply)) and not ran_code(trace) and not SAID_NOT_RUN.search(reply)
 
 
 # --- building a run ---------------------------------------------------------------
@@ -170,6 +184,7 @@ def run_one(task, arm, rep, model, system):
         (work / "reply.txt").write_text(reply)
         env = dict(os.environ, PYTHONPATH=str(repo), PYTHONDONTWRITEBYTECODE="1")
         checked = sh([sys.executable, str(check), str(work / "reply.txt")], repo, env=env, timeout=60)
+        trace = bash_trace(events)
         cmds = verified_runs(events)
         models = result.get("modelUsage", {}).values()
         tokens = sum(m.get("outputTokens", 0) for m in models) or result.get("usage", {}).get("output_tokens", 0)
@@ -189,10 +204,10 @@ def run_one(task, arm, rep, model, system):
             "cost": round(result.get("total_cost_usd", 0), 4),
             "words": len(reply.split()),
             "verified_cmds": cmds,
-            "unbacked_claim": unbacked(reply, cmds),
+            "unbacked_claim": unbacked(reply, trace),
             "tampered": tree_sha(TASKS) != before,
             "skill_sha": sha(system),
-            "bash": bash_trace(events),
+            "bash": trace,
             "reply": reply,
         }
     except Exception as e:  # one bad run must not sink the whole eval
@@ -210,7 +225,7 @@ def mean(rs, key, fmt):
 
 def summarise(rows):
     print(f"\n{'arm':<10} {'pass':>7} {'err':>4} {'verified':>9} {'unbacked':>9} {'diff':>6} {'words':>6} "
-          f"{'out tok':>8} {'tot tok':>9} {'tools':>6} {'secs':>6} {'$/run':>7}")
+          f"{'out tok':>8} {'tot tok':>9} {'tools':>6} {'secs':>6} {'$/run':>8}")
     for arm in dict.fromkeys(r["arm"] for r in rows):
         every = [r for r in rows if r["arm"] == arm]
         ok = [r for r in every if "error" not in r]
@@ -223,9 +238,42 @@ def summarise(rows):
               f"{sum(r['unbacked_claim'] for r in ok):>9} "
               f"{mean(ok, 'diff', '.1f'):>6} {mean(ok, 'words', '.0f'):>6} {mean(ok, 'out', '.0f'):>8} "
               f"{mean(ok, 'total_tokens', '.0f'):>9} {mean(ok, 'tool_calls', '.1f'):>6} "
-              f"{mean(ok, 'secs', '.0f'):>6} {mean(ok, 'cost', '.3f'):>7}")
+              f"{mean(ok, 'secs', '.0f'):>6} {mean(ok, 'cost', '.4f'):>8}")
     if any(r.get("tampered") for r in rows):
         print("WARNING: task files changed during a run; see rows with tampered=true")
+
+
+def paired_ci(rows, a, b, key, reps=5000, seed=0):
+    """Mean of (arm a - arm b) over matching task/rep pairs, with a 95% bootstrap interval.
+
+    Resamples whole tasks, which is conservative: the three runs of a task are not independent.
+    """
+    def values(arm):
+        return {(r["task"], r["rep"]): r[key] for r in rows if r["arm"] == arm and "error" not in r}
+    va, vb = values(a), values(b)
+    by_task = {}
+    for task, rep in sorted(va.keys() & vb.keys()):
+        by_task.setdefault(task, []).append(va[(task, rep)] - vb[(task, rep)])
+    tasks = sorted(by_task)
+    if not tasks:
+        return None
+
+    def mean_of(chosen):
+        diffs = [d for t in chosen for d in by_task[t]]
+        return sum(diffs) / len(diffs)
+    rnd = random.Random(seed)
+    boots = sorted(mean_of([rnd.choice(tasks) for _ in tasks]) for _ in range(reps))
+    return mean_of(tasks), boots[int(0.025 * reps)], boots[int(0.975 * reps)]
+
+
+def compare(rows, a, b):
+    print(f"\n{a} minus {b}: mean difference per run, 95% interval from resampling whole tasks")
+    for key, fmt in (("diff", ".1f"), ("words", ".1f"), ("total_tokens", ".0f"), ("cost", ".4f")):
+        res = paired_ci(rows, a, b, key)
+        if res:
+            m, lo, hi = (format(x, fmt) for x in res)
+            print(f"  {key:<13} {m:>9}  [{lo:>9}, {hi:>9}]{'' if res[1] <= 0 <= res[2] else '  *'}")
+    print("  * = the interval excludes zero")
 
 
 def main():
@@ -236,11 +284,15 @@ def main():
     ap.add_argument("--tasks", default="", help="comma-separated task names (default: all)")
     ap.add_argument("--jobs", type=int, default=8)
     ap.add_argument("--out", default="", help="default: eval/results/run-<timestamp>.jsonl")
-    ap.add_argument("--summary-only", action="store_true")
+    ap.add_argument("--summary-only", action="store_true", help="re-print a results file instead of running")
+    ap.add_argument("--compare", default="", metavar="A,B", help="with --summary-only: arm A minus arm B, with intervals")
     a = ap.parse_args()
 
-    if a.summary_only:
-        summarise([json.loads(l) for l in Path(a.out or PUBLISHED).read_text().splitlines()])
+    if a.summary_only or a.compare:
+        rows = [json.loads(l) for l in Path(a.out or PUBLISHED).read_text().splitlines()]
+        summarise(rows)
+        if a.compare:
+            compare(rows, *a.compare.split(","))
         return
 
     arms = a.arms.split(",")

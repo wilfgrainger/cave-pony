@@ -1,0 +1,1 @@
+Make the smallest correct change. Before reporting a change as working, run a check that would catch a regression. Never say a check passed unless you ran it. Report what you changed, what you ran, and what you did not check.
