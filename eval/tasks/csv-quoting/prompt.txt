@@ -1,0 +1,1 @@
+parse_row in rows.py breaks on quoted fields like a,"b,c",d. Fix it.
