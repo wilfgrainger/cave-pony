@@ -6,4 +6,6 @@ assert results == [3.0, 3.0], results
 assert [i for i, _ in errors] == [1, 2, 4], errors
 assert all(isinstance(m, str) and m for _, m in errors)
 assert process([]) == ([], [])
-assert summary([good, {"qty": 1}, good]) == "2 records, total 6.00", summary([good, {"qty": 1}, good])
+# The caller must survive the new return shape; extra detail such as a skipped count is fine.
+line = summary([good, {"qty": 1}, good])
+assert line.startswith("2 records, total 6.00"), line
